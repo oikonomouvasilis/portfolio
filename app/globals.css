@@ -1,0 +1,53 @@
+@import "tailwindcss";
+
+/*
+ * Φάση 1 — μόνο η βάση. Η πλήρης χρωματική κλίμακα, η τυπογραφική κλίμακα και τα
+ * components έρχονται στη Φάση 3 (D8). Ό,τι μπαίνει εδώ τώρα είναι μόνο όσα
+ * χρειάζονται για να μη φαίνεται άστεγη η σελίδα-σκελετός.
+ */
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --font-sans: var(--font-sans);
+}
+
+:root {
+  --bg: #fbfaf8;
+  --fg: #1a1a19;
+  --muted: #6b6a66;
+  --border: #e3e0d8;
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #121211;
+    --fg: #f0eee9;
+    --muted: #9c9a94;
+    --border: #2e2d2a;
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: #121211;
+  --fg: #f0eee9;
+  --muted: #9c9a94;
+  --border: #2e2d2a;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Ορατός δακτύλιος εστίασης — απαίτηση προσβασιμότητας, όχι διακόσμηση. */
+:focus-visible {
+  outline: 2px solid var(--fg);
+  outline-offset: 2px;
+}

@@ -1,0 +1,26 @@
+{
+  "nav": {
+    "home": "Αρχική",
+    "projects": "Projects",
+    "about": "Προφίλ",
+    "cv": "Βιογραφικό",
+    "contact": "Επικοινωνία"
+  },
+  "home": {
+    "tagline": "Χτίζω εργαλεία που λύνουν αληθινά προβλήματα",
+    "subtitle": "Data engineering · αυτοματισμοί · full-stack",
+    "ctaProjects": "Δες τα projects",
+    "ctaCv": "Κατέβασε το βιογραφικό"
+  },
+  "categories": {
+    "fullstack": "Full-stack",
+    "data": "Δεδομένα & ETL",
+    "automation": "Αυτοματισμοί"
+  },
+  "common": {
+    "comingSoon": "Υπό κατασκευή",
+    "scaffoldNote": "Η υποδομή είναι ζωντανή. Το περιεχόμενο έρχεται στις φάσεις 4–5.",
+    "switchLanguage": "Αλλαγή γλώσσας",
+    "toggleTheme": "Εναλλαγή θέματος"
+  }
+}

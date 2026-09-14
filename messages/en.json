@@ -1,0 +1,26 @@
+{
+  "nav": {
+    "home": "Home",
+    "projects": "Projects",
+    "about": "About",
+    "cv": "CV",
+    "contact": "Contact"
+  },
+  "home": {
+    "tagline": "Building tools that solve real problems",
+    "subtitle": "Data engineering · automation · full-stack",
+    "ctaProjects": "See the projects",
+    "ctaCv": "Download CV"
+  },
+  "categories": {
+    "fullstack": "Full-stack",
+    "data": "Data & ETL",
+    "automation": "Automation"
+  },
+  "common": {
+    "comingSoon": "Under construction",
+    "scaffoldNote": "Infrastructure is live. Content lands in phases 4–5.",
+    "switchLanguage": "Switch language",
+    "toggleTheme": "Toggle theme"
+  }
+}

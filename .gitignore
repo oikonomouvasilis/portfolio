@@ -1,0 +1,47 @@
+# dependencies
+node_modules/
+.pnp
+.pnp.*
+
+# next.js
+.next/
+out/
+build/
+next-env.d.ts
+
+# production
+dist/
+
+# misc
+.DS_Store
+*.pem
+Thumbs.db
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# env files — ποτέ σε commit (D9)
+.env
+.env*.local
+.env.production
+!.env.example
+
+# credentials — τίποτα από αυτά δεν πλησιάζει το repo (D9)
+*.key
+*.pem
+*credentials*.json
+client_secret*.json
+*api_keys*
+
+# typescript
+*.tsbuildinfo
+
+# vercel
+.vercel
+
+# editors
+.idea/
+.vscode/
