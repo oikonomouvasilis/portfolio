@@ -48,14 +48,29 @@
 - Το `next-mdx-remote` 5.0.0 είχε high-severity advisory (GHSA-g4xw-jxrg-5f6m) —
   αναβαθμίστηκε σε 6.x. `npm audit`: 0 ευπάθειες.
 
-## Φάση 2 — Content pipeline
-- [ ] zod schema για το frontmatter των project
-- [ ] Loader που διαβάζει τα MDX, επικυρώνει, και σπάει το build σε λάθος
-- [ ] Παραγωγή κατηγοριών/τεχνολογιών **από τα δεδομένα**, όχι από χειροκίνητη λίστα
-- [ ] 2 πραγματικά project ως δείγμα, σε EN + EL
-- [ ] `content/cv.ts` με typed δομή βιογραφικού
+## Φάση 2 — Content pipeline ✅
+- [x] zod schema για το frontmatter των project (`lib/content/schema.ts`)
+- [x] Loader που διαβάζει τα MDX, επικυρώνει, και **σπάει το build σε λάθος**
+- [x] Έλεγχος συμφωνίας slug αρχείου ↔ slug frontmatter
+- [x] Fallback γλώσσας με ορατή ειδοποίηση, αντί για σιωπηλή αγγλική σελίδα (D4)
+- [x] Παραγωγή κατηγοριών/τεχνολογιών **από τα δεδομένα** (`lib/content/taxonomy.ts`)
+- [x] 2 πραγματικά project ως δείγμα, σε EN + EL — `ai-trader`, `nutrition-tracker`
+- [x] `content/cv.ts` με typed δομή βιογραφικού (σκελετός, περιμένει υλικό)
+- [x] Σελίδες `/projects` και `/projects/[slug]` με MDX rendering
 
 **Παραδοτέο:** προσθέτεις αρχείο → εμφανίζεται στο site χωρίς να αγγίξεις κώδικα.
+
+**Επαληθεύτηκε**
+- Build: 11 στατικές σελίδες, όλα τα project × 2 γλώσσες. `typecheck`/`lint` καθαρά.
+- Άκυρο frontmatter → build **απέτυχε** με exit 1 και μήνυμα που ονομάζει αρχείο
+  και πεδία (`categories.0: Invalid option…`, `stack: Too small…`).
+- Αφαίρεση του `nutrition-tracker.el.mdx` → η ελληνική σελίδα σέρβιρε το αγγλικό
+  κείμενο **με** την ειδοποίηση fallback· το `ai-trader`, που έχει ελληνικά, καμία.
+- Οι όψεις μετρούν σωστά (`TypeScript 2`), και η κατηγορία `data` **δεν**
+  εμφανίζεται όσο κανένα project δεν την έχει — καμία άδεια επιλογή φίλτρου.
+
+**Εκκρεμότητες περιεχομένου:** και τα δύο δείγματα έχουν `{/* TODO Φ0 */}` στα
+σημεία όπου λείπουν νούμερα. Κανένα νούμερο δεν εφευρέθηκε.
 
 ## Φάση 3 — Design system
 - [ ] Τυπογραφική κλίμακα, χρώματα, spacing, radius — ως tokens

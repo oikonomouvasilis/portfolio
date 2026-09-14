@@ -17,6 +17,27 @@
     "data": "Δεδομένα & ETL",
     "automation": "Αυτοματισμοί"
   },
+  "status": {
+    "live": "Σε λειτουργία",
+    "wip": "Σε εξέλιξη",
+    "archived": "Αρχειοθετημένο"
+  },
+  "projects": {
+    "title": "Projects",
+    "intro": "Πράγματα που έχω φτιάξει, και σε τι χρησίμευαν.",
+    "empty": "Δεν υπάρχουν ακόμη project.",
+    "categoriesLabel": "Κατηγορίες",
+    "stackLabel": "Τεχνολογίες",
+    "problem": "Πρόβλημα",
+    "solution": "Λύση",
+    "outcome": "Αποτέλεσμα",
+    "role": "Ρόλος",
+    "viewRepo": "Πηγαίος κώδικας",
+    "viewDemo": "Ζωντανό demo",
+    "caseStudyOnly": "Ο κώδικας δεν είναι δημόσιος",
+    "fallbackNotice": "Αυτό το case study δεν υπάρχει ακόμη στα ελληνικά — βλέπεις την αγγλική εκδοχή.",
+    "backToProjects": "Όλα τα projects"
+  },
   "common": {
     "comingSoon": "Υπό κατασκευή",
     "scaffoldNote": "Η υποδομή είναι ζωντανή. Το περιεχόμενο έρχεται στις φάσεις 4–5.",

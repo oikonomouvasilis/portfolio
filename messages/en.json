@@ -17,6 +17,27 @@
     "data": "Data & ETL",
     "automation": "Automation"
   },
+  "status": {
+    "live": "Live",
+    "wip": "In progress",
+    "archived": "Archived"
+  },
+  "projects": {
+    "title": "Projects",
+    "intro": "Things I have built, and what they were for.",
+    "empty": "No projects yet.",
+    "categoriesLabel": "Categories",
+    "stackLabel": "Technologies",
+    "problem": "Problem",
+    "solution": "Solution",
+    "outcome": "Outcome",
+    "role": "Role",
+    "viewRepo": "Source code",
+    "viewDemo": "Live demo",
+    "caseStudyOnly": "Source not public",
+    "fallbackNotice": "This case study is not available in your language yet — showing the English version.",
+    "backToProjects": "All projects"
+  },
   "common": {
     "comingSoon": "Under construction",
     "scaffoldNote": "Infrastructure is live. Content lands in phases 4–5.",

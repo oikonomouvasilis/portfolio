@@ -1,0 +1,71 @@
+---
+title: AI Trader
+slug: ai-trader
+year: 2026
+status: live
+categories:
+  - automation
+stack:
+  - Python
+  - GitHub Actions
+  - Alpaca API
+  - Gemini
+  - Finnhub
+  - TypeScript
+  - Vite
+role: Design and implementation, end to end
+summary: An autonomous daily trading pipeline where the language model proposes and the code decides.
+problem: >-
+  A trading strategy is only worth as much as the discipline behind it. People
+  get tired, skip the stop-loss, and chase losses.
+solution: >-
+  A fully autonomous pipeline running on GitHub Actions with no server. The
+  model's decision passes through code that enforces hard limits per ticker,
+  per sector and per day.
+outcome: >-
+  Runs unattended on every trading day and publishes a dashboard that updates
+  on each execution. Repeated runs cannot double-trade.
+repo: https://github.com/oikonomouvasilis/AI-TRADER
+demo: https://oikonomouvasilis.github.io/AI-TRADER/
+featured: true
+---
+
+{/* TODO Φ0: λείπει «πόσο καιρό τρέχει αδιάκοπα» και «πόσες συνεδρίες». Μόλις τα
+δώσει ο χρήστης, μπαίνουν στο `outcome`. Καμία αναφορά σε απόδοση — D9. */}
+
+This runs on a **paper account**. There is no real capital at risk, and this page
+makes no claim about returns — the interesting part is the machinery, not the P&L.
+
+## The shape of a day
+
+The pipeline runs once, at US market open, in three stages.
+
+**Research.** A screener picks up the most active movers with five-day momentum,
+filtered to names priced at or below $50. That price ceiling is not arbitrary: it
+keeps positions to whole shares, which is what makes a native broker stop-loss
+possible. Candidates are enriched with headlines and sector data.
+
+**Receptivity check.** One decision call goes to Gemini, framed as a value-driven
+momentum portfolio manager. Its answer is a proposal, not an instruction.
+
+**Execution.** Whatever survives the gates is entered as a bracket order — a hard
+stop-loss at −3% and a take-profit at +10%, both attached at entry.
+
+## The decision that matters
+
+The model does not get the last word. Its proposal passes through risk gating
+written in plain code: **$50 per ticker, $250 per sector, $100 per day**. If the
+model asks for something outside those bounds, the bounds win.
+
+This inversion is the whole point. An LLM is good at reading a noisy situation and
+suggesting something plausible. It is bad at being consistent about risk. So the
+part that needs judgement is delegated, and the part that needs discipline is not.
+
+## Idempotency without a database
+
+Each run appends to a per-day journal file, and that same file acts as the
+"already traded today" lock. A workflow that fires twice — a retry, a manual
+trigger, a scheduling hiccup — finds the day's journal and stops.
+
+No database, no external state store. The artifact that records what happened is
+the same artifact that prevents it happening twice.

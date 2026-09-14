@@ -1,0 +1,60 @@
+---
+title: Nutrition Tracker
+slug: nutrition-tracker
+year: 2026
+status: wip
+categories:
+  - fullstack
+stack:
+  - Next.js
+  - TypeScript
+  - React
+  - Tailwind CSS
+  - Supabase
+  - Recharts
+role: Design and implementation, end to end
+summary: A nutrition tracker built around recipes rather than individual ingredients.
+problem: >-
+  Off-the-shelf nutrition apps carry food databases with no Greek products, and
+  logging a composite home-cooked meal means entering every ingredient again,
+  every single time.
+solution: >-
+  A personal food database with macros per 100g, and meals composed from
+  ingredients so a recipe is defined once and reused. Search state lives in the
+  URL, so any filter can be shared or bookmarked.
+outcome: >-
+  A recipe entered once is logged in a single action from then on, and intake
+  statistics are computed from the same records rather than kept separately.
+repo: https://github.com/oikonomouvasilis/nutrition-tracker
+featured: true
+---
+
+{/* TODO Φ0: λείπει «πόσες τροφές έχει η βάση» και «πόσο γρήγορα καταγράφεται ένα
+γεύμα τώρα σε σχέση με πριν». Επίσης: υπάρχει live demo URL; */}
+
+## Two entities, not one
+
+The modelling decision that shapes everything else is separating **foods** from
+**meals**. A food carries macros per 100g and nothing else. A meal is a list of
+foods with quantities.
+
+That separation is what makes a recipe reusable. Enter the ingredients of a dish
+once, and logging it later is a single action instead of six. It also means
+correcting a food's macros retroactively fixes every meal that uses it, rather
+than leaving stale copies scattered through the history.
+
+## The URL is the state
+
+Search terms, filters and the selected columns are all held in the URL rather
+than in component state. The effect is that any view can be shared, bookmarked,
+or reopened exactly as it was — and the back button behaves the way people expect
+instead of throwing away their filters.
+
+It costs a little more code than `useState`. It buys behaviour that users notice
+immediately when it is missing.
+
+## Statistics from the same records
+
+Intake statistics are derived from the logged meals, not accumulated into
+separate totals. There is no path where the charts and the history can disagree,
+because they are reading the same rows.

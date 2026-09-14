@@ -53,39 +53,36 @@ screenshots, διαγράμματα, αποσπάσματα κώδικα.
 
 | slug | Ετικέτα EN | Ετικέτα EL |
 |---|---|---|
-| `fullstack` | Full-stack | Full-stack |
-| `data` | Data & ETL | Δεδομένα & ETL |
+| `data-etl` | Data & ETL | Δεδομένα & ETL |
 | `automation` | Automation | Αυτοματισμοί |
+| `machine-learning` | Machine Learning | Μηχανική Μάθηση |
+| `web-app` | Web Apps | Εφαρμογές Web |
+| `api-integration` | APIs & Integrations | APIs & Διασυνδέσεις |
+| `finance` | Finance & Trading | Χρηματοοικονομικά |
 
-Τρεις κατηγορίες, όπως τις όρισες. Ένα project μπορεί να ανήκει σε πάνω από μία,
-αλλά στην πράξη κάθε ένα έχει μία κύρια — αυτή καθορίζει πού εμφανίζεται πρώτα.
-
-Οι **τεχνολογίες** (`stack`) λειτουργούν ως δεύτερος, ανεξάρτητος άξονας φιλτραρίσματος:
-κάποιος που ψάχνει «Python» τα βρίσκει όλα, ανεξάρτητα από κατηγορία.
+Ένα project μπορεί να ανήκει σε πάνω από μία.
 
 ---
 
-## 3. Τελική λίστα — κλειδωμένη
+## 3. Draft shortlist — από τον φάκελο `PROJECTS`
 
-Επιλογή δική σου, 9 project σε 3 κατηγορίες. Η πλήρης απογραφή με draft case studies
-και έλεγχο D9 ανά project είναι στο **[INVENTORY.md](INVENTORY.md)**.
+Πρώτη ανάγνωση, **προς συζήτηση**. Στόχος 6–10 project: λιγότερα και καλύτερα
+νικούν τα πολλά και μισοτελειωμένα.
 
-| Project | Κατηγορία | slug | Repo | D9 |
-|---|---|---|---|---|
-| Nutrition Tracker | fullstack | `nutrition-tracker` | ✅ public | ✅ |
-| AI Expenses Predictor | fullstack `+data?` | `expenses-predictor` | 🔒 private | ⚠️ ανωνυμοποίηση |
-| Αθανéleon | fullstack | `athaneleon` | ✅ public | 🔴 θέλει άδεια |
-| Stock Valuation & Validation | data | `etl-stock-valuation` | ✅ public | ⚠️ key |
-| AI Trader | automation | `ai-trader` | ✅ public + live | ⚠️ χωρίς αποδόσεις |
-| n8n Job Seeker | automation | `n8n-job-seeker` | ✅ public | ⚠️ λείπει το JSON |
-| Ελληνικά μητρώα | automation `+data?` | `greek-public-registries` | ❌ χωρίς git | ✅ |
-| Duty Scheduler | automation | `duty-scheduler` | 🔒 private | 🔴 θέλει έγκριση |
+| Project | Κατηγορίες | Γιατί μπαίνει | D9 |
+|---|---|---|---|
+| **Duty Scheduler** | web-app, automation | Πλήρες full-stack, αλγόριθμος δίκαιης κατανομής, δικό σου σχέδιο από το μηδέν | ⚠️ ψευδοδεδομένα στα screenshots |
+| **ETL Stock Valuation** | data-etl, finance | Pipeline + βάση + Power BI. Δείχνει data engineering end-to-end | ✅ δημόσια δεδομένα |
+| **ML Expenses Predictor** | machine-learning, web-app | Μοντέλο + API + frontend — σπάνιος συνδυασμός σε portfolio | ⚠️ ανωνυμοποίηση συναλλαγών |
+| **AI Trading** | finance, api-integration | Alpaca API, dashboard, journal. Δείχνει δουλειά με live αγορές | ⚠️ χωρίς keys, χωρίς αποδόσεις λογαριασμού |
+| **n8n Job Seeker** | automation, api-integration | Πραγματικός αυτοματισμός που λύνει δικό σου πρόβλημα | ⚠️ credentials έξω |
+| **Αυτοματοποίηση Συνθηματικών** | automation | Desktop app με PyInstaller, export σε PDF/XLSX. Δείχνει εύρος πέρα από web | 🔴 **case study χωρίς repo** |
+| **Διαύγεια / ΚΗΜΔΗΣ ανάκτηση** | data-etl, api-integration | Δουλειά με δημόσια open data APIs | ✅ δημόσια δεδομένα |
+| **  * | web-app | Δεύτερη Next.js εφαρμογή — μπαίνει μόνο αν έχει κάτι να πει | ✅ |
+| **Open Banking App** | finance, api-integration | Δυνατός τομέας, αλλά ευαίσθητος | 🔴 μόνο περιγραφικά |
+| **SYNOLO / finance hub** | finance, web-app | Χρειάζεται να δω τι έχει μέσα | ❓ |
 
-Τα δύο ETL **ενώθηκαν σε ένα** — το repo `ETL-STOCK-VALUATION` περιείχε ήδη το
-`validations.pbix` του δεύτερου. Διαύγεια και ΚΗΜΔΗΣ είναι **ένα** project.
-
-Το `+data?` σημειώνει τη δεύτερη κατηγορία που προτείνω για ισορροπία των φίλτρων —
-βλ. [INVENTORY.md](INVENTORY.md), τελευταία ενότητα.
+✅ ασφαλές · ⚠️ θέλει ανωνυμοποίηση · 🔴 όχι repo, μόνο περιγραφή
 
 ---
 
