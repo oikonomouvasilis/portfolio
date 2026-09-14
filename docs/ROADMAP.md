@@ -26,13 +26,27 @@
 που δεν χρειάζονται περιεχόμενο.
 
 ## Φάση 1 — Υποδομή & πρώτο deploy
-- [ ] `git init`, public repo στο GitHub
-- [ ] Next.js 16 + TS + Tailwind 4 + MDX scaffold
-- [ ] Routing δύο γλωσσών: `/[locale]` με `en` | `el`, redirect από `/`
-- [ ] ESLint + Prettier + `typecheck` script
-- [ ] Σύνδεση Vercel → deploy κενής σελίδας
+- [x] `git init`, **public repo**: [oikonomouvasilis/portfolio](https://github.com/oikonomouvasilis/portfolio)
+- [x] Next.js 16 + TS + Tailwind 4 scaffold (χειροκίνητο — βλ. σημείωση)
+- [x] Routing δύο γλωσσών: `/[locale]` με `en` | `el`, redirect από `/`
+- [x] `LocaleSwitch` που κρατά τον χρήστη στην ίδια σελίδα
+- [x] `hreflang` alternates στα metadata
+- [x] ESLint (flat config) + `typecheck` script — και τα δύο καθαρά
+- [x] Επαλήθευση: `/` → 307 → `/en` · `/en` 200 · `/el` 200 · `/xx` 404
+- [x] Επαλήθευση: `lang` σωστό ανά γλώσσα, μηδέν console errors, καθαρό σε 375px
+- [ ] ⏳ **Σύνδεση Vercel** — περιμένει σύνδεση λογαριασμού από εσένα
 
 **Παραδοτέο:** ζωντανό URL από την πρώτη μέρα. Κάθε επόμενο push ανεβαίνει μόνο του.
+
+**Σημειώσεις υλοποίησης**
+- Το `create-next-app` αρνείται όνομα φακέλου με κεφαλαία (`PORTFOLIO`). Το scaffold
+  έγινε χειροκίνητα — καλύτερα ούτως ή άλλως, δεν κουβαλήσαμε boilerplate προς διαγραφή.
+- Το root `app/layout.tsx` είναι pass-through ώστε το `<html lang>` να ζει στο
+  `app/[locale]/layout.tsx` και να αντιστοιχεί στη γλώσσα της σελίδας.
+- Το `eslint-config-next` 16 εξάγει flat configs· το `FlatCompat` σκάει σε κυκλική
+  αναφορά και αφαιρέθηκε μαζί με το `@eslint/eslintrc`.
+- Το `next-mdx-remote` 5.0.0 είχε high-severity advisory (GHSA-g4xw-jxrg-5f6m) —
+  αναβαθμίστηκε σε 6.x. `npm audit`: 0 ευπάθειες.
 
 ## Φάση 2 — Content pipeline
 - [ ] zod schema για το frontmatter των project
