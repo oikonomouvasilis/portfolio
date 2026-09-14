@@ -10,7 +10,8 @@
     "tagline": "Χτίζω εργαλεία που λύνουν αληθινά προβλήματα",
     "subtitle": "Data engineering · αυτοματισμοί · full-stack",
     "ctaProjects": "Δες τα projects",
-    "ctaCv": "Κατέβασε το βιογραφικό"
+    "ctaCv": "Κατέβασε το βιογραφικό",
+    "selectedWork": "Επιλεγμένη δουλειά"
   },
   "categories": {
     "fullstack": "Full-stack",
@@ -22,6 +23,12 @@
     "wip": "Σε εξέλιξη",
     "archived": "Αρχειοθετημένο"
   },
+  "layers": {
+    "frontend": "Frontend",
+    "backend": "Backend",
+    "data": "Δεδομένα",
+    "infra": "Υποδομή"
+  },
   "projects": {
     "title": "Projects",
     "intro": "Πράγματα που έχω φτιάξει, και σε τι χρησίμευαν.",
@@ -29,9 +36,12 @@
     "categoriesLabel": "Κατηγορίες",
     "stackLabel": "Τεχνολογίες",
     "problem": "Πρόβλημα",
+    "goal": "Στόχος",
     "solution": "Λύση",
     "outcome": "Αποτέλεσμα",
     "role": "Ρόλος",
+    "architecture": "Αρχιτεκτονική",
+    "gallery": "Οθόνες",
     "viewRepo": "Πηγαίος κώδικας",
     "viewDemo": "Ζωντανό demo",
     "caseStudyOnly": "Ο κώδικας δεν είναι δημόσιος",

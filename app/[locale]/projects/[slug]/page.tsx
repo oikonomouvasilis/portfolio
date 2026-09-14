@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import { getMessages, isLocale, locales } from "@/lib/i18n";
 import { getProject, getProjectSlugs } from "@/lib/content/projects";
+import { StackDiagram } from "@/components/stack-diagram";
+import { Gallery } from "@/components/gallery";
 
 type Params = Promise<{ locale: string; slug: string }>;
 
@@ -23,7 +26,11 @@ export async function generateMetadata({
   const project = await getProject(slug, locale);
   if (!project) return {};
 
-  return { title: project.title, description: project.summary };
+  return {
+    title: project.title,
+    description: project.summary,
+    openGraph: { images: [project.cover] },
+  };
 }
 
 export default async function ProjectPage({ params }: { params: Params }) {
@@ -35,101 +42,111 @@ export default async function ProjectPage({ params }: { params: Params }) {
 
   const t = await getMessages(locale);
 
+  const narrative = [
+    [t.projects.problem, project.problem],
+    [t.projects.goal, project.goal],
+    [t.projects.solution, project.solution],
+    [t.projects.outcome, project.outcome],
+  ] as const;
+
   return (
-    <article className="space-y-10">
-      <Link
-        href={`/${locale}/projects`}
-        className="text-sm text-[var(--muted)] underline-offset-4 hover:underline"
-      >
-        ← {t.projects.backToProjects}
-      </Link>
+    <article className="space-y-20">
+      <header className="space-y-8">
+        <Link
+          href={`/${locale}/projects`}
+          className="font-mono text-xs tracking-widest text-[var(--faint)] uppercase underline-offset-4 hover:text-[var(--fg)] hover:underline"
+        >
+          ← {t.projects.backToProjects}
+        </Link>
 
-      <header className="space-y-3">
-        <h1 className="text-3xl font-medium tracking-tight">{project.title}</h1>
-        <p className="text-[var(--muted)]">{project.summary}</p>
+        <div className="max-w-3xl space-y-5">
+          <h1 className="text-5xl sm:text-6xl">{project.title}</h1>
+          <p className="text-xl text-[var(--muted)]">{project.summary}</p>
+        </div>
 
-        <dl className="flex flex-wrap gap-x-6 gap-y-1 text-sm text-[var(--muted)]">
-          <div className="flex gap-2">
-            <dt className="sr-only">{t.projects.role}</dt>
-            <dd>{project.role}</dd>
-          </div>
-          <div className="flex gap-2">
-            <dt className="sr-only">Year</dt>
-            <dd>
-              {project.year} · {t.status[project.status]}
-            </dd>
-          </div>
-        </dl>
+        <div className="flex flex-wrap items-center gap-x-8 gap-y-3 border-y border-[var(--line)] py-4 font-mono text-xs tracking-wide text-[var(--faint)] uppercase">
+          <span>{project.year}</span>
+          <span>{t.status[project.status]}</span>
+          <span className="normal-case">{project.role}</span>
 
-        <ul className="flex flex-wrap gap-2 text-xs">
-          {project.stack.map((tech) => (
-            <li
-              key={tech}
-              className="rounded-md border border-[var(--border)] px-2 py-0.5 text-[var(--muted)]"
-            >
-              {tech}
-            </li>
-          ))}
-        </ul>
-
-        <div className="flex flex-wrap gap-4 text-sm">
-          {project.repo && (
-            <a
-              href={project.repo}
-              className="underline underline-offset-4"
-              rel="noreferrer"
-            >
-              {t.projects.viewRepo}
-            </a>
-          )}
-          {project.demo && (
-            <a
-              href={project.demo}
-              className="underline underline-offset-4"
-              rel="noreferrer"
-            >
-              {t.projects.viewDemo}
-            </a>
-          )}
-          {project.caseStudyOnly && (
-            <span className="text-[var(--muted)]">
-              {t.projects.caseStudyOnly}
-            </span>
-          )}
+          <span className="flex flex-1 flex-wrap justify-end gap-x-6 gap-y-2">
+            {project.repo && (
+              <a
+                href={project.repo}
+                rel="noreferrer"
+                className="text-[var(--fg)] underline underline-offset-4 decoration-[var(--line)] hover:decoration-[var(--fg)]"
+              >
+                {t.projects.viewRepo} ↗
+              </a>
+            )}
+            {project.demo && (
+              <a
+                href={project.demo}
+                rel="noreferrer"
+                className="text-[var(--fg)] underline underline-offset-4 decoration-[var(--line)] hover:decoration-[var(--fg)]"
+              >
+                {t.projects.viewDemo} ↗
+              </a>
+            )}
+            {project.caseStudyOnly && <span>{t.projects.caseStudyOnly}</span>}
+          </span>
         </div>
       </header>
 
       {project.isFallback && (
         <p
           role="status"
-          className="rounded-lg border border-[var(--border)] px-4 py-3 text-sm text-[var(--muted)]"
+          className="border-l-2 border-[var(--line)] pl-4 text-sm text-[var(--muted)]"
         >
           {t.projects.fallbackNotice}
         </p>
       )}
 
-      <section className="grid gap-6 sm:grid-cols-3">
-        {(
-          [
-            [t.projects.problem, project.problem],
-            [t.projects.solution, project.solution],
-            [t.projects.outcome, project.outcome],
-          ] as const
-        ).map(([label, value]) => (
-          <div key={label} className="space-y-1">
-            <h2 className="text-sm font-medium">{label}</h2>
-            <p className="text-sm text-[var(--muted)]">{value}</p>
+      <div className="overflow-hidden rounded-lg border border-[var(--line)] bg-[var(--surface)]">
+        <Image
+          src={project.cover}
+          alt=""
+          width={1200}
+          height={675}
+          priority
+          className="h-auto w-full"
+          sizes="(max-width: 64rem) 100vw, 64rem"
+        />
+      </div>
+
+      {/* Πρόβλημα → στόχος → λύση → αποτέλεσμα: η αφήγηση με μια ματιά (D15). */}
+      <section className="grid gap-x-10 gap-y-8 sm:grid-cols-2 lg:grid-cols-4">
+        {narrative.map(([label, value]) => (
+          <div key={label} className="space-y-2">
+            <h2 className="font-mono text-xs tracking-widest text-[var(--faint)] uppercase">
+              {label}
+            </h2>
+            <p className="text-sm leading-relaxed">{value}</p>
           </div>
         ))}
       </section>
 
+      <StackDiagram
+        layers={project.stackLayers}
+        labels={t.layers}
+        title={t.projects.architecture}
+      />
+
       {/*
         Το σώμα MDX είναι δικό μας περιεχόμενο από το repo, όχι είσοδος χρήστη.
-        Η προεπιλεγμένη τυπογραφία μπαίνει στη Φάση 3 μαζί με το design system.
+        Το μέγιστο πλάτος κρατά τη γραμμή σε αναγνώσιμο μήκος (~70 χαρακτήρες).
       */}
-      <div className="space-y-4 leading-relaxed [&_h2]:mt-8 [&_h2]:text-lg [&_h2]:font-medium [&_p]:text-[var(--muted)]">
+      <div className="max-w-2xl space-y-5 leading-[1.75] [&_h2]:mt-12 [&_h2]:mb-3 [&_h2]:text-2xl [&_p]:text-[var(--muted)] [&_strong]:font-medium [&_strong]:text-[var(--fg)]">
         <MDXRemote source={project.body} />
       </div>
+
+      <section className="space-y-6">
+        <h2 className="flex items-baseline gap-4 font-mono text-xs tracking-widest text-[var(--faint)] uppercase">
+          {t.projects.gallery}
+          <span aria-hidden="true" className="h-px flex-1 bg-[var(--line)]" />
+        </h2>
+        <Gallery items={project.gallery} />
+      </section>
     </article>
   );
 }

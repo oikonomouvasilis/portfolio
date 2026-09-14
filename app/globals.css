@@ -1,53 +1,101 @@
 @import "tailwindcss";
 
 /*
- * Φάση 1 — μόνο η βάση. Η πλήρης χρωματική κλίμακα, η τυπογραφική κλίμακα και τα
- * components έρχονται στη Φάση 3 (D8). Ό,τι μπαίνει εδώ τώρα είναι μόνο όσα
- * χρειάζονται για να μη φαίνεται άστεγη η σελίδα-σκελετός.
+ * Design system — editorial (D14).
+ * Δυνατές serif επικεφαλίδες, καθαρό grid, γενναιόδωρο κενό, ελάχιστο χρώμα.
+ * Το χρώμα μπαίνει από τις εικόνες των project, όχι από το chrome της σελίδας.
  */
 
 @theme inline {
   --color-bg: var(--bg);
+  --color-surface: var(--surface);
   --color-fg: var(--fg);
   --color-muted: var(--muted);
-  --color-border: var(--border);
+  --color-faint: var(--faint);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
   --font-sans: var(--font-sans);
+  --font-serif: var(--font-serif);
 }
 
 :root {
-  --bg: #fbfaf8;
-  --fg: #1a1a19;
-  --muted: #6b6a66;
-  --border: #e3e0d8;
-  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
-    "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  --bg: #fdfcfa;
+  --surface: #f5f2ec;
+  --fg: #171614;
+  --muted: #5f5d57;
+  --faint: #8d8a82;
+  --line: #ddd8ce;
+  --accent: #7a3b1f;
+
+  color-scheme: light;
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #121211;
-    --fg: #f0eee9;
-    --muted: #9c9a94;
-    --border: #2e2d2a;
+    --bg: #100f0e;
+    --surface: #1a1917;
+    --fg: #f2efe9;
+    --muted: #a5a29a;
+    --faint: #76736c;
+    --line: #2c2a27;
+    --accent: #d79268;
+
+    color-scheme: dark;
   }
 }
 
 :root[data-theme="dark"] {
-  --bg: #121211;
-  --fg: #f0eee9;
-  --muted: #9c9a94;
-  --border: #2e2d2a;
+  --bg: #100f0e;
+  --surface: #1a1917;
+  --fg: #f2efe9;
+  --muted: #a5a29a;
+  --faint: #76736c;
+  --line: #2c2a27;
+  --accent: #d79268;
+
+  color-scheme: dark;
 }
 
 body {
   background: var(--bg);
   color: var(--fg);
-  font-family: var(--font-sans);
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/*
+ * Η τυπογραφική υπογραφή του site. Οι επικεφαλίδες είναι serif με σφιχτό
+ * tracking και ύψος γραμμής — το editorial ύφος ζει ή πεθαίνει εδώ.
+ */
+h1,
+h2,
+h3 {
+  font-family: var(--font-serif), Georgia, "Times New Roman", serif;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  text-wrap: balance;
 }
 
 /* Ορατός δακτύλιος εστίασης — απαίτηση προσβασιμότητας, όχι διακόσμηση. */
 :focus-visible {
-  outline: 2px solid var(--fg);
-  outline-offset: 2px;
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+/* Σεβασμός σε όποιον έχει ζητήσει λιγότερη κίνηση. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }

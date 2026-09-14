@@ -5,32 +5,45 @@ year: 2026
 status: live
 categories:
   - automation
-stack:
-  - Python
-  - GitHub Actions
-  - Alpaca API
-  - Gemini
-  - Finnhub
-  - TypeScript
-  - Vite
+stackLayers:
+  frontend:
+    - TypeScript
+    - Vite
+  backend:
+    - Python
+  data:
+    - Alpaca API
+    - Finnhub
+    - Gemini
+  infra:
+    - GitHub Actions
+    - GitHub Pages
 role: Σχεδιασμός και ανάπτυξη, εξ ολοκλήρου
 summary: Αυτόνομο ημερήσιο pipeline συναλλαγών όπου το μοντέλο προτείνει και ο κώδικας αποφασίζει.
 problem: >-
   Μια στρατηγική συναλλαγών αξίζει όσο και η πειθαρχία πίσω της. Ο άνθρωπος
   κουράζεται, ξεχνά το stop-loss και κυνηγά τη ζημιά.
+goal: >-
+  Να δοκιμάσω αν ένα γλωσσικό μοντέλο μπορεί να πάρει πραγματική κρίση πάνω σε
+  μια θορυβώδη απόφαση, χωρίς να πάρει μαζί και τον έλεγχο του κινδύνου.
 solution: >-
   Πλήρως αυτόνομο pipeline σε GitHub Actions, χωρίς server. Η απόφαση του
   μοντέλου περνά από κώδικα που επιβάλλει αυστηρά όρια ανά μετοχή, ανά κλάδο
   και ανά ημέρα.
 outcome: >-
-  Τρέχει μόνο του κάθε ημέρα συναλλαγών και δημοσιεύει dashboard που ενημερώνεται
-  σε κάθε εκτέλεση. Επαναλαμβανόμενα τρεξίματα δεν μπορούν να διπλοσυναλλάξουν.
+  Έχει εκτελέσει 61 κλεισμένες συναλλαγές χωρίς επίβλεψη, με δημόσιο dashboard
+  που ενημερώνεται σε κάθε εκτέλεση. Επαναλαμβανόμενα τρεξίματα δεν μπορούν να
+  διπλοσυναλλάξουν.
 repo: https://github.com/oikonomouvasilis/AI-TRADER
 demo: https://oikonomouvasilis.github.io/AI-TRADER/
+cover: /images/projects/ai-trader/cover.svg
+gallery:
+  - src: /images/projects/ai-trader/dashboard.svg
+    caption: Το dashboard, ξαναχτισμένο σε κάθε εκτέλεση από το journal της ημέρας.
 featured: true
 ---
 
-{/* TODO Φ0: λείπει «πόσο καιρό τρέχει αδιάκοπα» και «πόσες συνεδρίες». */}
+{/* TODO: οι εικόνες είναι placeholders — αντικαθίστανται με screenshots. */}
 
 Τρέχει σε **paper account**. Δεν διακυβεύονται πραγματικά κεφάλαια, και η σελίδα
 δεν ισχυρίζεται τίποτα για αποδόσεις — το ενδιαφέρον εδώ είναι η μηχανική, όχι το

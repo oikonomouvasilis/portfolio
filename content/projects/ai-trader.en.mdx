@@ -5,33 +5,45 @@ year: 2026
 status: live
 categories:
   - automation
-stack:
-  - Python
-  - GitHub Actions
-  - Alpaca API
-  - Gemini
-  - Finnhub
-  - TypeScript
-  - Vite
+stackLayers:
+  frontend:
+    - TypeScript
+    - Vite
+  backend:
+    - Python
+  data:
+    - Alpaca API
+    - Finnhub
+    - Gemini
+  infra:
+    - GitHub Actions
+    - GitHub Pages
 role: Design and implementation, end to end
 summary: An autonomous daily trading pipeline where the language model proposes and the code decides.
 problem: >-
   A trading strategy is only worth as much as the discipline behind it. People
   get tired, skip the stop-loss, and chase losses.
+goal: >-
+  Find out whether a language model can be given real judgement over a noisy
+  decision without also being given control of the risk.
 solution: >-
   A fully autonomous pipeline running on GitHub Actions with no server. The
   model's decision passes through code that enforces hard limits per ticker,
   per sector and per day.
 outcome: >-
-  Runs unattended on every trading day and publishes a dashboard that updates
-  on each execution. Repeated runs cannot double-trade.
+  Has executed 61 closed trades unattended, with a public dashboard that updates
+  on every run. Repeated runs cannot double-trade.
 repo: https://github.com/oikonomouvasilis/AI-TRADER
 demo: https://oikonomouvasilis.github.io/AI-TRADER/
+cover: /images/projects/ai-trader/cover.svg
+gallery:
+  - src: /images/projects/ai-trader/dashboard.svg
+    caption: The dashboard, rebuilt on every run from the day's journal file.
 featured: true
 ---
 
-{/* TODO Φ0: λείπει «πόσο καιρό τρέχει αδιάκοπα» και «πόσες συνεδρίες». Μόλις τα
-δώσει ο χρήστης, μπαίνουν στο `outcome`. Καμία αναφορά σε απόδοση — D9. */}
+{/* TODO: οι εικόνες είναι placeholders — αντικαθίστανται με screenshots του
+πραγματικού dashboard. Καμία αναφορά σε απόδοση — D9. */}
 
 This runs on a **paper account**. There is no real capital at risk, and this page
 makes no claim about returns — the interesting part is the machinery, not the P&L.

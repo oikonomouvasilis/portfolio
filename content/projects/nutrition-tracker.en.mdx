@@ -5,19 +5,25 @@ year: 2026
 status: wip
 categories:
   - fullstack
-stack:
-  - Next.js
-  - TypeScript
-  - React
-  - Tailwind CSS
-  - Supabase
-  - Recharts
+stackLayers:
+  frontend:
+    - Next.js
+    - React
+    - TypeScript
+    - Tailwind CSS
+    - Recharts
+  data:
+    - Supabase
+    - PostgreSQL
 role: Design and implementation, end to end
 summary: A nutrition tracker built around recipes rather than individual ingredients.
 problem: >-
   Off-the-shelf nutrition apps carry food databases with no Greek products, and
   logging a composite home-cooked meal means entering every ingredient again,
   every single time.
+goal: >-
+  Make logging a repeated home-cooked meal cost one action instead of six,
+  without giving up accuracy on the macros.
 solution: >-
   A personal food database with macros per 100g, and meals composed from
   ingredients so a recipe is defined once and reused. Search state lives in the
@@ -26,11 +32,15 @@ outcome: >-
   A recipe entered once is logged in a single action from then on, and intake
   statistics are computed from the same records rather than kept separately.
 repo: https://github.com/oikonomouvasilis/nutrition-tracker
+cover: /images/projects/nutrition-tracker/cover.svg
+gallery:
+  - src: /images/projects/nutrition-tracker/stats.svg
+    caption: Intake statistics, derived from the logged meals themselves.
 featured: true
 ---
 
-{/* TODO Φ0: λείπει «πόσες τροφές έχει η βάση» και «πόσο γρήγορα καταγράφεται ένα
-γεύμα τώρα σε σχέση με πριν». Επίσης: υπάρχει live demo URL; */}
+{/* TODO Φ0: λείπει «πόσες τροφές έχει η βάση» και σύγκριση χρόνου καταγραφής.
+Οι εικόνες είναι placeholders — θέλουν screenshots. Υπάρχει live demo URL; */}
 
 ## Two entities, not one
 

@@ -10,7 +10,8 @@
     "tagline": "Building tools that solve real problems",
     "subtitle": "Data engineering · automation · full-stack",
     "ctaProjects": "See the projects",
-    "ctaCv": "Download CV"
+    "ctaCv": "Download CV",
+    "selectedWork": "Selected work"
   },
   "categories": {
     "fullstack": "Full-stack",
@@ -22,6 +23,12 @@
     "wip": "In progress",
     "archived": "Archived"
   },
+  "layers": {
+    "frontend": "Frontend",
+    "backend": "Backend",
+    "data": "Data",
+    "infra": "Infra"
+  },
   "projects": {
     "title": "Projects",
     "intro": "Things I have built, and what they were for.",
@@ -29,9 +36,12 @@
     "categoriesLabel": "Categories",
     "stackLabel": "Technologies",
     "problem": "Problem",
+    "goal": "Goal",
     "solution": "Solution",
     "outcome": "Outcome",
     "role": "Role",
+    "architecture": "Architecture",
+    "gallery": "Screens",
     "viewRepo": "Source code",
     "viewDemo": "Live demo",
     "caseStudyOnly": "Source not public",

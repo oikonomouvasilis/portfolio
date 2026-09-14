@@ -4,6 +4,7 @@ import { cache } from "react";
 import matter from "gray-matter";
 import { defaultLocale, isLocale, locales, type Locale } from "@/lib/i18n";
 import {
+  flattenStack,
   projectFrontmatterSchema,
   type ProjectFrontmatter,
 } from "./schema";
@@ -14,6 +15,8 @@ const CONTENT_DIR = path.join(process.cwd(), "content", "projects");
 const FILENAME = /^(?<slug>[a-z0-9-]+)\.(?<locale>[a-z]{2})\.mdx$/;
 
 export type Project = ProjectFrontmatter & {
+  /** Επίπεδη λίστα τεχνολογιών, παραγόμενη από τα `stackLayers` — για τα φίλτρα. */
+  stack: string[];
   /** Το σώμα MDX, χωρίς το frontmatter. */
   body: string;
   /** Η γλώσσα του κειμένου που πράγματι επιστράφηκε. */
@@ -106,7 +109,13 @@ function resolve(
 ): Project | null {
   const exact = byLocale.get(locale);
   if (exact) {
-    return { ...exact.frontmatter, body: exact.body, locale, isFallback: false };
+    return {
+      ...exact.frontmatter,
+      stack: flattenStack(exact.frontmatter.stackLayers),
+      body: exact.body,
+      locale,
+      isFallback: false,
+    };
   }
 
   const fallback = byLocale.get(defaultLocale);
@@ -114,6 +123,7 @@ function resolve(
 
   return {
     ...fallback.frontmatter,
+    stack: flattenStack(fallback.frontmatter.stackLayers),
     body: fallback.body,
     locale: defaultLocale,
     isFallback: true,
