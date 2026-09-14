@@ -153,3 +153,30 @@ export async function getProject(
 export async function getProjectSlugs(): Promise<string[]> {
   return [...(await loadAll()).keys()];
 }
+
+export type Neighbours = {
+  previous: Pick<Project, "slug" | "title"> | null;
+  next: Pick<Project, "slug" | "title"> | null;
+};
+
+/**
+ * Τα γειτονικά project στη σειρά της λίστας, για την πλοήγηση στο τέλος κάθε
+ * case study. Η λίστα **δεν** κυκλώνει: στο πρώτο δεν υπάρχει προηγούμενο και
+ * στο τελευταίο δεν υπάρχει επόμενο, ώστε ο επισκέπτης να ξέρει πού βρίσκεται.
+ */
+export async function getNeighbours(
+  slug: string,
+  locale: Locale,
+): Promise<Neighbours> {
+  const all = await getProjects(locale);
+  const index = all.findIndex((p) => p.slug === slug);
+  if (index === -1) return { previous: null, next: null };
+
+  const pick = (p: Project | undefined) =>
+    p ? { slug: p.slug, title: p.title } : null;
+
+  return {
+    previous: pick(all[index - 1]),
+    next: pick(all[index + 1]),
+  };
+}

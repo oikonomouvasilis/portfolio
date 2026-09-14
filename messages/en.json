@@ -46,7 +46,15 @@
     "viewDemo": "Live demo",
     "caseStudyOnly": "Source not public",
     "fallbackNotice": "This case study is not available in your language yet — showing the English version.",
-    "backToProjects": "All projects"
+    "backToProjects": "All projects",
+    "search": "Search",
+    "searchPlaceholder": "title, technology, year…",
+    "clear": "Clear",
+    "results": "Showing",
+    "noMatches": "Nothing matches these filters.",
+    "loading": "Loading filters…",
+    "previous": "Previous",
+    "next": "Next"
   },
   "common": {
     "comingSoon": "Under construction",

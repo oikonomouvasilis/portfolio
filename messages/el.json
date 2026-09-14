@@ -46,7 +46,15 @@
     "viewDemo": "Ζωντανό demo",
     "caseStudyOnly": "Ο κώδικας δεν είναι δημόσιος",
     "fallbackNotice": "Αυτό το case study δεν υπάρχει ακόμη στα ελληνικά — βλέπεις την αγγλική εκδοχή.",
-    "backToProjects": "Όλα τα projects"
+    "backToProjects": "Όλα τα projects",
+    "search": "Αναζήτηση",
+    "searchPlaceholder": "τίτλος, τεχνολογία, έτος…",
+    "clear": "Καθαρισμός",
+    "results": "Εμφανίζονται",
+    "noMatches": "Κανένα project δεν ταιριάζει με αυτά τα φίλτρα.",
+    "loading": "Φόρτωση φίλτρων…",
+    "previous": "Προηγούμενο",
+    "next": "Επόμενο"
   },
   "common": {
     "comingSoon": "Υπό κατασκευή",

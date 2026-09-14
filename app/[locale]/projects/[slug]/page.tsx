@@ -4,7 +4,11 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import { getMessages, isLocale, locales } from "@/lib/i18n";
-import { getProject, getProjectSlugs } from "@/lib/content/projects";
+import {
+  getNeighbours,
+  getProject,
+  getProjectSlugs,
+} from "@/lib/content/projects";
 import { StackDiagram } from "@/components/stack-diagram";
 import { Gallery } from "@/components/gallery";
 
@@ -41,6 +45,7 @@ export default async function ProjectPage({ params }: { params: Params }) {
   if (!project) notFound();
 
   const t = await getMessages(locale);
+  const neighbours = await getNeighbours(slug, locale);
 
   const narrative = [
     [t.projects.problem, project.problem],
@@ -147,6 +152,43 @@ export default async function ProjectPage({ params }: { params: Params }) {
         </h2>
         <Gallery items={project.gallery} />
       </section>
+
+      {(neighbours.previous || neighbours.next) && (
+        <nav
+          aria-label={t.projects.title}
+          className="grid gap-6 border-t border-[var(--line)] pt-8 sm:grid-cols-2"
+        >
+          {neighbours.previous ? (
+            <Link
+              href={`/${locale}/projects/${neighbours.previous.slug}`}
+              className="group space-y-1"
+            >
+              <span className="font-mono text-xs tracking-widest text-[var(--faint)] uppercase">
+                ← {t.projects.previous}
+              </span>
+              <span className="block text-xl group-hover:underline group-hover:underline-offset-4">
+                {neighbours.previous.title}
+              </span>
+            </Link>
+          ) : (
+            <span />
+          )}
+
+          {neighbours.next && (
+            <Link
+              href={`/${locale}/projects/${neighbours.next.slug}`}
+              className="group space-y-1 sm:text-right"
+            >
+              <span className="font-mono text-xs tracking-widest text-[var(--faint)] uppercase">
+                {t.projects.next} →
+              </span>
+              <span className="block text-xl group-hover:underline group-hover:underline-offset-4">
+                {neighbours.next.title}
+              </span>
+            </Link>
+          )}
+        </nav>
+      )}
     </article>
   );
 }
