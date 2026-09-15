@@ -61,5 +61,20 @@
     "scaffoldNote": "Infrastructure is live. Content lands in phases 4–5.",
     "switchLanguage": "Switch language",
     "toggleTheme": "Toggle theme"
+  },
+  "about": {
+    "title": "About",
+    "experience": "Experience",
+    "education": "Education",
+    "skills": "Skills",
+    "interests": "Interests",
+    "present": "Present"
+  },
+  "contact": {
+    "title": "Contact",
+    "intro": "The fastest way to reach me is email. I read everything.",
+    "email": "Email",
+    "elsewhere": "Elsewhere",
+    "openToWork": "Open to opportunities — Athens, hybrid or remote"
   }
 }

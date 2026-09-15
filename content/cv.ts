@@ -43,6 +43,14 @@ export type Cv = {
   headline: Localized;
   location: Localized;
   email: string;
+  /**
+   * Διαδρομή από τη ρίζα του `public`. Η πηγή είναι το LinkedIn, το οποίο
+   * σερβίρει μόνο **200×200** — αρκετό για avatar έως ~150px, οριακό πάνω από
+   * αυτό σε οθόνη υψηλής πυκνότητας. Γι' αυτό δεν εμφανίζεται ποτέ μεγαλύτερη.
+   */
+  photo: string;
+  /** Ανοιχτός σε προτάσεις — ελέγχει αν φαίνεται η σχετική ένδειξη (D5). */
+  openToWork: boolean;
   links: CvLink[];
   summary: Localized;
   experience: ExperienceEntry[];
@@ -76,6 +84,11 @@ export const cv: Cv = {
   },
 
   email: "billoiko8@gmail.com",
+
+  photo: "/images/profile.jpg",
+
+  /** Το LinkedIn δηλώνει «Open to work · Recruiters only», Αθήνα / hybrid / remote. */
+  openToWork: true,
 
   links: [
     { label: "GitHub", href: "https://github.com/oikonomouvasilis" },

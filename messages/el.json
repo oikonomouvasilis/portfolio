@@ -61,5 +61,20 @@
     "scaffoldNote": "Η υποδομή είναι ζωντανή. Το περιεχόμενο έρχεται στις φάσεις 4–5.",
     "switchLanguage": "Αλλαγή γλώσσας",
     "toggleTheme": "Εναλλαγή θέματος"
+  },
+  "about": {
+    "title": "Προφίλ",
+    "experience": "Εμπειρία",
+    "education": "Σπουδές",
+    "skills": "Δεξιότητες",
+    "interests": "Ενδιαφέροντα",
+    "present": "σήμερα"
+  },
+  "contact": {
+    "title": "Επικοινωνία",
+    "intro": "Ο γρηγορότερος τρόπος είναι το email. Τα διαβάζω όλα.",
+    "email": "Email",
+    "elsewhere": "Αλλού",
+    "openToWork": "Ανοιχτός σε προτάσεις — Αθήνα, hybrid ή remote"
   }
 }
