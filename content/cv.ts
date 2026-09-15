@@ -15,6 +15,7 @@ export type Period = {
 export type ExperienceEntry = Period & {
   role: Localized;
   organization: Localized;
+  location: Localized;
   /** Δύο-τρεις γραμμές ουσίας. Όχι λίστα καθηκόντων. */
   summary: Localized;
   highlights?: Localized[];
@@ -35,8 +36,6 @@ export type SkillGroup = {
 export type CvLink = {
   label: string;
   href: string;
-  /** Εμφανίζεται στο PDF· τα εικονίδια μένουν στο web. */
-  displayAs?: string;
 };
 
 export type Cv = {
@@ -53,39 +52,188 @@ export type Cv = {
 };
 
 /**
- * ⚠️ ΣΚΕΛΕΤΟΣ — Φάση 0 εκκρεμότητα.
+ * Ένα σημείο αλήθειας (D7): από εδώ τρέφονται **και** η σελίδα `/cv` **και** τα
+ * δύο PDF. Μην αντιγράψεις τίποτα από εδώ σε σελίδα — η σελίδα διαβάζει από εδώ.
  *
- * Τα πραγματικά δεδομένα έρχονται από το βιογραφικό σου. Αυτό είναι το σημείο
- * αλήθειας (D7): από εδώ τρέφονται **και** η σελίδα `/cv` **και** τα δύο PDF.
- * Μην αντιγράψεις τίποτα από εδώ σε σελίδα — η σελίδα διαβάζει από εδώ.
+ * Πηγές: `CV_REVISED.docx` (Αύγ 2025) για σπουδές, δεξιότητες και ενδιαφέροντα·
+ * το προφίλ LinkedIn για τις θέσεις εργασίας και τις ημερομηνίες τους.
+ *
+ * ⚠️ **Τι ΔΕΝ μπαίνει εδώ, συνειδητά (D9):** το repo είναι δημόσιο, οπότε η
+ * ημερομηνία γέννησης και η ακριβής οδός κατοικίας — που υπάρχουν στο βιογραφικό —
+ * παραλείπονται. Ο εργοδότης δεν τα χρειάζεται· ο κάθε περαστικός ακόμη λιγότερο.
  */
 export const cv: Cv = {
-  name: "Vasilis Oikonomou",
+  name: "Vasileios Oikonomou",
+
   headline: {
-    en: "Data engineering · automation · full-stack",
-    el: "Data engineering · αυτοματισμοί · full-stack",
+    en: "Finance Officer · Data & automation",
+    el: "Αξιωματικός Οικονομικού · Δεδομένα & αυτοματισμοί",
   },
+
   location: {
-    en: "Greece",
-    el: "Ελλάδα",
+    en: "Athens, Greece",
+    el: "Αθήνα, Ελλάδα",
   },
-  email: "",
+
+  email: "billoiko8@gmail.com",
+
   links: [
     { label: "GitHub", href: "https://github.com/oikonomouvasilis" },
-    // TODO Φ0: LinkedIn και ό,τι άλλο social θέλεις δημόσιο.
+    {
+      label: "LinkedIn",
+      href: "https://www.linkedin.com/in/vasileios-oikonomoy/",
+    },
   ],
+
   summary: {
-    en: "",
-    el: "",
+    en:
+      "Finance officer with a background in economics and applied informatics. " +
+      "My day job is public-sector financial control — payroll and the execution " +
+      "of budget funds — and most of what I build comes from automating the parts " +
+      "of it that should never have been manual.",
+    el:
+      "Αξιωματικός οικονομικού με υπόβαθρο στα οικονομικά και στην εφαρμοσμένη " +
+      "πληροφορική. Η καθημερινή μου δουλειά είναι ο δημοσιονομικός έλεγχος — " +
+      "μισθοδοσία και εκτέλεση κονδυλίων — και τα περισσότερα από όσα φτιάχνω " +
+      "προκύπτουν από την αυτοματοποίηση όσων δεν θα έπρεπε ποτέ να γίνονται στο χέρι.",
   },
-  experience: [],
-  education: [],
-  skills: [],
-  interests: [],
+
+  experience: [
+    {
+      from: "2024-06",
+      to: null,
+      role: { en: "Fiscal Auditor", el: "Δημοσιονομικός Ελεγκτής" },
+      organization: { en: "Greek Army", el: "Ελληνικός Στρατός" },
+      location: { en: "Athens", el: "Αθήνα" },
+      summary: {
+        en:
+          "Payroll for a large body of personnel, and execution and control of " +
+          "national funds from the defence budget.",
+        el:
+          "Μισθοδοσία μεγάλου αριθμού στελεχών, και εκτέλεση και έλεγχος εθνικών " +
+          "κονδυλίων από τον προϋπολογισμό άμυνας.",
+      },
+    },
+    {
+      from: "2023-11",
+      to: "2024-07",
+      role: {
+        en: "Trainee, Finance Corps Military Academy",
+        el: "Εκπαιδευόμενος, Σχολή Οικονομικού",
+      },
+      organization: { en: "Greek Army", el: "Ελληνικός Στρατός" },
+      location: { en: "Athens", el: "Αθήνα" },
+      summary: {
+        en: "Specialist training in military financial administration.",
+        el: "Ειδίκευση στη στρατιωτική οικονομική διοίκηση.",
+      },
+    },
+    {
+      from: "2022-10",
+      to: "2023-07",
+      role: {
+        en: "Assistant Accounting Manager",
+        el: "Βοηθός Προϊσταμένου Λογιστηρίου",
+      },
+      organization: { en: "Greek Army", el: "Ελληνικός Στρατός" },
+      location: { en: "Thessaloniki", el: "Θεσσαλονίκη" },
+      summary: {
+        en: "Internship in accounting operations.",
+        el: "Πρακτική άσκηση σε λογιστικές εργασίες.",
+      },
+    },
+    {
+      from: "2019-10",
+      to: "2023-10",
+      role: { en: "Finance Cadet", el: "Δόκιμος Οικονομικού" },
+      organization: {
+        en: "Hellenic National Defence General Staff",
+        el: "Γενικό Επιτελείο Εθνικής Άμυνας",
+      },
+      location: { en: "Thessaloniki", el: "Θεσσαλονίκη" },
+      summary: {
+        en: "Officer training, alongside the economics degree.",
+        el: "Εκπαίδευση αξιωματικού, παράλληλα με τις σπουδές οικονομικών.",
+      },
+    },
+  ],
+
+  education: [
+    {
+      from: "2022-10",
+      to: "2024-05",
+      degree: {
+        en: "MSc, Applied Informatics — Business Computing",
+        el: "MSc, Εφαρμοσμένη Πληροφορική — Επιχειρηματική Πληροφορική",
+      },
+      institution: {
+        en: "University of Macedonia",
+        el: "Πανεπιστήμιο Μακεδονίας",
+      },
+      note: { en: "Graduated with honors", el: "Αποφοίτηση με διάκριση" },
+    },
+    {
+      from: "2019-10",
+      to: "2022-07",
+      degree: {
+        en: "BSc, Economics — Business Administration",
+        el: "BSc, Οικονομικά — Διοίκηση Επιχειρήσεων",
+      },
+      institution: {
+        en: "Aristotle University of Thessaloniki",
+        el: "Αριστοτέλειο Πανεπιστήμιο Θεσσαλονίκης",
+      },
+      note: { en: "Graduated with honors", el: "Αποφοίτηση με διάκριση" },
+    },
+    {
+      from: "2019-09",
+      to: "2023-10",
+      degree: { en: "Officer training", el: "Εκπαίδευση αξιωματικού" },
+      institution: {
+        en: "Military Academy of Combat Support Officers",
+        el: "Στρατιωτική Σχολή Αξιωματικών Σωμάτων",
+      },
+    },
+  ],
+
+  skills: [
+    {
+      label: { en: "Languages & data", el: "Γλώσσες & δεδομένα" },
+      items: ["Python", "SQL", "TypeScript", "Java"],
+    },
+    {
+      label: { en: "Data & ML", el: "Δεδομένα & ML" },
+      items: [
+        "Pandas",
+        "NumPy",
+        "scikit-learn",
+        "SciPy",
+        "Matplotlib",
+        "Seaborn",
+        "Plotly",
+      ],
+    },
+    {
+      label: { en: "Web", el: "Web" },
+      items: ["Next.js", "React", "Tailwind CSS", "HTML5", "CSS3"],
+    },
+    {
+      label: { en: "BI & analysis", el: "BI & ανάλυση" },
+      items: ["Power BI", "Tableau", "Excel / VBA", "EViews", "GAMS / LINGO"],
+    },
+    {
+      label: { en: "Automation", el: "Αυτοματισμοί" },
+      items: ["n8n", "GitHub Actions", "Web scraping", "REST APIs"],
+    },
+  ],
+
+  interests: [
+    { en: "Psychology & sociology", el: "Ψυχολογία & κοινωνιολογία" },
+    { en: "Football", el: "Ποδόσφαιρο" },
+    { en: "Training", el: "Γυμναστική" },
+  ],
 };
 
-/** `true` όσο ο σκελετός είναι άδειος — η σελίδα `/cv` το χρησιμοποιεί για να
- * μην εμφανίσει κενές ενότητες πριν έρθει το υλικό. */
 export const cvIsEmpty =
   cv.experience.length === 0 &&
   cv.education.length === 0 &&
