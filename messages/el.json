@@ -78,6 +78,7 @@
     "openToWork": "Ανοιχτός σε προτάσεις — Αθήνα, hybrid ή remote"
   },
   "cv": {
-    "download": "Λήψη PDF"
+    "download": "Λήψη PDF",
+    "projects": "Επιλεγμένα project"
   }
 }

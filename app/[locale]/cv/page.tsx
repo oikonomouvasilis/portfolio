@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getMessages, isLocale, type Locale } from "@/lib/i18n";
 import { formatPeriod } from "@/lib/format";
+import { getProjects } from "@/lib/content/projects";
 import { cv } from "@/content/cv";
 
 export async function generateMetadata({
@@ -27,6 +28,13 @@ export default async function CvPage({
   const t = await getMessages(locale);
   const period = (from: string, to: string | null) =>
     formatPeriod(from, to, locale, t.about.present);
+
+  /*
+   * Τα project του βιογραφικού αντλούνται από το ίδιο content pipeline με το
+   * site — δεν ξαναγράφονται εδώ. Ένα project που αλλάζει στο MDX αλλάζει και
+   * στο PDF, χωρίς να το θυμηθεί κανείς.
+   */
+  const projects = (await getProjects(locale)).filter((p) => p.featured);
 
   return (
     <div className="cv-page mx-auto max-w-3xl space-y-10">
@@ -68,6 +76,37 @@ export default async function CvPage({
               {e.organization[locale]} · {e.location[locale]}
             </p>
             <p className="text-sm text-[var(--muted)]">{e.summary[locale]}</p>
+            {e.highlights && e.highlights.length > 0 && (
+              <ul className="ml-4 list-disc space-y-1 pt-1 text-sm text-[var(--muted)] marker:text-[var(--faint)]">
+                {e.highlights.map((h) => (
+                  <li key={h.en}>{h[locale]}</li>
+                ))}
+              </ul>
+            )}
+          </article>
+        ))}
+      </CvSection>
+
+      <CvSection title={t.cv.projects}>
+        {projects.map((p) => (
+          <article key={p.slug} className="cv-entry space-y-1">
+            <div className="flex flex-wrap items-baseline justify-between gap-x-4">
+              <h4 className="text-lg">{p.title}</h4>
+              <span className="font-mono text-xs text-[var(--faint)]">
+                {p.year}
+              </span>
+            </div>
+            <p className="text-sm text-[var(--muted)]">{p.summary}</p>
+            <p className="text-sm text-[var(--muted)]">{p.outcome}</p>
+            <p className="font-mono text-xs text-[var(--faint)]">
+              {p.stack.join(" · ")}
+              {p.repo && (
+                <>
+                  {" — "}
+                  {p.repo.replace(/^https?:\/\/(www\.)?/, "")}
+                </>
+              )}
+            </p>
           </article>
         ))}
       </CvSection>

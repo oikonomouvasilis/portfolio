@@ -18,6 +18,13 @@ export type ExperienceEntry = Period & {
   location: Localized;
   /** Δύο-τρεις γραμμές ουσίας. Όχι λίστα καθηκόντων. */
   summary: Localized;
+  /**
+   * Τι σήκωσε πράγματι δουλειά και πώς αντιμετωπίστηκε.
+   *
+   * Κάθε γραμμή απαντά σε **πρόκληση → αντιμετώπιση**, όχι σε «αρμοδιότητες».
+   * Ένας αναγνώστης βιογραφικού ξέρει τι κάνει ένας ελεγκτής· αυτό που δεν ξέρει
+   * είναι τι ήταν δύσκολο και τι έκανες γι' αυτό.
+   */
   highlights?: Localized[];
 };
 
@@ -91,6 +98,8 @@ export const cv: Cv = {
   openToWork: true,
 
   links: [
+    // Το portfolio πρώτο: είναι ο λόγος που υπάρχει το βιογραφικό σε PDF.
+    { label: "Portfolio", href: "https://portfolio-oiko4.vercel.app" },
     { label: "GitHub", href: "https://github.com/oikonomouvasilis" },
     {
       label: "LinkedIn",
@@ -126,6 +135,29 @@ export const cv: Cv = {
           "Μισθοδοσία μεγάλου αριθμού στελεχών, και εκτέλεση και έλεγχος εθνικών " +
           "κονδυλίων από τον προϋπολογισμό άμυνας.",
       },
+      // ⚠️ DRAFT — γραμμένο από το About του CV/LinkedIn. Διόρθωσέ τα ή πες μου
+      // τι ισχύει πραγματικά· δεν εφευρίσκω μετρήσεις που δεν μου έδωσες.
+      highlights: [
+        {
+          en:
+            "Payroll leaves no room for error and repeats every month. I moved the " +
+            "recurring cross-checks into scripts, so the same mistake cannot be made twice.",
+          el:
+            "Η μισθοδοσία δεν σηκώνει λάθος και επαναλαμβάνεται κάθε μήνα. Μετέφερα " +
+            "τους επαναλαμβανόμενους ελέγχους σε scripts, ώστε το ίδιο λάθος να μη " +
+            "γίνεται δεύτερη φορά.",
+        },
+        {
+          en:
+            "Controlling budget execution means reconciling figures that live in " +
+            "separate systems and formats. Most of what I build starts from exactly " +
+            "that friction.",
+          el:
+            "Ο έλεγχος εκτέλεσης προϋπολογισμού σημαίνει συμφωνία αριθμών που ζουν σε " +
+            "διαφορετικά συστήματα και μορφές. Τα περισσότερα από όσα φτιάχνω ξεκινούν " +
+            "ακριβώς από αυτή την τριβή.",
+        },
+      ],
     },
     {
       from: "2023-11",
@@ -168,6 +200,17 @@ export const cv: Cv = {
         en: "Officer training, alongside the economics degree.",
         el: "Εκπαίδευση αξιωματικού, παράλληλα με τις σπουδές οικονομικών.",
       },
+      highlights: [
+        {
+          en:
+            "Four years of officer training running in parallel with a full economics " +
+            "degree — both finished with honors. What it taught me was scheduling, not theory.",
+          el:
+            "Τέσσερα χρόνια εκπαίδευσης αξιωματικού παράλληλα με πλήρεις σπουδές " +
+            "οικονομικών — και τα δύο με διάκριση. Αυτό που έμαθα ήταν διαχείριση " +
+            "χρόνου, όχι θεωρία.",
+        },
+      ],
     },
   ],
 
