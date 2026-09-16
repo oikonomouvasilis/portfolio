@@ -76,5 +76,8 @@
     "email": "Email",
     "elsewhere": "Αλλού",
     "openToWork": "Ανοιχτός σε προτάσεις — Αθήνα, hybrid ή remote"
+  },
+  "cv": {
+    "download": "Λήψη PDF"
   }
 }

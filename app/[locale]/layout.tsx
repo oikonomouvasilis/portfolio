@@ -122,14 +122,30 @@ export default async function LocaleLayout({
 
         <footer className="border-t border-[var(--line)]">
           <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-4 px-6 py-8 text-sm text-[var(--faint)]">
-            <span>© {year} Vasilis Oikonomou</span>
-            <a
-              href="https://github.com/oikonomouvasilis"
-              rel="me noreferrer"
-              className="underline-offset-4 hover:text-[var(--fg)] hover:underline"
-            >
-              GitHub
-            </a>
+            <span>© {year} Vasileios Oikonomou</span>
+            <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
+              <a
+                href={`/cv-${locale}.pdf`}
+                download
+                className="underline-offset-4 hover:text-[var(--fg)] hover:underline"
+              >
+                {t.home.ctaCv} ↓
+              </a>
+              <a
+                href="https://github.com/oikonomouvasilis"
+                rel="me noreferrer"
+                className="underline-offset-4 hover:text-[var(--fg)] hover:underline"
+              >
+                GitHub
+              </a>
+              <a
+                href="https://www.linkedin.com/in/vasileios-oikonomoy/"
+                rel="me noreferrer"
+                className="underline-offset-4 hover:text-[var(--fg)] hover:underline"
+              >
+                LinkedIn
+              </a>
+            </div>
           </div>
         </footer>
       </body>

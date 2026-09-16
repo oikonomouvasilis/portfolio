@@ -99,3 +99,73 @@ h3 {
     transition-duration: 0.01ms !important;
   }
 }
+
+/*
+ * Εκτύπωση — και ταυτόχρονα η πηγή των PDF (D7).
+ *
+ * Το PDF δεν παράγεται από ξεχωριστό πρότυπο: είναι η ίδια σελίδα /cv
+ * τυπωμένη. Έτσι δεν υπάρχει περίπτωση το online βιογραφικό και το PDF να
+ * αποκλίνουν — που είναι ο συνηθέστερος τρόπος να ντροπιαστεί κανείς σε
+ * συνέντευξη.
+ */
+@media print {
+  /* Πάντα σκούρο σε λευκό, ανεξάρτητα από το θέμα του επισκέπτη. */
+  :root,
+  :root[data-theme="dark"],
+  :root[data-theme="light"] {
+    --bg: #ffffff;
+    --surface: #ffffff;
+    --fg: #111111;
+    --muted: #333333;
+    --faint: #666666;
+    --line: #cccccc;
+    --accent: #111111;
+  }
+
+  /*
+   * ΜΟΝΟ το chrome του site κρύβεται — `body > header`, όχι κάθε `header`.
+   * Η σελίδα /cv έχει δικό της <header> με το όνομα και τα στοιχεία
+   * επικοινωνίας· χωρίς αυτόν τον περιορισμό το PDF έβγαινε χωρίς όνομα.
+   */
+  body > header,
+  body > footer,
+  body > header nav,
+  .no-print {
+    display: none !important;
+  }
+
+  main {
+    max-width: none !important;
+    padding: 0 !important;
+  }
+
+  body {
+    background: #fff;
+    font-size: 10.5pt;
+  }
+
+  @page {
+    margin: 14mm 15mm;
+  }
+
+  /* Μια εγγραφή δεν κόβεται στη μέση από αλλαγή σελίδας. */
+  .cv-entry,
+  .cv-section h3 {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .cv-section h3 {
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+
+  .cv-name {
+    font-size: 20pt;
+  }
+
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+}

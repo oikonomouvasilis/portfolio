@@ -76,5 +76,8 @@
     "email": "Email",
     "elsewhere": "Elsewhere",
     "openToWork": "Open to opportunities — Athens, hybrid or remote"
+  },
+  "cv": {
+    "download": "Download PDF"
   }
 }

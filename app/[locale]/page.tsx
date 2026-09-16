@@ -39,6 +39,13 @@ export default async function HomePage({
             >
               {t.nav.about}
             </Link>
+            <a
+              href={`/cv-${locale}.pdf`}
+              download
+              className="text-[var(--muted)] underline-offset-4 hover:text-[var(--fg)] hover:underline"
+            >
+              {t.home.ctaCv} ↓
+            </a>
           </div>
         </div>
 
