@@ -190,6 +190,44 @@
 2. `spawn EINVAL` στα Windows όταν το script καλούσε `npx.cmd`. Το binary του
    Next καλείται πλέον απευθείας με `node`, χωρίς shell.
 
+## Φάση 6β — Τα υπόλοιπα case studies ✅
+Η βιτρίνα είχε 2 από τα 8 project που αποφασίστηκαν στη Φάση 0. Τώρα έχει όλα.
+
+- [x] `expenses-predictor` — fullstack + data, case study χωρίς repo (private)
+- [x] `duty-scheduler` — automation + fullstack, case study χωρίς repo (private, ανώνυμα)
+- [x] `etl-stock-valuation` — data, με το πραγματικό διάγραμμα αρχιτεκτονικής
+- [x] `n8n-job-seeker` — automation, με το πραγματικό διάγραμμα ροής
+- [x] `greek-public-registries` — automation + data, Διαύγεια + ΚΗΜΔΗΣ ενωμένα
+- [x] `oil-site` — fullstack, **ανώνυμα**: ούτε όνομα brand ούτε σύνδεσμος repo
+- [x] Το `nutrition-tracker` πήρε το μετρημένο «70 τροφές» που έλειπε
+- [x] **Διαρροή D9**: το όνομα του πελάτη ήταν γραμμένο σε 3 σημεία των `docs/`
+      — αφαιρέθηκε από το HEAD (παραμένει στο git history)
+
+**Επιλογές που θέλουν την έγκρισή σου**
+- Δεύτερη κατηγορία `data` στο Expenses Predictor και στα Ελληνικά Μητρώα
+  (πρόταση του INVENTORY) → η ισορροπία είναι πλέον 4 / 3 / 4.
+- **Στην αρχική προβάλλονται 4**: AI Trader, Expenses Predictor, Duty Scheduler,
+  ETL Stock Valuation. Το Nutrition Tracker βγήκε από τα featured (μένει στο `/projects`).
+- Το `oil-site` δεν συνδέεται με το δημόσιο repo του: το wordmark υπάρχει σε κάθε
+  οθόνη, οπότε ο σύνδεσμος θα ακύρωνε την ανωνυμία.
+
+**Επαληθεύτηκε**
+- 29 στατικές σελίδες (από 17), 8 project × 2 γλώσσες. `typecheck` / `lint` καθαρά.
+- Καμία γλώσσα σε fallback: όλα τα project έχουν και τις δύο εκδόσεις.
+- Φίλτρο `?cat=data` → 3 αποτελέσματα. Αναζήτηση `διαυγεια` (χωρίς τόνο) → 1.
+- Καμία οριζόντια υπερχείλιση στα 375px. Μηδέν console errors.
+
+**Δύο που βρέθηκαν στη δοκιμή**
+1. Το φίλτρο τεχνολογιών είχε **και `Finnhub` και `Finnhub API`** ως ξεχωριστές
+   επιλογές — ενοποιήθηκαν.
+2. Η αναζήτηση `Διαύγεια` **δεν έβρισκε τίποτα**: το ευρετήριο διαβάζει
+   τίτλο και περίληψη, όχι το σώμα του case study. Η περίληψη ονομάζει
+   πλέον ρητά τη Διαύγεια και το ΚΗΜΔΗΣ.
+
+**Εκκρεμότητες περιεχομένου** — γραμμένες ως `{/* TODO Φ0 */}` μέσα στα αρχεία:
+χρόνοι πριν/μετά, πλήθος ατόμων στο Duty Scheduler, αν είναι online το oil-site,
+αν ανοίγει το repo του Expenses Predictor. **Κανένα νούμερο δεν εφευρέθηκε.**
+
 ## Φάση 7 — Polish & go-live
 - [ ] SEO: metadata ανά σελίδα, sitemap.xml, robots.txt, `hreflang` για τις 2 γλώσσες
 - [ ] OG images — παραγόμενες δυναμικά ανά project

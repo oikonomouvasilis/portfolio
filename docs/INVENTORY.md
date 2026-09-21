@@ -450,7 +450,7 @@ duty-scheduler αντικατέστησε το D8) — αξίζει διόρθω
 |---|---|---|
 | **fullstack** | Nutrition Tracker | ✅ public |
 | **fullstack** | AI Expenses Predictor | 🔒 private |
-| **fullstack** | Αθανéleon | ✅ public |
+| **fullstack** | Oil Site (ανώνυμα) | ✅ public |
 | **data** | Stock Valuation & Validation | ✅ public |
 | **automation** | AI Trader | ✅ public + live |
 | **automation** | n8n LinkedIn Job Seeker | ✅ public |

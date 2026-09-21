@@ -1,0 +1,90 @@
+---
+title: Olive Oil Brand Site
+slug: oil-site
+year: 2026
+status: wip
+categories:
+  - fullstack
+stackLayers:
+  frontend:
+    - HTML
+    - CSS
+    - JavaScript
+    - Tailwind CSS
+  infra:
+    - PostCSS
+role: Frontend design and implementation, client work
+summary: A five-page site for a premium olive oil producer, built against a design specification written before the first line of code.
+problem: >-
+  A new premium olive oil brand from Korinthia needed a presence that justified
+  its positioning — without borrowing a heritage it does not have. Being founded
+  this decade is the one fact a "generations of tradition" story would have to
+  lie about.
+goal: >-
+  Make the site read as expensive through restraint rather than decoration, and
+  make that judgement reproducible by someone other than me.
+solution: >-
+  Five static pages, no framework, written against a design specification that
+  came first and that bans the shortcuts which make a premium brand look cheap:
+  no stock photography, no parallax, no drop shadows on product images, every
+  animation at least 800ms, every easing curve custom.
+outcome: >-
+  The specification outlived the first build: it is a written document a second
+  developer can follow, so consistency does not depend on remembering what was
+  decided.
+repo: null
+demo: null
+cover: /images/projects/oil-site/cover.svg
+gallery:
+  - src: /images/projects/oil-site/typography.svg
+    caption: Type, colour and empty space carrying the work, because the specification forbids borrowed imagery.
+featured: false
+caseStudyOnly: true
+---
+
+{/* TODO Φ0: είναι online; Το χρησιμοποιεί το brand; Αν ναι → status: live + demo URL.
+Τα screenshots δείχνουν layout και τυπογραφία, ποτέ το wordmark (D9). */}
+
+Client work, presented anonymously: the brand is not named here, and the
+screenshots show layout and typography rather than the mark. The repository is
+public but stays unlinked from this page for the same reason — it carries the
+name on every screen.
+
+## The specification came first
+
+Before any markup, a design brief was written down: palette, type scale, motion,
+and eleven rules that are not negotiable. Not a mood board — a document with
+prohibitions in it.
+
+Some of them are ordinary craft. No stock photography from the usual libraries:
+if there is no real photograph, the work is done with type, colour or empty
+space. No justified text. No fixed-attachment parallax. No heavy drop shadows
+under product images, only a contact shadow where the bottle meets the surface.
+
+Some of them are about time. Every animation runs at **800ms or longer**, and
+every easing curve is a custom cubic-bezier rather than the browser's defaults.
+Fast and bouncy reads as playful, and playful is the opposite of what a bottle
+at this price is claiming.
+
+## The rule that is not about design
+
+The hardest rule in the document is the one forbidding invented history. The
+brand was founded this decade, so the site does not talk about generations,
+deep roots, or a recipe handed down.
+
+That is the easiest paragraph in the world to write and it would have been the
+first thing a visitor stopped believing. What is left when you take it away is
+what is actually true and actually specific: the place, the method, the current
+harvest, precision. A new brand has no past to sell, which means it has to be
+interesting about the present.
+
+## Why no framework
+
+Five pages of largely static content, deployed as files. React would have added
+a build step, a hydration cost and a dependency tree to a site whose hardest
+requirement is that the typography is right.
+
+Tailwind is compiled through PostCSS with a custom config rather than pulled
+from a CDN, so what ships is the CSS this site uses. The interactive parts —
+navigation, a small amount of scroll behaviour — are plain JavaScript, in files
+named after the page they belong to.

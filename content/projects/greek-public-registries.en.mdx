@@ -1,0 +1,90 @@
+---
+title: Greek Public Registries
+slug: greek-public-registries
+year: 2025
+status: archived
+categories:
+  - automation
+  - data
+stackLayers:
+  backend:
+    - Python
+    - requests
+    - openpyxl
+  data:
+    - Diavgeia Open Data API
+    - KIMDIS API
+    - Excel
+role: Design and implementation, end to end
+summary: Scripts that resolve decision identifiers against Diavgeia and KIMDIS, and write the answers back into the spreadsheet they came from.
+problem: >-
+  Matching protocol numbers to their published decision identifiers on Diavgeia
+  is done one at a time: search in a browser, copy the identifier, paste it into
+  a spreadsheet cell, repeat. For a few hundred rows that is hours of work and a
+  guaranteed number of transcription errors.
+goal: >-
+  Resolve a whole spreadsheet in one pass, without asking anyone to abandon the
+  spreadsheet they already work in.
+solution: >-
+  Scripts that query the public open-data APIs directly and write results back
+  into the same workbook, locating the header row by reading it rather than
+  assuming a fixed layout. Lookups run in both directions, and a paginated query
+  totals an organisation's decisions over a date range.
+outcome: >-
+  What was a per-row browser task becomes one run over the file, with the
+  identifiers landing in the column they were always meant to go in — and the
+  same script works on next year's file, which has the headers somewhere else.
+repo: null
+demo: null
+cover: /images/projects/greek-public-registries/cover.svg
+gallery:
+  - src: /images/projects/greek-public-registries/spreadsheet.svg
+    caption: The workbook is the interface — the column that was filled by hand is the column the script writes.
+featured: false
+caseStudyOnly: true
+---
+
+{/* TODO Φ0: εκκρεμεί `git init` + repo (ROADMAP Φάση 0). Λείπουν τα νούμερα:
+πόσες εγγραφές, από πόση ώρα σε πόση. Το `ada.xlsx` δεν μπαίνει στο repo (D9). */}
+
+Everything here runs against **open data published by the Greek state**: Diavgeia,
+where public-sector decisions are published by law, and KIMDIS, the central
+electronic registry for public procurement. No credentials, no private endpoints,
+nothing that is not already public.
+
+## The spreadsheet stays
+
+The scripts do not introduce a database, a UI or a new place to keep the work.
+They read the same `.xlsx` that was already being filled in by hand, and they
+write into the same column.
+
+That constraint is the reason the thing was actually used. A tool that asks
+someone to migrate their process is a tool that gets evaluated; a tool that fills
+in the column they were going to fill in anyway just gets run.
+
+It does mean facing what real spreadsheets look like. The header row is not row 1
+— there is a title, a blank line, a merged cell someone added. So the script
+scans for the row that contains the headers it needs and takes the column
+positions from there. Next year's file, with two extra rows on top, still works.
+
+## Both directions, and pagination
+
+Lookups go each way: from a protocol number to the published decision identifier,
+and from an identifier back to the protocol number of the commitment decision it
+refers to — filtering on the decision type rather than taking the first result,
+because a search can legitimately return several.
+
+A third script answers a different question entirely: how many decisions a given
+organisation published over a date range. That one pages through the API 500
+records at a time until it comes back empty, which is the only honest way to
+count something you do not know the size of in advance.
+
+## KIMDIS is a beginning, not a chapter
+
+The procurement side is twelve lines against the organisations endpoint: enough
+to confirm the API answers, what it returns, and that the Greek-language header
+matters. It is exploratory, and calling it anything more would be dressing up a
+spike as a feature.
+
+The official Diavgeia sample client is vendored in the folder for reference; the
+scripts described above are written against the HTTP API directly.

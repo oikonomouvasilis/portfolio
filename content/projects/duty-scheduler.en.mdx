@@ -1,0 +1,93 @@
+---
+title: Duty Scheduler
+slug: duty-scheduler
+year: 2026
+status: live
+categories:
+  - automation
+  - fullstack
+stackLayers:
+  frontend:
+    - Next.js
+    - React
+    - TypeScript
+    - Tailwind CSS
+  data:
+    - SQLite
+    - Drizzle ORM
+role: Design and implementation, end to end
+summary: Monthly shift rosters assigned by an algorithm whose definition of fair is written down and checkable.
+problem: >-
+  Monthly duty rosters were drawn up by hand in a spreadsheet. That cost hours,
+  but the worse problem was that nobody could show the result was fair: without
+  a kept history, "you had the last two weekends" is an argument, not a fact.
+goal: >-
+  Make fairness a measurable property of the roster rather than a claim about
+  it, while leaving the final say with the person responsible for the month.
+solution: >-
+  A scheduling app over a single assignments table, with an algorithm that
+  balances each person's load normalised by their time in service, counting
+  heavy days separately from ordinary ones. It fills greedily, then improves the
+  result with a deterministic local search.
+outcome: >-
+  A month is generated in one action and then adjusted by hand where judgement
+  is needed. Every statistic on the page is derived from the same assignment
+  rows the calendar shows, so the roster and its fairness report cannot disagree.
+repo: null
+demo: null
+cover: /images/projects/duty-scheduler/cover.svg
+gallery:
+  - src: /images/projects/duty-scheduler/fairness.svg
+    caption: Load per person, normalised by time in service — the quantity the algorithm actually equalises.
+featured: true
+caseStudyOnly: true
+---
+
+{/* TODO Φ0: λείπουν τα νούμερα — πόσα άτομα, πόσες ώρες γλίτωνε ο μήνας.
+Τα screenshots βγαίνουν αποκλειστικά από `db:seed` με φανταστικά ονόματα (D9). */}
+
+Built for an organisation that runs on shifts. The repository is private and the
+application is shown as a case study only: no unit, location, rank list or real
+name appears here, and any screenshot comes from seeded fictional data.
+
+## One table of facts
+
+The data model is a single `assignments` table — who, which day, which duty —
+and every statistic on every page is a query over it. Nothing is accumulated
+into precomputed totals.
+
+That is the decision the rest of the application rests on. Precomputed counters
+are faster and they are also the standard way these systems start lying: someone
+edits a day in the calendar, one of four counters does not get updated, and from
+then on the roster and the fairness report tell different stories. Here they
+read the same rows, so they cannot drift apart.
+
+## What "fair" had to mean
+
+Counting duties per person is the obvious measure and the wrong one. Two people
+with the same count are not treated equally if one of them has been on the list
+for three years and the other for three months, and a Sunday is not a Tuesday.
+
+So the algorithm balances two quantities at once, both **normalised by each
+person's available days since they started**: total duties, and heavy days —
+weekends, public holidays and days flagged as special. On a heavy day, balancing
+heavy load takes priority; on an ordinary day, total load does.
+
+Hard constraints sit outside the optimisation entirely: declared
+unavailabilities, which ranks a given duty is open to, people who have not
+started yet, and never the same person twice on the same day.
+
+## Greedy, then local search
+
+Filling the month greedily gives a decent roster and an arbitrary one — early
+choices constrain later days in ways nobody intended.
+
+After the greedy pass, a deterministic local search moves automatic assignments
+to other eligible people whenever that lowers the overall inequality. The
+objective is the sum of squared normalised rates, which is minimised exactly
+when those rates are equal; the two terms carry adjustable weights. Every
+accepted move strictly decreases the objective, so the search terminates rather
+than oscillating, and the same input always produces the same roster.
+
+Manual assignments are never moved. The algorithm proposes; the person
+responsible for the month decides, and the decision survives the next run.

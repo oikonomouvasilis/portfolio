@@ -1,0 +1,101 @@
+---
+title: AI Expenses Predictor
+slug: expenses-predictor
+year: 2026
+status: live
+categories:
+  - fullstack
+  - data
+stackLayers:
+  frontend:
+    - React
+    - Vite
+    - Tailwind CSS
+    - Recharts
+  backend:
+    - Python
+    - FastAPI
+    - scikit-learn
+    - Prophet
+  data:
+    - Supabase
+    - PostgreSQL
+role: Design and implementation, end to end
+summary: Four banks' exports go in; categorised transactions and a six-month forecast come out.
+problem: >-
+  Four Greek banks export account activity in four incompatible layouts, with
+  descriptions written in merchant shorthand. Seeing where the money actually
+  goes means categorising thousands of rows by hand — and doing it again the
+  next month.
+goal: >-
+  Get the categorisation down to reviewing exceptions instead of typing every
+  line, and have the corrections make the next month cheaper rather than
+  identical.
+solution: >-
+  A three-stage pipeline: per-bank parsers that converge on one schema, a neural
+  classifier that reads the description text in Greek and English, and Prophet
+  for the forward projection. Every manual correction is retained and folded
+  back into training.
+outcome: >-
+  90.1% accuracy (±0.8%, 3-fold cross-validation) across 6,493 transactions and
+  32 categories, measured on transactions the model had not seen during
+  training.
+repo: null
+demo: null
+cover: /images/projects/expenses-predictor/cover.svg
+gallery:
+  - src: /images/projects/expenses-predictor/pipeline.svg
+    caption: The three stages — ingestion, classification, forecast — and the correction loop that feeds the middle one.
+featured: true
+caseStudyOnly: true
+---
+
+{/* TODO Φ0: το repo είναι private — εκκρεμεί η απόφαση αν ανοίγει (INVENTORY #11).
+Οι εικόνες είναι placeholders· τα screenshots γίνονται με ψευδοδεδομένα (D9). */}
+
+The repository is private and stays that way: it runs on my own bank statements.
+What follows is the engineering. No amount, balance, merchant or category
+breakdown from the underlying data appears anywhere on this site.
+
+## Four banks, one schema
+
+Piraeus, Alpha, Eurobank and the National Bank of Greece each export account
+activity differently — different column names, different date formats, different
+ideas about where the header row belongs, and in two cases a different file
+format altogether.
+
+The ingestion engine keeps one parser per bank and one target schema: date,
+description, amount. Detection happens on the file's own shape rather than on
+what the user says it is, because the person uploading a statement should not
+have to know which of four buttons is the correct one.
+
+Everything downstream — the classifier, the charts, the forecast — sees only the
+target schema. Adding a fifth bank means writing a fifth parser and touching
+nothing else.
+
+## The model learns from being corrected
+
+Categorisation is an MLP classifier over TF-IDF features of the description
+text. That text is a mix of Greek and English, heavy on abbreviations, and it is
+the only signal available — amounts say very little about what something was.
+
+The design decision that matters is what happens **after** a prediction. Every
+manual correction is written back to the database and mixed into the training
+set, so the model is retrained from a static base plus the accumulated
+corrections. It is not trained once and then slowly falsified by reality; it
+gets more accurate the longer it is used, and specifically more accurate about
+the merchants that this account actually sees.
+
+Accuracy was measured, not estimated: **90.1% (±0.8%) under 3-fold
+cross-validation, over 6,493 transactions in 32 categories**. The per-category
+report stays private — the categories are somebody's spending habits.
+
+## Forecasting is a different problem
+
+Prediction and classification get confused with each other constantly, so they
+are kept apart here. The classifier answers *what was this*. Prophet answers
+*what does the next six months look like if the pattern holds*, working on the
+time series of income and expenses rather than on individual rows.
+
+Separating them means a bad forecast never corrupts the historical record, and
+a re-categorisation never silently rewrites a projection that was already shown.

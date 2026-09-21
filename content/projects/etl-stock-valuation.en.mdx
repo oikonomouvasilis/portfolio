@@ -1,0 +1,90 @@
+---
+title: Stock Valuation ETL
+slug: etl-stock-valuation
+year: 2026
+status: live
+categories:
+  - data
+stackLayers:
+  backend:
+    - Python
+    - pandas
+    - NumPy
+  data:
+    - SQLite
+    - Finnhub
+    - Power BI
+role: Design and implementation, end to end
+summary: A pipeline that values listed companies with CAPM, stores the result, and then checks it against independently fetched data.
+problem: >-
+  Valuing a listed company with CAPM means pulling data from more than one
+  source and redoing the same arithmetic per company. In a spreadsheet that is
+  manual work that does not scale — and once the numbers are out, there is no
+  way to tell whether they are right.
+goal: >-
+  Turn a per-company spreadsheet exercise into a repeatable pipeline, and build
+  in a way to disprove its own output instead of trusting it.
+solution: >-
+  Extract, transform and load as three separable steps: fetch tickers and betas
+  from Finnhub, derive the annualised market return from S&P 500 history,
+  compute CAPM, load into SQLite, and read the database from Power BI. A second
+  set of scripts fetches betas and closing prices independently so the results
+  can be cross-checked.
+outcome: >-
+  24,426 listed companies carry a computed beta and CAPM in the database
+  (24,428 rows, 24,427 unique tickers), rebuilt by rerunning the stage that
+  changed rather than the whole chain.
+repo: https://github.com/oikonomouvasilis/ETL-STOCK-VALUATION
+demo: null
+cover: /images/projects/etl-stock-valuation/cover.svg
+gallery:
+  - src: /images/projects/etl-stock-valuation/architecture.png
+    caption: The pipeline end to end — extraction from the API, computation, the SQLite database, and the Power BI report on top.
+featured: true
+---
+
+{/* TODO Φ0: πόσο κρατάει ένα πλήρες τρέξιμο; Λείπει screenshot του Power BI. */}
+
+## Three stages that can run alone
+
+The pipeline is deliberately not one script. Ticker retrieval, market-return
+calculation, CAPM computation and database load are separate modules with files
+between them.
+
+The reason is boring and practical: the Finnhub free tier is rate-limited to
+roughly one call per second, so a full extraction over the whole US market is
+measured in hours. A design where a failure at the load step means refetching
+everything is a design that never finishes. Each stage reruns on its own, and
+the stage that is slow is the one you never have to repeat.
+
+## CAPM over the whole market, DCF on one name
+
+The cost of equity is computed the textbook way — risk-free rate plus beta times
+the equity risk premium — with the market return derived from S&P 500 history
+rather than assumed, and with companies whose beta is missing or zero filtered
+out instead of silently treated as market-neutral.
+
+That runs across the entire listed universe: **24,426 companies** with a
+computed beta and CAPM in the database.
+
+The discounted cash flow side is honest about its scope. Free cash flow is
+derived from reported financials as operating cash flow minus capital
+expenditure, and it currently runs per ticker rather than across the market —
+the extraction of reported statements is far heavier than pulling a single beta.
+The arithmetic is there; the scale is not, and this page is not going to pretend
+otherwise.
+
+## Checking your own answer
+
+The part worth showing is the second set of scripts, which fetch betas and
+historical closing prices through a separate path and compare.
+
+Almost nobody bothers. A pipeline that produces numbers and a report that
+displays them will look equally convincing whether the numbers are right or
+wrong — the failure mode of a data pipeline is not a crash, it is a plausible
+answer. Cross-checking against an independently fetched value is the cheapest
+defence available, and it is the difference between a result and a claim.
+
+The database is the seam between the two halves: Power BI reads SQLite and
+nothing else, so the report cannot contain a number that the pipeline did not
+compute and store.

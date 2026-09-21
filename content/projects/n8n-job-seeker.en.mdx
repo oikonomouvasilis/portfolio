@@ -1,0 +1,85 @@
+---
+title: LinkedIn Job Seeker
+slug: n8n-job-seeker
+year: 2025
+status: archived
+categories:
+  - automation
+stackLayers:
+  backend:
+    - n8n
+    - OpenAI API
+  data:
+    - Apify
+    - Google Sheets
+    - Google Docs
+    - Google Drive
+role: Design and implementation, end to end
+summary: A three-stage n8n workflow that collects job postings, scores them against a real profile, and only then writes a letter.
+problem: >-
+  Looking for work is repetitive labour: the same searches, the same reading of
+  near-identical postings, and the same cover letter rewritten for each one.
+goal: >-
+  Automate the repetition without turning it into a machine that applies
+  everywhere — volume is what makes an application worthless.
+solution: >-
+  One workflow in three stages. Collection scrapes postings into a spreadsheet
+  and de-duplicates them; evaluation scores each posting against the CV and the
+  LinkedIn profile; generation writes a tailored cover letter only above a
+  compatibility threshold and files it in Drive.
+outcome: >-
+  The expensive step happens only where it is justified: postings below 3.5 out
+  of 5 are scored, recorded and dropped, and the spreadsheet accumulates a
+  reviewable history rather than a pile of generated letters.
+repo: https://github.com/oikonomouvasilis/N8n-Linkedin-Job-Scrapper
+demo: null
+cover: /images/projects/n8n-job-seeker/cover.svg
+gallery:
+  - src: /images/projects/n8n-job-seeker/workflow.png
+    caption: The three stages and the gate between them — drawn from the node-level documentation, since the workflow itself could not be exported.
+featured: false
+---
+
+{/* TODO Φ0: πόσες αγγελίες επεξεργάστηκε; Οδήγησε σε συνέντευξη; */}
+
+The workflow was built on a free n8n account, which cannot export to JSON, so
+what survives is node-level documentation rather than a runnable file. The
+diagram above is drawn from that documentation — it describes the workflow as it
+ran, not an idealised version of it.
+
+## The threshold is the whole design
+
+Stage one collects: an Apify actor scrapes LinkedIn search results into Google
+Sheets, company names are aggregated and compared so a posting already in the
+sheet is never appended twice.
+
+Stage two scores. Each posting is put in front of a model together with the CV
+and the LinkedIn profile, with a structured output parser forcing the answer
+back into JSON so a compatibility score can be read out reliably instead of
+parsed from prose.
+
+Stage three writes — but only above **3.5 out of 5**. Below that, the posting
+still gets its score written back to the sheet and the workflow stops there.
+
+That gate is the point of the whole thing. An automation that generates a letter
+for every posting it finds is not saving anyone effort, it is manufacturing
+noise at a rate no human could match and pushing the cost onto whoever reads it.
+The scoring step exists to throw work away.
+
+## Where the human stays
+
+The model scores and drafts; it never sends. Every generated letter lands in
+Drive and is logged next to its posting in the sheet, which means the last step
+before anything reaches an employer is a person reading what was written about
+them.
+
+That is a deliberate stopping point, not an unfinished feature. Sending is the
+one step in this pipeline that cannot be taken back.
+
+## What it shows
+
+Orchestration across four services that were never designed to meet each other,
+scoring with a structured contract rather than free text, and de-duplication
+treated as a first-class concern instead of an afterthought — plus the judgement
+to put a filter where the automation would otherwise scale in the wrong
+direction.
