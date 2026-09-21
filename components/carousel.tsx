@@ -6,15 +6,20 @@ import Image from "next/image";
 export type CarouselImage = { src: string; caption?: string };
 
 /**
- * Εναλλαγή εικόνων με κλικ πάνω στην ίδια την εικόνα.
+ * Εναλλαγή εικόνων, σε δύο τρόπους.
  *
- * Γιατί κλικ και όχι αυτόματη περιστροφή: η εικόνα ενός project δεν είναι
- * διαφήμιση που πρέπει να τραβήξει το μάτι — είναι στοιχείο. Ο επισκέπτης
- * προχωράει όταν έχει δει αρκετά, όχι όταν λήξει ένα χρονόμετρο. Και μια
- * κινούμενη εικόνα δίπλα σε κείμενο απλώς εμποδίζει το διάβασμα.
+ * `click` — στη σελίδα του project: κλικ στην εικόνα για την επόμενη, βέλη και
+ * πληκτρολόγιο. Εκεί ο επισκέπτης έχει ήδη αποφασίσει να κοιτάξει.
  *
- * Με μία μόνο εικόνα δεν εμφανίζεται κανένα χειριστήριο: τα κουμπιά υπάρχουν
- * μόνο όταν υπάρχει κάτι να δείξουν.
+ * `hover` — στη λίστα των project: το ποντίκι περνά πάνω από την εικόνα και
+ * αλλάζει καρέ ανάλογα με το πού βρίσκεται οριζόντια, σαν να ξεφυλλίζει. Καμία
+ * ενέργεια δεν κλέβει το κλικ, γιατί εκεί ολόκληρη η κάρτα είναι σύνδεσμος.
+ *
+ * Σε καμία περίπτωση δεν υπάρχει αυτόματη περιστροφή: μια εικόνα που κινείται
+ * μόνη της δίπλα σε κείμενο εμποδίζει το διάβασμα, και το στιγμιότυπο ενός
+ * project είναι στοιχείο, όχι διαφήμιση.
+ *
+ * Με μία μόνο εικόνα δεν εμφανίζεται κανένα χειριστήριο.
  */
 export function Carousel({
   images,
@@ -22,10 +27,13 @@ export function Carousel({
   sizes,
   showCaption = false,
   label,
+  mode = "click",
 }: {
   images: CarouselImage[];
   priority?: boolean;
   sizes: string;
+  /** `hover` στη λίστα, `click` μέσα στο project. */
+  mode?: "click" | "hover";
   /** Δείχνει τη λεζάντα κάτω από την εικόνα — στη σελίδα του project, όχι στην κάρτα. */
   showCaption?: boolean;
   /** Προσβάσιμο όνομα της ομάδας, π.χ. ο τίτλος του project. */
@@ -46,7 +54,7 @@ export function Carousel({
   // carousel — αλλιώς θα έκλεβαν το ← → από την υπόλοιπη σελίδα.
   useEffect(() => {
     const node = region.current;
-    if (!node || count < 2) return;
+    if (!node || count < 2 || mode !== "click") return;
 
     const onKey = (event: KeyboardEvent) => {
       if (event.key === "ArrowLeft") {
@@ -60,7 +68,7 @@ export function Carousel({
 
     node.addEventListener("keydown", onKey);
     return () => node.removeEventListener("keydown", onKey);
-  }, [count, go]);
+  }, [count, go, mode]);
 
   if (count === 0) return null;
 
@@ -99,19 +107,42 @@ export function Carousel({
 
         {!single && (
           <>
-            {/* Το κλικ πάνω στην εικόνα πάει στην επόμενη — το προφανές. */}
-            <button
-              type="button"
-              onClick={() => go(1)}
-              className="absolute inset-0 cursor-pointer"
-            >
-              <span className="sr-only">
-                {label} — {index + 1} / {count}
-              </span>
-            </button>
+            {mode === "click" ? (
+              <>
+                {/* Το κλικ πάνω στην εικόνα πάει στην επόμενη — το προφανές. */}
+                <button
+                  type="button"
+                  onClick={() => go(1)}
+                  className="absolute inset-0 cursor-pointer"
+                >
+                  <span className="sr-only">
+                    {label} — {index + 1} / {count}
+                  </span>
+                </button>
 
-            <Arrow side="left" onClick={() => go(-1)} label={label} />
-            <Arrow side="right" onClick={() => go(1)} label={label} />
+                <Arrow side="left" onClick={() => go(-1)} label={label} />
+                <Arrow side="right" onClick={() => go(1)} label={label} />
+              </>
+            ) : (
+              /*
+                Κάθετες λωρίδες, μία ανά εικόνα. Το ποντίκι δείχνει ποια θέλει
+                αντί να πατά κουμπί — και επειδή είναι απλά `div`, η κάρτα από
+                πάνω μένει ολόκληρη σύνδεσμος.
+              */
+              <div
+                aria-hidden="true"
+                className="absolute inset-0 flex"
+                onMouseLeave={() => setIndex(0)}
+              >
+                {images.map((image, i) => (
+                  <div
+                    key={image.src}
+                    className="h-full flex-1"
+                    onMouseEnter={() => setIndex(i)}
+                  />
+                ))}
+              </div>
+            )}
 
             <div className="pointer-events-none absolute inset-x-0 bottom-0 flex items-center justify-between p-3">
               <span className="flex gap-1.5">

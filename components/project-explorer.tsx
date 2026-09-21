@@ -191,40 +191,38 @@ export function ProjectExplorer({
       ) : (
         <ul className="space-y-16">
           {visible.map((project) => (
-            <li
-              key={project.slug}
-              className="grid gap-6 sm:grid-cols-[1fr_1.2fr] sm:items-center"
-            >
+            <li key={project.slug}>
               {/*
-                Η εικόνα δεν είναι πια μέσα στον σύνδεσμο: το κλικ πάνω της
-                αλλάζει εικόνα. Στο project πάει ο τίτλος, που είναι και ο
-                προορισμός που περιμένει ο screen reader.
+                Στη λίστα η εναλλαγή γίνεται με το ποντίκι, οπότε τίποτα δεν
+                διεκδικεί το κλικ: ολόκληρη η κάρτα παραμένει ένας σύνδεσμος
+                προς το project, όπως περιμένει κανείς από έναν κατάλογο.
               */}
-              <Carousel
-                images={project.images}
-                sizes="(max-width: 40rem) 100vw, 24rem"
-                label={project.title}
-              />
+              <Link
+                href={`/${locale}/projects/${project.slug}`}
+                className="group grid gap-6 sm:grid-cols-[1fr_1.2fr] sm:items-center"
+              >
+                <Carousel
+                  images={project.images}
+                  mode="hover"
+                  sizes="(max-width: 40rem) 100vw, 24rem"
+                  label={project.title}
+                />
 
-              <div className="space-y-3">
-                <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
-                  <h2 className="text-3xl">
-                    <Link
-                      href={`/${locale}/projects/${project.slug}`}
-                      className="underline-offset-4 hover:underline"
-                    >
+                <div className="space-y-3">
+                  <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
+                    <h2 className="text-3xl group-hover:underline group-hover:underline-offset-4">
                       {project.title}
-                    </Link>
-                  </h2>
-                  <span className="font-mono text-xs text-[var(--faint)]">
-                    {project.year} · {labels.status[project.status]}
-                  </span>
+                    </h2>
+                    <span className="font-mono text-xs text-[var(--faint)]">
+                      {project.year} · {labels.status[project.status]}
+                    </span>
+                  </div>
+                  <p className="text-[var(--muted)]">{project.summary}</p>
+                  <p className="font-mono text-xs text-[var(--faint)]">
+                    {project.stack.join("  ·  ")}
+                  </p>
                 </div>
-                <p className="text-[var(--muted)]">{project.summary}</p>
-                <p className="font-mono text-xs text-[var(--faint)]">
-                  {project.stack.join("  ·  ")}
-                </p>
-              </div>
+              </Link>
             </li>
           ))}
         </ul>
