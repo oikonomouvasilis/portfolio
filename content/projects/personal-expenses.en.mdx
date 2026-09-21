@@ -1,0 +1,83 @@
+---
+title: Personal Expenses Workbook
+slug: personal-expenses
+year: 2023
+status: live
+categories:
+  - data
+stackLayers:
+  data:
+    - Excel
+role: Design and implementation, end to end
+summary: The spreadsheet that came before the app — a budgeting workbook with a validated ledger, a calculation layer and a dashboard.
+problem: >-
+  Knowing where the money goes needs two things at once: a record that is quick
+  enough to keep up every day, and a view that answers a question in one glance.
+  A notes app gives the first and nothing else; a bank app gives a version of the
+  second over categories somebody else chose.
+goal: >-
+  Build the whole thing in the tool that was already open, and find out how far
+  a spreadsheet could be pushed before it became the bottleneck.
+solution: >-
+  Six sheets with a strict division of labour: configuration, a planning sheet,
+  a validated ledger, an internal calculation layer, a dashboard, and the lists
+  that feed the dropdowns. Entry is constrained by data validation rather than by
+  discipline, and every figure above the ledger is derived.
+outcome: >-
+  1,179 records kept since October 2023 across 13 categories, with the dashboard
+  reading them live. It also mapped its own ceiling — the manual categorisation
+  it demands is exactly the problem the ML app was built to remove.
+repo: https://github.com/oikonomouvasilis/Personal-Expenses
+demo: null
+cover: /images/projects/personal-expenses/dashboard.png
+gallery:
+  - src: /images/projects/personal-expenses/tracking.png
+    caption: The ledger. Type and category are validated lists, the running balance is computed, and the effective date is separate from the entry date.
+  - src: /images/projects/personal-expenses/calculations.png
+    caption: The calculation layer — where the period, the days elapsed and the savings rate are worked out before anything is drawn.
+  - src: /images/projects/personal-expenses/planning.png
+    caption: Budget planning by category and year. The categories here are the same ones the ledger validates against.
+  - src: /images/projects/personal-expenses/settings.png
+    caption: Configuration, including how late-month income is treated and which definition of savings rate the dashboard uses.
+featured: false
+---
+
+This is where the [expenses work](/en/projects/expenses-predictor) started, and
+it is still running. It is included because the spreadsheet is the honest first
+version of the problem — and because it shows the ceiling that justified
+building anything more complicated.
+
+## Input, processing, output — kept apart
+
+The workbook is six sheets and the split between them is the whole design.
+`BUDGET TRACKING` is the only place anything is typed. `CALCULATIONS` holds the
+intermediate work — the selected period, days elapsed, the savings rate.
+`BUDGET DASHBOARD` only displays. `DROPDOWN DATA` feeds the validation lists.
+
+Spreadsheets rot when those three jobs get mixed into the same cells: a total
+typed over a formula, a chart pointed at a range that someone later sorted. The
+separation is not elegance, it is the thing that lets a file survive three years
+of daily use.
+
+## The ledger refuses bad input
+
+Entry is constrained rather than trusted. **Type** is a three-value list —
+income, expenses, savings. **Category** is an `INDIRECT` dropdown that reads the
+chosen type, so picking *Expenses* offers only expense categories. The date
+column takes dates and the amount column takes numbers, and neither accepts
+anything else.
+
+That is why the dashboard can be believed. Every chart above it is an
+aggregation, and an aggregation over dirty categories is a confident wrong
+answer. Constraining the input at the point of entry is cheaper than cleaning it
+afterwards, and it is the same argument the parsers in the ML app make later.
+
+## The part it cannot do
+
+One thing stays manual: choosing the category for each line. Over 1,179 records
+that is 1,179 small decisions, and it is the only step that does not get faster
+with practice.
+
+That single unautomatable column is the reason the predictor exists. The
+spreadsheet did not fail — it worked well enough, for long enough, to show
+precisely which part of the job a model should take over.

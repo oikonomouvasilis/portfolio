@@ -31,19 +31,20 @@ solution: >-
   model's decision passes through code that enforces hard limits per ticker,
   per sector and per day.
 outcome: >-
-  Has executed 61 closed trades unattended, with a public dashboard that updates
+  Has executed 67 closed trades unattended, with a public dashboard that updates
   on every run. Repeated runs cannot double-trade.
 repo: https://github.com/oikonomouvasilis/AI-TRADER
 demo: https://oikonomouvasilis.github.io/AI-TRADER/
-cover: /images/projects/ai-trader/cover.svg
+cover: /images/projects/ai-trader/dashboard-overview.png
 gallery:
-  - src: /images/projects/ai-trader/dashboard.svg
-    caption: The dashboard, rebuilt on every run from the day's journal file.
+  - src: /images/projects/ai-trader/trades.png
+    caption: Closed trades. Most exits sit at roughly −3% and the winners at about +10% — the bracket order deciding the exit before the entry was made.
+  - src: /images/projects/ai-trader/research.png
+    caption: The screener's output for one session, before the model is asked anything.
+  - src: /images/projects/ai-trader/positions.png
+    caption: Open positions, each carrying the stop-loss it was born with.
 featured: true
 ---
-
-{/* TODO: οι εικόνες είναι placeholders — αντικαθίστανται με screenshots του
-πραγματικού dashboard. Καμία αναφορά σε απόδοση — D9. */}
 
 This runs on a **paper account**. There is no real capital at risk, and this page
 makes no claim about returns — the interesting part is the machinery, not the P&L.
