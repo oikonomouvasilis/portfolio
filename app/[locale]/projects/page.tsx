@@ -48,6 +48,10 @@ export default async function ProjectsPage({
     stack: p.stack,
     role: p.role,
     cover: p.cover,
+    images: [
+      { src: p.cover },
+      ...p.gallery.map((g) => ({ src: g.src, caption: g.caption })),
+    ],
   }));
 
   return (

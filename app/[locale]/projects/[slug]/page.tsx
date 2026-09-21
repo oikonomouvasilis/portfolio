@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
@@ -11,6 +10,7 @@ import {
 } from "@/lib/content/projects";
 import { StackDiagram } from "@/components/stack-diagram";
 import { Gallery } from "@/components/gallery";
+import { Carousel } from "@/components/carousel";
 
 type Params = Promise<{ locale: string; slug: string }>;
 
@@ -107,17 +107,21 @@ export default async function ProjectPage({ params }: { params: Params }) {
         </p>
       )}
 
-      <div className="overflow-hidden rounded-lg border border-[var(--line)] bg-[var(--surface)]">
-        <Image
-          src={project.cover}
-          alt=""
-          width={1200}
-          height={675}
-          priority
-          className="h-auto w-full"
-          sizes="(max-width: 64rem) 100vw, 64rem"
-        />
-      </div>
+      {/*
+        Το εξώφυλλο είναι η αρχή ενός carousel με όλες τις οθόνες του project:
+        ο επισκέπτης βλέπει τι είναι το πράγμα χωρίς να κατέβει μέχρι κάτω.
+        Οι ίδιες εικόνες επανέρχονται πιο κάτω σε πλήρες μέγεθος, με λεζάντα.
+      */}
+      <Carousel
+        images={[
+          { src: project.cover, caption: project.summary },
+          ...project.gallery,
+        ]}
+        priority
+        showCaption
+        sizes="(max-width: 64rem) 100vw, 64rem"
+        label={project.title}
+      />
 
       {/* Πρόβλημα → στόχος → λύση → αποτέλεσμα: η αφήγηση με μια ματιά (D15). */}
       <section className="grid gap-x-10 gap-y-8 sm:grid-cols-2 lg:grid-cols-4">

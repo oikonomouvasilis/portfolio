@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import Image from "next/image";
+import { Carousel } from "@/components/carousel";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
@@ -191,37 +191,40 @@ export function ProjectExplorer({
       ) : (
         <ul className="space-y-16">
           {visible.map((project) => (
-            <li key={project.slug}>
-              <Link
-                href={`/${locale}/projects/${project.slug}`}
-                className="group grid gap-6 sm:grid-cols-[1fr_1.2fr] sm:items-center"
-              >
-                <div className="overflow-hidden rounded-lg border border-[var(--line)] bg-[var(--surface)]">
-                  <Image
-                    src={project.cover}
-                    alt=""
-                    width={1200}
-                    height={675}
-                    className="h-auto w-full transition-transform duration-500 group-hover:scale-[1.02]"
-                    sizes="(max-width: 40rem) 100vw, 24rem"
-                  />
-                </div>
+            <li
+              key={project.slug}
+              className="grid gap-6 sm:grid-cols-[1fr_1.2fr] sm:items-center"
+            >
+              {/*
+                Η εικόνα δεν είναι πια μέσα στον σύνδεσμο: το κλικ πάνω της
+                αλλάζει εικόνα. Στο project πάει ο τίτλος, που είναι και ο
+                προορισμός που περιμένει ο screen reader.
+              */}
+              <Carousel
+                images={project.images}
+                sizes="(max-width: 40rem) 100vw, 24rem"
+                label={project.title}
+              />
 
-                <div className="space-y-3">
-                  <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
-                    <h2 className="text-3xl group-hover:underline group-hover:underline-offset-4">
+              <div className="space-y-3">
+                <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
+                  <h2 className="text-3xl">
+                    <Link
+                      href={`/${locale}/projects/${project.slug}`}
+                      className="underline-offset-4 hover:underline"
+                    >
                       {project.title}
-                    </h2>
-                    <span className="font-mono text-xs text-[var(--faint)]">
-                      {project.year} · {labels.status[project.status]}
-                    </span>
-                  </div>
-                  <p className="text-[var(--muted)]">{project.summary}</p>
-                  <p className="font-mono text-xs text-[var(--faint)]">
-                    {project.stack.join("  ·  ")}
-                  </p>
+                    </Link>
+                  </h2>
+                  <span className="font-mono text-xs text-[var(--faint)]">
+                    {project.year} · {labels.status[project.status]}
+                  </span>
                 </div>
-              </Link>
+                <p className="text-[var(--muted)]">{project.summary}</p>
+                <p className="font-mono text-xs text-[var(--faint)]">
+                  {project.stack.join("  ·  ")}
+                </p>
+              </div>
             </li>
           ))}
         </ul>

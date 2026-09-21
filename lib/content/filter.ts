@@ -17,6 +17,11 @@ export type ProjectCard = {
   stack: string[];
   role: string;
   cover: string;
+  /**
+   * Όλες οι εικόνες του project — εξώφυλλο πρώτο. Η κάρτα τις εναλλάσσει με
+   * κλικ, οπότε χρειάζεται τη λίστα και όχι μόνο την πρώτη.
+   */
+  images: { src: string; caption?: string }[];
 };
 
 export type Filters = {
