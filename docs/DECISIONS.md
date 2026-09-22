@@ -121,6 +121,16 @@ Vercel** (Project → Analytics). Μέχρι τότε το script δεν σερ�
 Ποιο όνομα; Προτάσεις: `oikonomou.dev`, `vasilisoikonomou.com`, `boikonomou.dev`.
 Απόφαση μπορεί να πάρει χρόνο — δεν μπλοκάρει τίποτα.
 
+**Τι ισχύει στο μεταξύ (Σεπ 2026).** Το `portfolio-oiko4.vercel.app` είναι πλέον
+καταχωρημένο production domain του project, όχι απλώς alias. Η διάκριση δεν είναι
+τυπική: όσο ήταν alias, το Vercel το σέρβιρε με `X-Robots-Tag: noindex` και το
+site ήταν αόρατο στην Google — παρότι το `robots.txt` έγραφε `Allow: /`.
+
+Όταν κλείσει η D11, αλλάζει **μία γραμμή**: το `siteUrl` στο `lib/site.ts`. Από
+εκεί τρέφονται canonical, `hreflang`, sitemap, robots και OG διευθύνσεις. Θέλει
+επίσης ενημέρωση το `links` στο `content/cv.ts` και νέα παραγωγή των PDF
+(`npm run cv:pdf`), γιατί η παλιά διεύθυνση είναι τυπωμένη μέσα τους.
+
 ### ❓ D12 — Blog / γραπτά
 Αξίζει ενότητα `/blog` ή `/notes`; Ένα-δύο καλά τεχνικά κείμενα ανεβάζουν πολύ ένα
 portfolio, αλλά ένα εγκαταλελειμμένο blog με ένα post του 2026 το ρίχνει.
