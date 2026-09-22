@@ -22,14 +22,16 @@
 - [x] n8n: δεν υπάρχει JSON (δωρεάν λογαριασμός) → διάγραμμα ροής
 - [x] Ενώσεις: τα δύο ETL σε ένα · Διαύγεια + ΚΗΜΔΗΣ σε ένα
 - [x] Duty Scheduler: **εγκρίθηκε** — δεν υπάρχει κανόνας που να το απαγορεύει
-- [ ] `git init` + repo για τα 3 project που δεν έχουν
+- [x] `git init` + repo — 5 project έχουν repo· τα υπόλοιπα 4 είναι `caseStudyOnly`
 - [x] Βιογραφικό εντοπίστηκε: `Desktop/Υπολογιστής/CV_REVISED.docx` (Αύγ 2025)
 - [x] LinkedIn & GitHub URLs, σπουδές, δεξιότητες, πιστοποιήσεις, δημοσιεύσεις
 - [x] **Εμπειρία εργασίας** — αντλήθηκε από το LinkedIn: 4 θέσεις με ημερομηνίες
 - [x] **Φωτογραφία προφίλ** — από το LinkedIn (200×200, η μόνη διαθέσιμη)
-- [ ] 🔴 **Screenshots ανά project** — 2 από 8 έτοιμα (n8n workflow, ETL διάγραμμα)
+- [x] **Screenshots ανά project** — ολοκληρώθηκε στις Φάσεις 6γ–6ε, και για τα 9
 
-**Απομένουν:** τα screenshots των υπόλοιπων project, και `git init` σε τρία repos.
+**Τίποτα δεν απομένει εδώ.** Τα screenshots έγιναν στις Φάσεις 6γ–6ε. Τα project
+χωρίς repo δεν χρειάστηκαν `git init`: παρουσιάζονται ως `caseStudyOnly` — η
+διέξοδος που προβλέπει ρητά η D15, όχι παράλειψη.
 
 ## Φάση 1 — Υποδομή & πρώτο deploy ✅
 - [x] `git init`, **public repo**: [oikonomouvasilis/portfolio](https://github.com/oikonomouvasilis/portfolio)
@@ -238,8 +240,8 @@
 - [x] **ETL Stock Valuation** — η αναφορά Power BI, ανοιγμένη στο Desktop
 - [x] **Ελληνικά Μητρώα** — πριν/μετά, με πραγματικά δημόσια δεδομένα
 - [x] **Νέο project `personal-expenses`** — το Excel από όπου ξεκίνησαν όλα
-- [ ] 🔴 **Nutrition Tracker & Expenses Predictor** — θέλουν σύνδεση του χρήστη
-      (Supabase auth) — κρατούν ακόμη placeholders
+- [x] **Nutrition Tracker & Expenses Predictor** — χρειάζονταν σύνδεση του χρήστη
+      (Supabase auth). Λύθηκε στις Φάσεις 6γ και 6ε· κανένα placeholder δεν έμεινε.
 
 **Πώς τραβήχτηκαν**
 - Οδηγός πάνω από το Chrome DevTools Protocol με το ήδη εγκατεστημένο Chrome —
