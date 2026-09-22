@@ -23,7 +23,12 @@
   --surface: #f5f2ec;
   --fg: #171614;
   --muted: #5f5d57;
-  --faint: #8d8a82;
+  /*
+   * Το «αχνό» έχει δάπεδο, και το δάπεδο είναι το 4.5:1 του WCAG AA πάνω στο
+   * `--surface` — όχι στο `--bg`, γιατί εκεί κάθονται οι ετικέτες του stack.
+   * Το προηγούμενο #8d8a82 έδινε 3.09 και φοριέται σε κείμενο 11px.
+   */
+  --faint: #706d65;
   --line: #ddd8ce;
   --accent: #7a3b1f;
 
@@ -36,7 +41,7 @@
     --surface: #1a1917;
     --fg: #f2efe9;
     --muted: #a5a29a;
-    --faint: #76736c;
+    --faint: #8a867c;
     --line: #2c2a27;
     --accent: #d79268;
 
@@ -49,7 +54,7 @@
   --surface: #1a1917;
   --fg: #f2efe9;
   --muted: #a5a29a;
-  --faint: #76736c;
+  --faint: #8a867c;
   --line: #2c2a27;
   --accent: #d79268;
 

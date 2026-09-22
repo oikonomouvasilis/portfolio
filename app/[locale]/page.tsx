@@ -67,7 +67,7 @@ export default async function HomePage({
           </h2>
 
           <ul className="grid gap-12 sm:grid-cols-2">
-            {featured.map((project) => (
+            {featured.map((project, i) => (
               <li key={project.slug}>
                 <Link
                   href={`/${locale}/projects/${project.slug}`}
@@ -79,6 +79,13 @@ export default async function HomePage({
                       alt=""
                       width={1200}
                       height={675}
+                      /*
+                       * Οι δύο πρώτες κάρτες γεμίζουν τη σειρά του grid και
+                       * είναι ό,τι μεγαλύτερο βλέπει ο επισκέπτης — μία από
+                       * αυτές είναι το LCP. Φορτωμένες τεμπέλικα, το LCP
+                       * περίμενε το JavaScript.
+                       */
+                      priority={i < 2}
                       className="h-auto w-full transition-transform duration-500 group-hover:scale-[1.02]"
                       sizes="(max-width: 40rem) 100vw, 32rem"
                     />

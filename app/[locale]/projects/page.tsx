@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import { getMessages, isLocale } from "@/lib/i18n";
+import { alternatesFor, openGraphFor } from "@/lib/site";
 import { getProjects } from "@/lib/content/projects";
 import { getCategoryFacets, getStackFacets } from "@/lib/content/taxonomy";
 import { ProjectExplorer } from "@/components/project-explorer";
@@ -15,7 +16,16 @@ export async function generateMetadata({
   const { locale } = await params;
   if (!isLocale(locale)) return {};
   const t = await getMessages(locale);
-  return { title: t.projects.title, description: t.projects.intro };
+  return {
+    title: t.projects.title,
+    description: t.projects.intro,
+    alternates: alternatesFor(locale, "/projects"),
+    openGraph: openGraphFor(locale, {
+      title: t.projects.title,
+      description: t.projects.intro,
+      path: "/projects",
+    }),
+  };
 }
 
 export default async function ProjectsPage({

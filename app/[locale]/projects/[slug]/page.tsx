@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import { getMessages, isLocale, locales } from "@/lib/i18n";
+import { alternatesFor, openGraphFor } from "@/lib/site";
 import {
   getNeighbours,
   getProject,
@@ -30,10 +31,20 @@ export async function generateMetadata({
   const project = await getProject(slug, locale);
   if (!project) return {};
 
+  /*
+   * Δεν δηλώνεται `openGraph.images` — θα υπερίσχυε του `opengraph-image.tsx`
+   * δίπλα, που παράγει την κάρτα με τον τίτλο πάνω στο στιγμιότυπο.
+   */
   return {
     title: project.title,
     description: project.summary,
-    openGraph: { images: [project.cover] },
+    alternates: alternatesFor(locale, `/projects/${slug}`),
+    openGraph: openGraphFor(locale, {
+      title: project.title,
+      description: project.summary,
+      path: `/projects/${slug}`,
+      type: "article",
+    }),
   };
 }
 

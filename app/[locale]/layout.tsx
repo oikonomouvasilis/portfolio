@@ -2,7 +2,10 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { Analytics } from "@vercel/analytics/next";
 import { htmlLang, isLocale, locales, getMessages, type Locale } from "@/lib/i18n";
+import { alternatesFor, openGraphFor, siteName, siteUrl } from "@/lib/site";
+import { cv } from "@/content/cv";
 import { serif, sans } from "@/lib/fonts";
 import { LocaleSwitch } from "@/components/locale-switch";
 import { ThemeToggle, themeInitScript } from "@/components/theme-toggle";
@@ -18,35 +21,24 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
+  if (!isLocale(locale)) return {};
   const isGreek = locale === "el";
+
+  const description = isGreek
+    ? "Data engineering, αυτοματισμοί και full-stack ανάπτυξη."
+    : "Data engineering, automation and full-stack development.";
 
   return {
     /*
      * Χωρίς αυτό, οι σχετικές διαδρομές των OG εικόνων δεν γίνονται απόλυτα URL
-     * και το preview σε LinkedIn/Slack βγαίνει χωρίς εικόνα. Παίρνει το URL που
-     * δίνει το Vercel στο build, με το production domain ως εφεδρεία.
+     * και το preview σε LinkedIn/Slack βγαίνει χωρίς εικόνα.
      */
-    metadataBase: new URL(
-      process.env.VERCEL_ENV === "production"
-        ? "https://portfolio-oiko4.vercel.app"
-        : process.env.VERCEL_URL
-          ? `https://${process.env.VERCEL_URL}`
-          : "http://localhost:3000",
-    ),
-    title: {
-      default: "Vasilis Oikonomou",
-      template: "%s · Vasilis Oikonomou",
-    },
-    description: isGreek
-      ? "Data engineering, αυτοματισμοί και full-stack ανάπτυξη."
-      : "Data engineering, automation and full-stack development.",
-    // Οι εναλλακτικές γλώσσες δηλώνονται ρητά ώστε οι μηχανές αναζήτησης να μη
-    // θεωρήσουν τις δύο εκδοχές διπλότυπο περιεχόμενο.
-    alternates: {
-      languages: Object.fromEntries(
-        locales.map((l) => [htmlLang[l], `/${l}`]),
-      ),
-    },
+    metadataBase: new URL(siteUrl),
+    title: { default: siteName, template: `%s · ${siteName}` },
+    description,
+    alternates: alternatesFor(locale),
+    openGraph: openGraphFor(locale, { title: siteName, description }),
+    twitter: { card: "summary_large_image" },
   };
 }
 
@@ -62,6 +54,33 @@ export default async function LocaleLayout({
 
   const t = await getMessages(locale);
   const year = new Date().getFullYear();
+
+  /*
+   * Ένας κόμβος `Person` για όλο το site — γι' αυτό σταθερό `@id` και όχι ένας
+   * ανά σελίδα: αλλιώς η Google βλέπει εννιά διαφορετικά πρόσωπα με το ίδιο
+   * όνομα. Το `sameAs` είναι ο τρόπος να δέσει το site με τα GitHub/LinkedIn.
+   */
+  const personLd = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "@id": `${siteUrl}/#person`,
+    name: cv.name,
+    alternateName: "Vasilis Oikonomou",
+    url: `${siteUrl}/${locale}`,
+    image: `${siteUrl}${cv.photo}`,
+    jobTitle: cv.headline[locale as Locale],
+    email: `mailto:${cv.email}`,
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: locale === "el" ? "Αθήνα" : "Athens",
+      addressCountry: "GR",
+    },
+    description: cv.summary[locale as Locale],
+    knowsAbout: cv.skills.flatMap((group) => group.items),
+    sameAs: cv.links
+      .filter((link) => link.label !== "Portfolio")
+      .map((link) => link.href),
+  };
 
   const nav = [
     { href: `/${locale}/projects`, label: t.nav.projects },
@@ -79,6 +98,10 @@ export default async function LocaleLayout({
       <head>
         {/* Εφαρμόζει το αποθηκευμένο θέμα πριν το πρώτο βάψιμο (D16). */}
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(personLd) }}
+        />
       </head>
       <body className="flex min-h-dvh flex-col">
         <a
@@ -148,6 +171,9 @@ export default async function LocaleLayout({
             </div>
           </div>
         </footer>
+
+        {/* Χωρίς cookies, χωρίς banner συγκατάθεσης (D10). */}
+        <Analytics />
       </body>
     </html>
   );

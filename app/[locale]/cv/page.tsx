@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getMessages, isLocale, type Locale } from "@/lib/i18n";
+import { alternatesFor, openGraphFor } from "@/lib/site";
 import { formatPeriod } from "@/lib/format";
 import { getProjects } from "@/lib/content/projects";
 import { cv } from "@/content/cv";
@@ -13,7 +14,16 @@ export async function generateMetadata({
   const { locale } = await params;
   if (!isLocale(locale)) return {};
   const t = await getMessages(locale);
-  return { title: t.nav.cv, description: cv.summary[locale] };
+  return {
+    title: t.nav.cv,
+    description: cv.summary[locale],
+    alternates: alternatesFor(locale, "/cv"),
+    openGraph: openGraphFor(locale, {
+      title: t.nav.cv,
+      description: cv.summary[locale],
+      path: "/cv",
+    }),
+  };
 }
 
 export default async function CvPage({

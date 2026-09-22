@@ -12,6 +12,7 @@
     "cv:pdf": "node scripts/build-cv-pdf.mjs"
   },
   "dependencies": {
+    "@vercel/analytics": "^2.0.1",
     "gray-matter": "^4.0.3",
     "next": "^16.2.9",
     "next-mdx-remote": "^6.0.0",

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getMessages, isLocale, type Locale } from "@/lib/i18n";
+import { alternatesFor, openGraphFor } from "@/lib/site";
 import { cv } from "@/content/cv";
 
 export async function generateMetadata({
@@ -11,7 +12,16 @@ export async function generateMetadata({
   const { locale } = await params;
   if (!isLocale(locale)) return {};
   const t = await getMessages(locale);
-  return { title: t.contact.title, description: t.contact.intro };
+  return {
+    title: t.contact.title,
+    description: t.contact.intro,
+    alternates: alternatesFor(locale, "/contact"),
+    openGraph: openGraphFor(locale, {
+      title: t.contact.title,
+      description: t.contact.intro,
+      path: "/contact",
+    }),
+  };
 }
 
 export default async function ContactPage({

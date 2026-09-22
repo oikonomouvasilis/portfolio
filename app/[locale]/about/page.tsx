@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { getMessages, isLocale, type Locale } from "@/lib/i18n";
+import { alternatesFor, openGraphFor } from "@/lib/site";
 import { formatPeriod } from "@/lib/format";
 import { cv } from "@/content/cv";
 
@@ -13,7 +14,16 @@ export async function generateMetadata({
   const { locale } = await params;
   if (!isLocale(locale)) return {};
   const t = await getMessages(locale);
-  return { title: t.about.title, description: cv.summary[locale] };
+  return {
+    title: t.about.title,
+    description: cv.summary[locale],
+    alternates: alternatesFor(locale, "/about"),
+    openGraph: openGraphFor(locale, {
+      title: t.about.title,
+      description: cv.summary[locale],
+      path: "/about",
+    }),
+  };
 }
 
 export default async function AboutPage({

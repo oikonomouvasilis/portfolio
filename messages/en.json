@@ -80,5 +80,11 @@
   "cv": {
     "download": "Download PDF",
     "projects": "Selected projects"
+  },
+  "notFound": {
+    "code": "404",
+    "title": "This page does not exist",
+    "body": "The address is valid, the page behind it is not. It may have moved, or the link may be mistyped.",
+    "home": "Back to home"
   }
 }

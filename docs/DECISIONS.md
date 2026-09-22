@@ -108,6 +108,11 @@ Puppeteer με δικό του κατέβασμα 150MB. Τα PDF γίνοντα
 Vercel Web Analytics (ή Plausible). Χωρίς cookies, χωρίς banner συγκατάθεσης,
 χωρίς Google Analytics. Θέλουμε να ξέρουμε ποια project διαβάζονται — τίποτα άλλο.
 
+**Υλοποιήθηκε στη Φάση 7** με `@vercel/analytics`. Χρειάζεται ένα ακόμη βήμα που
+δεν γίνεται από τον κώδικα: **ενεργοποίηση του Web Analytics στο dashboard του
+Vercel** (Project → Analytics). Μέχρι τότε το script δεν σερβίρεται και δεν
+καταγράφεται τίποτα.
+
 ---
 
 ## ❓ Ανοιχτά
