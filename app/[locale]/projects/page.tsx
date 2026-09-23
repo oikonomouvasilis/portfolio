@@ -6,6 +6,7 @@ import { alternatesFor, openGraphFor } from "@/lib/site";
 import { getProjects } from "@/lib/content/projects";
 import { getCategoryFacets, getStackFacets } from "@/lib/content/taxonomy";
 import { ProjectExplorer } from "@/components/project-explorer";
+import { Container } from "@/components/container";
 import type { ProjectCard } from "@/lib/content/filter";
 
 export async function generateMetadata({
@@ -65,7 +66,7 @@ export default async function ProjectsPage({
   }));
 
   return (
-    <div className="space-y-16">
+    <Container className="space-y-16 py-16 sm:py-24">
       <header className="max-w-2xl space-y-4">
         <h1 className="text-5xl sm:text-6xl">{t.projects.title}</h1>
         <p className="text-lg text-[var(--muted)]">{t.projects.intro}</p>
@@ -103,6 +104,6 @@ export default async function ProjectsPage({
           }}
         />
       </Suspense>
-    </div>
+    </Container>
   );
 }

@@ -15,6 +15,12 @@ const STORAGE_KEY = "theme";
  */
 export const themeInitScript = `
 (function () {
+  /*
+   * Σημαδεύει ότι τρέχει JavaScript, πριν βαφτεί οτιδήποτε. Τα στοιχεία που
+   * εμφανίζονται με το scroll κρύβονται **μόνο** κάτω από αυτή τη σημαία: χωρίς
+   * αυτήν, όποιος έχει κλειστό το JavaScript θα έβλεπε άδεια σελίδα.
+   */
+  document.documentElement.setAttribute("data-js", "");
   try {
     var t = localStorage.getItem("${STORAGE_KEY}");
     if (t === "light" || t === "dark") {

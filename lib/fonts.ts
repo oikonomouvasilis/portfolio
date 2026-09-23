@@ -1,20 +1,33 @@
-import { Inter, Source_Serif_4 } from "next/font/google";
+import { Literata, Manrope } from "next/font/google";
 
 /**
- * Επικεφαλίδες. Το `greek` subset είναι ο λόγος που επιλέχθηκε αυτή και όχι μια
- * από τις συνήθεις editorial serif — Instrument Serif, Fraunces και Playfair δεν
- * έχουν ελληνικούς χαρακτήρες, οπότε η μισή σελίδα θα έπεφτε σε fallback (D14).
+ * Επικεφαλίδες. **Literata** — σχεδιάστηκε για το Google Books, άρα κρατάει σε
+ * μέγεθος κειμένου χωρίς να χάνει χαρακτήρα σε μέγεθος τίτλου. Οι απολήξεις της
+ * είναι στιβαρές και ελαφρώς στρογγυλεμένες, που δένει με τις καμπύλες γωνίες
+ * του υπόλοιπου σχεδιασμού.
+ *
+ * Έχει **ελληνικά** — επαληθεύτηκε, όχι υποτέθηκε. Το κριτήριο της D14 παραμένει
+ * και έκοψε ξανά τις Playfair Display, Fraunces, Newsreader και Bodoni Moda.
+ *
+ * Μεταβλητή γραμματοσειρά: δεν δηλώνεται `weight`, ώστε όλη η κλίμακα βάρους να
+ * είναι διαθέσιμη από ένα αρχείο.
  */
-export const serif = Source_Serif_4({
+export const serif = Literata({
   subsets: ["latin", "greek"],
   variable: "--font-serif",
   display: "swap",
-  weight: ["400", "600"],
   style: ["normal", "italic"],
 });
 
-/** Σώμα κειμένου και UI. Έχει κι αυτή πλήρη ελληνική κάλυψη. */
-export const sans = Inter({
+/**
+ * Σώμα κειμένου και UI. **Manrope** — γεωμετρική με στρογγυλεμένες απολήξεις,
+ * αρκετά διαφορετική από τη Literata ώστε το ζεύγος να διαβάζεται ως δύο φωνές
+ * και όχι ως παραλλαγή της ίδιας.
+ *
+ * Αντικατέστησε την Inter, που έχει γίνει η προεπιλεγμένη γραμματοσειρά κάθε
+ * σύγχρονου UI — δηλαδή ακριβώς αυτό που το site προσπαθεί να μη μοιάζει.
+ */
+export const sans = Manrope({
   subsets: ["latin", "greek"],
   variable: "--font-sans",
   display: "swap",

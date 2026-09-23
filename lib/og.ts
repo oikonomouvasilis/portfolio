@@ -21,8 +21,8 @@ export const ogFonts = cache(async () => {
   ]);
 
   return [
-    { name: "Source Serif 4", data: serif, weight: 600 as const, style: "normal" as const },
-    { name: "Inter", data: sans, weight: 400 as const, style: "normal" as const },
+    { name: "Literata", data: serif, weight: 600 as const, style: "normal" as const },
+    { name: "Manrope", data: sans, weight: 400 as const, style: "normal" as const },
   ];
 });
 
@@ -35,9 +35,9 @@ export const ogContentType = "image/png";
  * δεν διαβάζει CSS μεταβλητές, οπότε εδώ γράφονται κυριολεκτικά.
  */
 export const ogTheme = {
-  bg: "#100f0e",
-  fg: "#f2efe9",
-  muted: "#a5a29a",
-  faint: "#8a867c",
-  accent: "#d79268",
+  bg: "#0e1014",
+  fg: "#ecedef",
+  muted: "#a3a9b4",
+  faint: "#8b929d",
+  accent: "#ff7183",
 };

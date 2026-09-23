@@ -9,6 +9,7 @@ import { cv } from "@/content/cv";
 import { serif, sans } from "@/lib/fonts";
 import { LocaleSwitch } from "@/components/locale-switch";
 import { ThemeToggle, themeInitScript } from "@/components/theme-toggle";
+import { Reveal } from "@/components/reveal";
 import "../globals.css";
 
 export function generateStaticParams() {
@@ -139,7 +140,8 @@ export default async function LocaleLayout({
           </div>
         </header>
 
-        <main id="main" className="mx-auto w-full max-w-5xl flex-1 px-6 py-16">
+        {/* Χωρίς περιορισμό πλάτους — τον βάζει κάθε σελίδα με το `Container`. */}
+        <main id="main" className="flex-1">
           {children}
         </main>
 
@@ -171,6 +173,8 @@ export default async function LocaleLayout({
             </div>
           </div>
         </footer>
+
+        <Reveal />
 
         {/* Χωρίς cookies, χωρίς banner συγκατάθεσης (D10). */}
         <Analytics />

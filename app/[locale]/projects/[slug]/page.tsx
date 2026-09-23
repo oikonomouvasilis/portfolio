@@ -12,6 +12,7 @@ import {
 import { StackDiagram } from "@/components/stack-diagram";
 import { Gallery } from "@/components/gallery";
 import { Carousel } from "@/components/carousel";
+import { Container } from "@/components/container";
 
 type Params = Promise<{ locale: string; slug: string }>;
 
@@ -66,8 +67,9 @@ export default async function ProjectPage({ params }: { params: Params }) {
   ] as const;
 
   return (
-    <article className="space-y-20">
-      <header className="space-y-8">
+    <Container className="py-16 sm:py-24">
+      <article className="space-y-20">
+        <header className="space-y-8">
         <Link
           href={`/${locale}/projects`}
           className="font-mono text-xs tracking-widest text-[var(--faint)] uppercase underline-offset-4 hover:text-[var(--fg)] hover:underline"
@@ -202,8 +204,9 @@ export default async function ProjectPage({ params }: { params: Params }) {
               </span>
             </Link>
           )}
-        </nav>
-      )}
-    </article>
+          </nav>
+        )}
+      </article>
+    </Container>
   );
 }

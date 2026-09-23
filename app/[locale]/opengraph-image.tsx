@@ -43,7 +43,7 @@ export default async function Image({
         <div
           style={{
             display: "flex",
-            fontFamily: "Inter",
+            fontFamily: "Manrope",
             fontSize: 24,
             letterSpacing: 4,
             textTransform: "uppercase",
@@ -57,7 +57,7 @@ export default async function Image({
           <div
             style={{
               display: "flex",
-              fontFamily: "Source Serif 4",
+              fontFamily: "Literata",
               fontSize: 76,
               lineHeight: 1.1,
               letterSpacing: -1.5,
@@ -69,7 +69,7 @@ export default async function Image({
           <div
             style={{
               display: "flex",
-              fontFamily: "Inter",
+              fontFamily: "Manrope",
               fontSize: 30,
               color: ogTheme.muted,
             }}
@@ -81,7 +81,7 @@ export default async function Image({
         <div
           style={{
             display: "flex",
-            fontFamily: "Inter",
+            fontFamily: "Manrope",
             fontSize: 24,
             color: ogTheme.faint,
           }}

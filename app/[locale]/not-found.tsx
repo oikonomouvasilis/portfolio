@@ -3,6 +3,7 @@
 import { usePathname } from "next/navigation";
 import { defaultLocale, isLocale, type Locale } from "@/lib/i18n";
 import { NotFoundNotice } from "@/components/not-found-notice";
+import { Container } from "@/components/container";
 import el from "@/messages/el.json";
 import en from "@/messages/en.json";
 
@@ -23,12 +24,14 @@ export default function LocaleNotFound() {
   const t = messages[locale].notFound;
 
   return (
-    <NotFoundNotice
+    <Container className="py-24">
+      <NotFoundNotice
       code={t.code}
       title={t.title}
       body={t.body}
-      homeLabel={t.home}
-      homeHref={`/${locale}`}
-    />
+        homeLabel={t.home}
+        homeHref={`/${locale}`}
+      />
+    </Container>
   );
 }

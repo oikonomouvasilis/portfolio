@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getMessages, isLocale, type Locale } from "@/lib/i18n";
 import { alternatesFor, openGraphFor } from "@/lib/site";
+import { Container } from "@/components/container";
 import { cv } from "@/content/cv";
 
 export async function generateMetadata({
@@ -36,7 +37,8 @@ export default async function ContactPage({
   const t = await getMessages(locale);
 
   return (
-    <div className="max-w-2xl space-y-12">
+    <Container className="py-16 sm:py-24">
+      <div className="max-w-2xl space-y-12">
       <header className="space-y-4">
         <h1 className="text-5xl sm:text-6xl">{t.contact.title}</h1>
         <p className="text-lg text-[var(--muted)]">{t.contact.intro}</p>
@@ -81,7 +83,8 @@ export default async function ContactPage({
         <p className="border-l-2 border-[var(--accent)] pl-4 text-sm text-[var(--muted)]">
           {t.contact.openToWork}
         </p>
-      )}
-    </div>
+        )}
+      </div>
+    </Container>
   );
 }

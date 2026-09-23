@@ -47,7 +47,7 @@ export default async function CvPage({
   const projects = (await getProjects(locale)).filter((p) => p.featured);
 
   return (
-    <div className="cv-page mx-auto max-w-3xl space-y-10">
+    <div className="cv-page mx-auto max-w-3xl space-y-10 px-6 py-16">
       {/* Η γραμμή λήψης δεν τυπώνεται — θα ήταν χαρτί που λέει «κατέβασε χαρτί». */}
       <div className="no-print flex flex-wrap items-center justify-between gap-4 border-b border-[var(--line)] pb-6">
         <h1 className="text-4xl sm:text-5xl">{t.nav.cv}</h1>

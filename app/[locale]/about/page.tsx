@@ -3,6 +3,7 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { getMessages, isLocale, type Locale } from "@/lib/i18n";
 import { alternatesFor, openGraphFor } from "@/lib/site";
+import { Container } from "@/components/container";
 import { formatPeriod } from "@/lib/format";
 import { cv } from "@/content/cv";
 
@@ -40,7 +41,7 @@ export default async function AboutPage({
     formatPeriod(from, to, locale, t.about.present);
 
   return (
-    <div className="space-y-20">
+    <Container className="space-y-20 py-16 sm:py-24">
       <header className="grid gap-8 sm:grid-cols-[auto_1fr] sm:items-start">
         {/*
           Η πηγή είναι 200×200, οπότε δεν εμφανίζεται ποτέ μεγαλύτερη από 128px —
@@ -141,7 +142,7 @@ export default async function AboutPage({
           {cv.interests.map((i) => i[locale]).join(" · ")}
         </p>
       </Section>
-    </div>
+    </Container>
   );
 }
 

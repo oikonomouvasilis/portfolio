@@ -16,49 +16,90 @@
   --color-accent: var(--accent);
   --font-sans: var(--font-sans);
   --font-serif: var(--font-serif);
+  --radius-sm: var(--r-sm);
+  --radius-md: var(--r-md);
+  --radius-lg: var(--r-lg);
+  --radius-xl: var(--r-xl);
 }
 
+/*
+ * Παλέτα «μελάνι σε χαρτί» (D17).
+ *
+ * Το χαρτί είναι **ουδέτερο**, όχι ζεστό κρεμ· το μελάνι γέρνει ελάχιστα προς το
+ * μπλε, όπως το πραγματικό μελάνι εκτύπωσης. Το προηγούμενο ζεύγος κρεμ +
+ * terracotta είναι το πιο αναγνωρίσιμο σημάδι παραγόμενης σχεδίασης, και το
+ * παλιό accent απείχε τρεις μονάδες από το χρώμα που αναφέρεται ρητά ως τέτοιο.
+ *
+ * Το accent είναι **ένα** κόκκινο και εμφανίζεται μόνο όπου κάτι επαληθεύεται ή
+ * είναι ενεργό — ποτέ ως διακόσμηση. Είναι το κόκκινο του ελεγκτή.
+ *
+ * Κάθε τιμή πέρασε 4.5:1 πάνω στο `--surface`, που είναι η αυστηρότερη από τις
+ * δύο βάσεις.
+ */
 :root {
-  --bg: #fdfcfa;
-  --surface: #f5f2ec;
-  --fg: #171614;
-  --muted: #5f5d57;
-  /*
-   * Το «αχνό» έχει δάπεδο, και το δάπεδο είναι το 4.5:1 του WCAG AA πάνω στο
-   * `--surface` — όχι στο `--bg`, γιατί εκεί κάθονται οι ετικέτες του stack.
-   * Το προηγούμενο #8d8a82 έδινε 3.09 και φοριέται σε κείμενο 11px.
-   */
-  --faint: #706d65;
-  --line: #ddd8ce;
-  --accent: #7a3b1f;
+  --bg: #f6f6f4;
+  --surface: #edede9;
+  --fg: #12161f;
+  --muted: #545a66;
+  --faint: #5e6773;
+  --line: #dbdbd5;
+  --accent: #a8122b;
 
   color-scheme: light;
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #100f0e;
-    --surface: #1a1917;
-    --fg: #f2efe9;
-    --muted: #a5a29a;
-    --faint: #8a867c;
-    --line: #2c2a27;
-    --accent: #d79268;
+    --bg: #0e1014;
+    --surface: #171a20;
+    --fg: #ecedef;
+    --muted: #a3a9b4;
+    --faint: #8b929d;
+    --line: #262a32;
+    --accent: #ff7183;
 
     color-scheme: dark;
   }
 }
 
 :root[data-theme="dark"] {
-  --bg: #100f0e;
-  --surface: #1a1917;
-  --fg: #f2efe9;
-  --muted: #a5a29a;
-  --faint: #8a867c;
-  --line: #2c2a27;
-  --accent: #d79268;
+  --bg: #0e1014;
+  --surface: #171a20;
+  --fg: #ecedef;
+  --muted: #a3a9b4;
+  --faint: #8b929d;
+  --line: #262a32;
+  --accent: #ff7183;
 
   color-scheme: dark;
+}
+
+/*
+ * Κλίμακα καμπυλότητας — **όχι** μία ακτίνα παντού. Η ίδια γωνία σε chip και σε
+ * μεγάλη εικόνα ισοπεδώνει την ιεραρχία· όσο μεγαλώνει το στοιχείο, τόσο
+ * μεγαλώνει η καμπύλη.
+ */
+:root {
+  --r-sm: 0.375rem;
+  --r-md: 0.75rem;
+  --r-lg: 1.25rem;
+  --r-xl: 2rem;
+}
+
+/*
+ * Τυπογραφική κλίμακα. Τα βήματα μεγαλώνουν όσο ανεβαίνει η ιεραρχία: μικρά και
+ * συντηρητικά στο κείμενο, γενναία στους τίτλους. Το `clamp` σημαίνει ότι η
+ * κλίμακα αναπνέει με το πλάτος χωρίς breakpoint.
+ */
+:root {
+  --t-display: clamp(2.75rem, 7vw, 6rem);
+  --t-title: clamp(2rem, 4.2vw, 3.5rem);
+  --t-section: clamp(1.5rem, 2.6vw, 2.25rem);
+  --t-sub: 1.3125rem;
+  --t-lead: 1.1875rem;
+  --t-body: 1rem;
+  --t-small: 0.875rem;
+  --t-micro: 0.8125rem;
 }
 
 body {
@@ -78,9 +119,80 @@ h2,
 h3 {
   font-family: var(--font-serif), Georgia, "Times New Roman", serif;
   font-weight: 400;
-  letter-spacing: -0.02em;
-  line-height: 1.1;
   text-wrap: balance;
+}
+
+/*
+ * Το tracking σφίγγει όσο μεγαλώνει το μέγεθος. Σε 6rem η κανονική απόσταση
+ * γραμμάτων ανοίγει τρύπες· σε 1.3rem η σφιχτή τις κλείνει υπερβολικά. Μία τιμή
+ * για όλα τα επίπεδα εξυπηρετεί μόνο το ένα.
+ */
+h1 {
+  font-size: var(--t-display);
+  line-height: 0.98;
+  letter-spacing: -0.035em;
+}
+
+h2 {
+  font-size: var(--t-section);
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+}
+
+h3 {
+  font-size: var(--t-sub);
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+
+/* Η serif θέλει περισσότερο αέρα ανάμεσα στις γραμμές από μια sans. */
+p {
+  text-wrap: pretty;
+}
+
+/*
+ * Εμφάνιση κατά το scroll.
+ *
+ * Η ορατότητα δίνεται από JavaScript (`IntersectionObserver`), **όχι** από
+ * `animation-timeline: view()`. Τα CSS scroll-driven animations δεν είναι
+ * Baseline: ο Firefox stable τα κρατά πίσω από flag, οπότε ένα μέρος των
+ * επισκεπτών δεν θα έβλεπε ποτέ το περιεχόμενο να εμφανίζεται.
+ *
+ * Η αφετηρία είναι ορατή. Το `data-reveal` το κρύβει μόνο αφού βεβαιωθεί ότι
+ * τρέχει JavaScript — αλλιώς όποιος το έχει κλειστό θα έβλεπε άδεια σελίδα.
+ */
+[data-reveal] {
+  --reveal-shift: 1.25rem;
+}
+
+html[data-js] [data-reveal] {
+  opacity: 0;
+  transform: translateY(var(--reveal-shift));
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+html[data-js] [data-reveal][data-shown] {
+  opacity: 1;
+  transform: none;
+}
+
+/*
+ * Η χάραξη της γραμμής.
+ *
+ * Αυτή είναι η μία κίνηση που σημαίνει κάτι: κάθε ενότητα «χαράζεται» πριν
+ * γεμίσει, όπως γραμμή καταλόγου. Γι' αυτό η γραμμή προηγείται του περιεχομένου
+ * και όχι το αντίστροφο.
+ */
+html[data-js] [data-rule] {
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+html[data-js] [data-rule][data-shown] {
+  transform: scaleX(1);
 }
 
 /* Ορατός δακτύλιος εστίασης — απαίτηση προσβασιμότητας, όχι διακόσμηση. */
@@ -102,6 +214,16 @@ h3 {
   *::after {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
+  }
+
+  /*
+   * Δεν αρκεί να μηδενιστεί η διάρκεια: με `opacity: 0` ως αφετηρία, το
+   * περιεχόμενο θα «πεταγόταν» μόλις το έπιανε ο observer. Εδώ απλώς δεν
+   * κρύβεται ποτέ.
+   */
+  html[data-js] [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
   }
 }
 
