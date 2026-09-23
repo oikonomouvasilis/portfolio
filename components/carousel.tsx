@@ -82,7 +82,7 @@ export function Carousel({
         role="group"
         aria-roledescription="carousel"
         aria-label={label}
-        className="group/carousel relative aspect-[16/9] overflow-hidden rounded-lg border border-[var(--line)] bg-[var(--surface)]"
+        className="group/carousel relative aspect-[16/9] overflow-hidden rounded-lg border border-[var(--line)] bg-[var(--panel)]"
       >
         {/*
           Σταθερό κουτί 16:9 και `object-contain`: οι οθόνες που τραβήχτηκαν δεν

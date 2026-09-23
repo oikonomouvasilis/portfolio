@@ -103,7 +103,7 @@ export function ThemeToggle({ label }: { label: string }) {
       onClick={advance}
       title={label}
       aria-label={label}
-      className="grid size-8 place-items-center rounded-full border border-[var(--line)] text-sm transition-colors hover:bg-[var(--surface)]"
+      className="grid size-8 place-items-center rounded-full border border-[var(--line)] text-sm transition-colors hover:bg-[var(--panel)]"
     >
       <span aria-hidden="true">{ICONS[theme]}</span>
     </button>

@@ -125,7 +125,17 @@ export function ProjectExplorer({
 
   return (
     <div className="space-y-12">
-      <div className="space-y-6 border-y border-[var(--line)] py-6">
+      {/*
+        `suppressHydrationWarning`: τα `data-shown` / `data-from` τα γράφει ο
+        observer πάνω στο DOM, και αυτό το κομμάτι ενυδατώνεται **μετά** (ζει
+        μέσα σε Suspense, λόγω `useSearchParams`). Χωρίς αυτό, ο React βρίσκει
+        στο DOM attributes που δεν απέδωσε ο ίδιος και βγάζει mismatch.
+      */}
+      <div
+        data-reveal
+        suppressHydrationWarning
+        className="space-y-6 border-y border-[var(--line)] py-6"
+      >
         <div className="grid gap-4 sm:grid-cols-[10rem_1fr] sm:items-center">
           <label
             htmlFor="project-search"
@@ -189,9 +199,9 @@ export function ProjectExplorer({
       {visible.length === 0 ? (
         <p className="text-[var(--muted)]">{labels.empty}</p>
       ) : (
-        <ul className="space-y-16">
+        <ul data-reveal-children className="space-y-16">
           {visible.map((project) => (
-            <li key={project.slug}>
+            <li key={project.slug} suppressHydrationWarning>
               {/*
                 Στη λίστα η εναλλαγή γίνεται με το ποντίκι, οπότε τίποτα δεν
                 διεκδικεί το κλικ: ολόκληρη η κάρτα παραμένει ένας σύνδεσμος

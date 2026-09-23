@@ -39,13 +39,13 @@ export default async function ContactPage({
   return (
     <Container className="py-16 sm:py-24">
       <div className="max-w-2xl space-y-12">
-      <header className="space-y-4">
+      <header data-reveal className="space-y-4">
         <h1 className="text-5xl sm:text-6xl">{t.contact.title}</h1>
         <p className="text-lg text-[var(--muted)]">{t.contact.intro}</p>
       </header>
 
       {/* Χωρίς φόρμα: κρατά τη σελίδα 100% στατική και δεν χρειάζεται anti-spam (D13). */}
-      <dl className="space-y-8">
+      <dl data-reveal-children className="space-y-8">
         <div className="grid gap-x-8 gap-y-2 sm:grid-cols-[8rem_1fr] sm:items-baseline">
           <dt className="font-mono text-xs tracking-widest text-[var(--faint)] uppercase">
             {t.contact.email}
@@ -80,7 +80,10 @@ export default async function ContactPage({
       </dl>
 
       {cv.openToWork && (
-        <p className="border-l-2 border-[var(--accent)] pl-4 text-sm text-[var(--muted)]">
+        <p
+          data-reveal
+          className="border-l-2 border-[var(--accent)] pl-4 text-sm text-[var(--muted)]"
+        >
           {t.contact.openToWork}
         </p>
         )}

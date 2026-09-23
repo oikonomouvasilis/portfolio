@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -5,6 +6,7 @@ import { getMessages, isLocale, type Locale } from "@/lib/i18n";
 import { getProjects } from "@/lib/content/projects";
 import { cv } from "@/content/cv";
 import { Container } from "@/components/container";
+import { TechList } from "@/components/tech-icon";
 
 /*
  * Η εικόνα αλλάζει πλευρά σε κάθε σειρά, το κείμενο κάθεται **δίπλα** της.
@@ -35,6 +37,15 @@ const TEXT_SIDE = {
   right: "sm:col-start-1 sm:col-end-7 sm:row-start-1",
 } as const;
 
+/**
+ * Καθυστέρηση ενός μέρους μέσα σε στοιχείο που αποκαλύπτεται.
+ *
+ * Ο τύπος `CSSProperties` δεν δέχεται custom properties, εξ ου το `as`. Η
+ * εναλλακτική —κλάσεις `delay-*` του Tailwind— θα σήμαινε πέντε κλάσεις για μια
+ * τιμή που έτσι κι αλλιώς είναι αριθμός.
+ */
+const part = (ms: number) => ({ "--part-delay": `${ms}ms` }) as CSSProperties;
+
 export default async function HomePage({
   params,
 }: {
@@ -50,7 +61,7 @@ export default async function HomePage({
   return (
     <>
       <Container className="py-20 sm:py-28">
-        <section className="grid gap-12 sm:grid-cols-[1fr_auto] sm:items-end">
+        <section className="grid gap-10 sm:grid-cols-[1fr_auto] sm:items-center sm:gap-16">
           <div className="max-w-3xl">
             <h1>{t.home.tagline}</h1>
             <p className="mt-8 max-w-[58ch] text-[length:var(--t-lead)] leading-[1.7] text-[var(--muted)]">
@@ -80,24 +91,34 @@ export default async function HomePage({
             </div>
           </div>
 
+          {/*
+           * Στρογγυλή και μεγαλύτερη, στοιχισμένη **στο κέντρο** της στήλης του
+           * κειμένου. Με `items-end` κάθονταν στη βάση της παραγράφου, που
+           * έμοιαζε με λάθος στοίχιση όσο μεγάλωνε η φωτογραφία.
+           *
+           * ⚠️ Η πηγή είναι 200×200 (LinkedIn). Στα 160px CSS σε οθόνη διπλής
+           * πυκνότητας ζητούνται 320px που δεν υπάρχουν, οπότε μαλακώνει λίγο.
+           * Θέλει αρχείο τουλάχιστον 400×400 για να ανέβει άλλο.
+           */}
           <Image
             src={cv.photo}
             alt=""
             width={200}
             height={200}
             priority
-            className="order-first size-24 rounded-[var(--r-lg)] object-cover sm:order-none sm:size-36"
+            className="order-first size-32 rounded-full border border-[var(--line)] object-cover sm:order-none sm:size-40"
           />
         </section>
       </Container>
 
       {featured.length > 0 && (
         /*
-         * Η ζώνη αλλάζει φόντο και πιάνει όλο το πλάτος του παραθύρου. Αυτό
-         * ξεχωρίζει την ενότητα πολύ πιο καθαρά από μια γραμμή, και είναι ο
-         * λόγος που ο περιορισμός πλάτους έφυγε από το `main`.
+         * Η ζώνη πιάνει όλο το πλάτος του παραθύρου και ξεχωρίζει με **γραμμές**,
+         * όχι με δικό της χρώμα: το φόντο είναι ένα και κοινό σε όλο το site
+         * (D18). Ζώνες σε διαφορετικά συμπαγή χρώματα έσπαγαν τη σελίδα σε
+         * κομμάτια που έμοιαζαν με ξεχωριστές σελίδες κολλημένες μεταξύ τους.
          */
-        <section className="border-y border-[var(--line)] bg-[var(--surface)] py-20 sm:py-28">
+        <section className="border-y border-[var(--line)] py-20 sm:py-28">
           <Container>
             <div className="flex items-baseline gap-6">
               <h2>{t.home.selectedWork}</h2>
@@ -119,7 +140,9 @@ export default async function HomePage({
                       className="group grid items-center gap-5 rounded-[var(--r-lg)] sm:grid-cols-12 sm:gap-10"
                     >
                       <div
-                        className={`overflow-hidden rounded-[var(--r-md)] border border-[var(--line)] bg-[var(--bg)] ${IMAGE_SIDE[side]}`}
+                        data-reveal-part
+                        style={part(0)}
+                        className={`overflow-hidden rounded-[var(--r-md)] border border-[var(--line)] bg-[var(--panel)] ${IMAGE_SIDE[side]}`}
                       >
                         <Image
                           src={project.cover}
@@ -134,7 +157,11 @@ export default async function HomePage({
                       </div>
 
                       <div className={TEXT_SIDE[side]}>
-                        <div className="flex items-baseline gap-4">
+                        <div
+                          data-reveal-part
+                          style={part(120)}
+                          className="flex items-baseline gap-4"
+                        >
                           <h3 className="transition-colors group-hover:text-[var(--accent)]">
                             {project.title}
                           </h3>
@@ -143,7 +170,11 @@ export default async function HomePage({
                           </span>
                         </div>
 
-                        <p className="mt-3 text-[length:var(--t-small)] leading-[1.65] text-[var(--muted)]">
+                        <p
+                          data-reveal-part
+                          style={part(220)}
+                          className="mt-3 text-[length:var(--t-small)] leading-[1.65] text-[var(--muted)]"
+                        >
                           {project.summary}
                         </p>
 
@@ -153,7 +184,11 @@ export default async function HomePage({
                          * κάρτα. Δίπλα σε εικόνα αφήνει τη στήλη μισοάδεια και
                          * δεν λέει τι βγήκε τελικά, που είναι το ενδιαφέρον.
                          */}
-                        <p className="mt-3 text-[length:var(--t-small)] leading-[1.65] text-[var(--faint)]">
+                        <p
+                          data-reveal-part
+                          style={part(300)}
+                          className="mt-3 text-[length:var(--t-small)] leading-[1.65] text-[var(--faint)]"
+                        >
                           {project.outcome}
                         </p>
                       </div>
@@ -192,8 +227,8 @@ export default async function HomePage({
                 <dt className="text-[length:var(--t-small)] font-semibold">
                   {group.label[locale]}
                 </dt>
-                <dd className="mt-2 text-[length:var(--t-small)] leading-relaxed text-[var(--muted)]">
-                  {group.items.join(", ")}
+                <dd className="mt-3 text-[length:var(--t-small)] text-[var(--muted)]">
+                  <TechList items={group.items} />
                 </dd>
               </div>
             ))}

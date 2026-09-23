@@ -68,7 +68,11 @@ export default async function ProjectPage({ params }: { params: Params }) {
 
   return (
     <Container className="py-16 sm:py-24">
-      <article className="space-y-20">
+      {/*
+        Κάθε ενότητα του case study εμφανίζεται μόνη της καθώς κατεβαίνεις:
+        κεφαλίδα, carousel, αφήγηση, αρχιτεκτονική, κείμενο, συλλογή, πλοήγηση.
+      */}
+      <article data-reveal-children className="space-y-20">
         <header className="space-y-8">
         <Link
           href={`/${locale}/projects`}

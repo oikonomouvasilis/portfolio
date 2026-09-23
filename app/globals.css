@@ -9,6 +9,7 @@
 @theme inline {
   --color-bg: var(--bg);
   --color-surface: var(--surface);
+  --color-panel: var(--panel);
   --color-fg: var(--fg);
   --color-muted: var(--muted);
   --color-faint: var(--faint);
@@ -41,9 +42,36 @@
   --surface: #edede9;
   --fg: #12161f;
   --muted: #545a66;
-  --faint: #5e6773;
+  /*
+   * Δύο μονάδες πιο σκούρο από πριν. Το φόντο πλέον δεν είναι σταθερό χαρτί:
+   * στη χειρότερη στιγμή (σκούρο στιγμιότυπο από πίσω) η βάση πέφτει κοντά στο
+   * #dc, και με το παλιό γκρι η μικρή γραμματοσειρά έπεφτε κάτω από 4.5:1.
+   */
+  --faint: #515a65;
   --line: #dbdbd5;
   --accent: #a8122b;
+
+  /*
+   * Ημιδιάφανη επιφάνεια. Όπου παλιά έμπαινε συμπαγές `--surface` — κορνίζες
+   * εικόνων, κουμπιά σε hover — μπαίνει αυτό, ώστε το κοινό φόντο να περνά από
+   * παντού και η σελίδα να έχει **ένα** φόντο αντί για μπαλώματα.
+   */
+  --panel: color-mix(in oklab, var(--surface) 62%, transparent);
+
+  /* Πόσο πέπλο μπαίνει πάνω από τις εικόνες του φόντου (D18). */
+  --backdrop-veil: 85%;
+  --backdrop-blur: 34px;
+  --backdrop-brightness: 1.05;
+
+  /*
+   * Η κινούμενη «παράσταση» πάνω από το πέπλο (D19). Τα χρώματα είναι το accent
+   * και το μελάνι **αναμειγμένα με το χαρτί**: έτσι η κηλίδα αλλάζει απόχρωση
+   * χωρίς να αλλάζει σχεδόν καθόλου φωτεινότητα, που είναι το μόνο που θα
+   * πείραζε την αντίθεση του κειμένου.
+   */
+  --scene-warm: color-mix(in oklab, var(--accent) 16%, var(--bg));
+  --scene-cool: color-mix(in oklab, var(--fg) 13%, var(--bg));
+  --scene-strength: 0.75;
 
   color-scheme: light;
 }
@@ -54,9 +82,22 @@
     --surface: #171a20;
     --fg: #ecedef;
     --muted: #a3a9b4;
-    --faint: #8b929d;
+    /* Συμμετρικά με το ανοιχτό θέμα: ανεβαίνει, επειδή η βάση μπορεί να φωτίσει. */
+    --faint: #959ca7;
     --line: #262a32;
     --accent: #ff7183;
+
+    /*
+     * Πιο πυκνό πέπλο στο σκοτεινό θέμα: οι εικόνες είναι φωτεινές, και όση
+     * φωτεινότητα περνά στο φόντο τρώγεται από την αντίθεση του γκρι κειμένου.
+     */
+    --backdrop-veil: 88%;
+    /*
+     * Στο σκοτεινό θέμα η εικόνα φωτίζεται πριν μπει: αλλιώς ένα 12% μιας μέτριας
+     * φωτογραφίας πάνω σε σχεδόν μαύρο δεν φαίνεται καθόλου — το φόντο θα ήταν
+     * κώδικας που δεν βλέπει κανείς.
+     */
+    --backdrop-brightness: 1.55;
 
     color-scheme: dark;
   }
@@ -67,9 +108,13 @@
   --surface: #171a20;
   --fg: #ecedef;
   --muted: #a3a9b4;
-  --faint: #8b929d;
+  --faint: #959ca7;
   --line: #262a32;
   --accent: #ff7183;
+
+  /* Βλ. σχόλια στο θέμα συστήματος παραπάνω. */
+  --backdrop-veil: 88%;
+  --backdrop-brightness: 1.55;
 
   color-scheme: dark;
 }
@@ -102,8 +147,18 @@
   --t-micro: 0.8125rem;
 }
 
-body {
+/*
+ * Το χρώμα βάσης μπαίνει στο <html>, όχι στο <body>: το κοινό φόντο
+ * (`.site-backdrop`) κάθεται σε αρνητικό z-index, δηλαδή πίσω από το περιεχόμενο
+ * του body αλλά **μπροστά** από το φόντο του html. Με χρωματισμένο body δεν θα
+ * φαινόταν ποτέ.
+ */
+html {
   background: var(--bg);
+}
+
+body {
+  background: transparent;
   color: var(--fg);
   font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -151,6 +206,161 @@ p {
 }
 
 /*
+ * ── Το κοινό φόντο (D18) ──────────────────────────────────────────────────────
+ *
+ * Μία επιφάνεια κάτω από όλες τις σελίδες, με εικόνες των project να εναλλάσσονται
+ * αργά από πίσω. Αντικαθιστά τις ζώνες με διαφορετικά συμπαγή χρώματα: μια σελίδα
+ * που αλλάζει φόντο τρεις φορές καθώς κατεβαίνεις μοιάζει με τρεις σελίδες
+ * κολλημένες.
+ *
+ * Οι εικόνες είναι **θολές και σκεπασμένες**. Καθαρό στιγμιότυπο από πίσω σημαίνει
+ * ότι η αντίθεση του κειμένου αλλάζει ανά σημείο της οθόνης και ανά δευτερόλεπτο —
+ * δηλαδή ότι κάπου θα είναι αδιάβαστο. Με θόλωμα 44px και πέπλο 88% περνά μόνο
+ * χρώμα και κίνηση, και οι μετρήσεις αντίθεσης μένουν εκεί που ήταν.
+ */
+.site-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  background: var(--bg);
+}
+
+.site-backdrop__frame {
+  object-fit: cover;
+  opacity: 0;
+  /*
+   * Η μεγέθυνση δεν είναι εφέ: το θόλωμα «τρώει» τις άκρες της εικόνας και
+   * χωρίς αυτήν θα φαινόταν διάφανο πλαίσιο γύρω γύρω.
+   */
+  transform: scale(1.18);
+  /*
+   * Το `contrast(0.75)` δεν είναι αισθητική επιλογή: μαζεύει τα άκρα της εικόνας
+   * προς το μέσο, ώστε ένα κατάλευκο screenshot να μη φωτίζει το φόντο και ένα
+   * σκούρο dashboard να μη το σβήνει. Έτσι η αντίθεση του κειμένου δεν εξαρτάται
+   * από το ποια εικόνα τυχαίνει να παίζει.
+   */
+  filter: blur(var(--backdrop-blur)) saturate(1.35) contrast(0.75)
+    brightness(var(--backdrop-brightness));
+  transition: opacity 2.4s ease-in-out;
+}
+
+.site-backdrop__frame.is-current {
+  opacity: 1;
+  animation: backdrop-drift 30s ease-in-out infinite alternate;
+}
+
+/*
+ * Δύο στρώσεις: σταθερό πέπλο στο χρώμα του χαρτιού, και μια βαθμίδα που σκουραίνει
+ * προς τις άκρες ώστε το κέντρο —όπου είναι το κείμενο— να μένει το πιο ήσυχο σημείο.
+ */
+.site-backdrop__veil {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(
+      125% 95% at 50% 0%,
+      transparent 35%,
+      color-mix(in oklab, var(--bg) 65%, transparent) 100%
+    ),
+    color-mix(in oklab, var(--bg) var(--backdrop-veil), transparent);
+}
+
+/*
+ * Η κινούμενη παράσταση.
+ *
+ * Κάθεται **πάνω** από το πέπλο και όχι από κάτω: κάτω από ένα πέπλο 85% θα
+ * περνούσε το 15% της, δηλαδή τίποτα. Μια μάσκα την κρατά στην περιφέρεια, έξω
+ * από τη στήλη ανάγνωσης — η κίνηση φαίνεται στα περιθώρια, το κείμενο πατά σε
+ * ακίνητο φόντο.
+ */
+.site-backdrop__scene {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  opacity: var(--scene-strength);
+  -webkit-mask-image: radial-gradient(
+    ellipse 76% 60% at 50% 50%,
+    transparent 28%,
+    #000 92%
+  );
+  mask-image: radial-gradient(
+    ellipse 76% 60% at 50% 50%,
+    transparent 28%,
+    #000 92%
+  );
+}
+
+.site-backdrop__blob {
+  position: absolute;
+  width: 58vmax;
+  height: 58vmax;
+  border-radius: 50%;
+  /* Μόνο `transform` κινείται — το layout δεν ξαναϋπολογίζεται ποτέ. */
+  will-change: transform;
+}
+
+.site-backdrop__blob--a {
+  top: -22vmax;
+  left: -18vmax;
+  background: radial-gradient(circle, var(--scene-warm) 0%, transparent 66%);
+  animation: scene-a 46s ease-in-out infinite alternate;
+}
+
+.site-backdrop__blob--b {
+  right: -24vmax;
+  bottom: -20vmax;
+  background: radial-gradient(circle, var(--scene-cool) 0%, transparent 64%);
+  animation: scene-b 62s ease-in-out infinite alternate;
+}
+
+.site-backdrop__blob--c {
+  top: 30%;
+  left: 55%;
+  width: 44vmax;
+  height: 44vmax;
+  background: radial-gradient(circle, var(--scene-warm) 0%, transparent 70%);
+  animation: scene-c 54s ease-in-out infinite alternate;
+}
+
+@keyframes scene-a {
+  from {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  to {
+    transform: translate3d(22vmax, 14vmax, 0) scale(1.25);
+  }
+}
+
+@keyframes scene-b {
+  from {
+    transform: translate3d(0, 0, 0) scale(1.15);
+  }
+  to {
+    transform: translate3d(-20vmax, -16vmax, 0) scale(0.95);
+  }
+}
+
+@keyframes scene-c {
+  from {
+    transform: translate3d(0, 0, 0) scale(0.9);
+  }
+  to {
+    transform: translate3d(-16vmax, 18vmax, 0) scale(1.2);
+  }
+}
+
+@keyframes backdrop-drift {
+  from {
+    transform: scale(1.14) translate3d(-1.5%, -1%, 0);
+  }
+  to {
+    transform: scale(1.26) translate3d(1.5%, 1%, 0);
+  }
+}
+
+/*
  * Εμφάνιση κατά το scroll.
  *
  * Η ορατότητα δίνεται από JavaScript (`IntersectionObserver`), **όχι** από
@@ -161,21 +371,95 @@ p {
  * Η αφετηρία είναι ορατή. Το `data-reveal` το κρύβει μόνο αφού βεβαιωθεί ότι
  * τρέχει JavaScript — αλλιώς όποιος το έχει κλειστό θα έβλεπε άδεια σελίδα.
  */
-[data-reveal] {
+[data-reveal],
+[data-reveal-children] > * {
   --reveal-shift: 1.25rem;
+  /*
+   * Ελάχιστη σμίκρυνση στην αφετηρία: αρκετή ώστε το στοιχείο να «πετάγεται»
+   * μπροστά αντί απλώς να ανεβαίνει, μικρή ώστε να μη θολώνει το κείμενο όσο
+   * κινείται.
+   */
+  --reveal-scale: 0.975;
 }
 
-html[data-js] [data-reveal] {
+/*
+ * Η κρυφή αφετηρία. Το `data-reveal-children` βάζει στο ίδιο καθεστώς **όλα** τα
+ * παιδιά ενός δοχείου — μια λίστα δηλώνεται μία φορά αντί για μία φορά ανά
+ * εγγραφή. Ο κανόνας είναι στο CSS και όχι στη JavaScript επίτηδες: αν τα παιδιά
+ * σημαδεύονταν μετά την ενυδάτωση, θα είχαν ήδη ζωγραφιστεί ορατά και θα
+ * αναβόσβηναν.
+ */
+html[data-js] :is([data-reveal], [data-reveal-children] > *) {
   opacity: 0;
-  transform: translateY(var(--reveal-shift));
+  transform: translateY(var(--reveal-shift)) scale(var(--reveal-scale));
+  /*
+   * Αυτή είναι η **απόσυρση**: γρήγορη, και χωρίς σειρά προτεραιότητας. Η είσοδος
+   * έχει δική της, πιο αργή καμπύλη παρακάτω. Ένα στοιχείο που φεύγει από την
+   * οθόνη δεν έχει λόγο να το κάνει με το πάσο του — ο επισκέπτης κοιτάζει ήδη
+   * αλλού, και μια αργή απόσυρση θα τον ακολουθούσε στο κάδρο.
+   */
   transition:
-    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
-    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    opacity 0.35s ease-out,
+    transform 0.35s ease-out;
 }
 
-html[data-js] [data-reveal][data-shown] {
+/*
+ * Απόσυρση προς τα **πάνω** για ό,τι βγήκε από την κορυφή της οθόνης. Χωρίς αυτό
+ * κάθε στοιχείο θα ξανακατέβαινε καθώς το προσπερνάς, δηλαδή θα κινούνταν
+ * αντίθετα από το scroll.
+ */
+html[data-js]
+  :is([data-reveal], [data-reveal-children] > *)[data-from="above"]:not(
+    [data-shown]
+  ) {
+  transform: translateY(calc(var(--reveal-shift) * -1))
+    scale(var(--reveal-scale));
+}
+
+html[data-js] :is([data-reveal], [data-reveal-children] > *)[data-shown] {
   opacity: 1;
   transform: none;
+  transition:
+    opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+  /*
+   * Το βήμα της σκυταλοδρομίας το γράφει ο observer (βλ. `components/reveal.tsx`)
+   * και ισχύει **μόνο στην είσοδο** — γι' αυτό ζει εδώ και όχι στην κρυφή
+   * κατάσταση, όπου θα καθυστερούσε και την απόσυρση.
+   */
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+/*
+ * Δεύτερο επίπεδο: τα **μέρη** ενός στοιχείου που αποκαλύπτεται.
+ *
+ * Δεν έχουν δικό τους observer — ακολουθούν το `data-shown` του γονιού και
+ * ξεκινούν με τη δική τους μικρή καθυστέρηση. Έτσι μια σειρά project δεν
+ * εμφανίζεται μονοκόμματη: πρώτα η εικόνα, μετά ο τίτλος, μετά το κείμενο.
+ *
+ * Η καθυστέρηση **προσθέτει** εκείνη του γονιού, γιατί το `--reveal-delay`
+ * κληρονομείται: αλλιώς το τρίτο project θα ξεκινούσε τα μέρη του πριν καν
+ * εμφανιστεί το ίδιο.
+ */
+html[data-js]
+  :is([data-reveal], [data-reveal-children] > *)
+  [data-reveal-part] {
+  opacity: 0;
+  transform: translateY(0.6rem);
+  transition:
+    opacity 0.3s ease-out,
+    transform 0.3s ease-out;
+}
+
+html[data-js]
+  :is([data-reveal], [data-reveal-children] > *)[data-shown]
+  [data-reveal-part] {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: calc(var(--reveal-delay, 0ms) + var(--part-delay, 0ms));
 }
 
 /*
@@ -221,9 +505,20 @@ html[data-js] [data-rule][data-shown] {
    * περιεχόμενο θα «πεταγόταν» μόλις το έπιανε ο observer. Εδώ απλώς δεν
    * κρύβεται ποτέ.
    */
-  html[data-js] [data-reveal] {
+  html[data-js] :is([data-reveal], [data-reveal-children] > *),
+  html[data-js] [data-reveal-part] {
     opacity: 1 !important;
     transform: none !important;
+  }
+
+  /*
+   * Ρητά `none` και όχι μηδενική διάρκεια: το `animation-duration: 0.01ms`
+   * παραπάνω, πάνω σε `infinite alternate`, θα έκανε το φόντο να τρεμοπαίζει —
+   * ακριβώς το αντίθετο από αυτό που ζήτησε ο επισκέπτης.
+   */
+  .site-backdrop__frame.is-current,
+  .site-backdrop__blob {
+    animation: none !important;
   }
 }
 
@@ -257,8 +552,21 @@ html[data-js] [data-rule][data-shown] {
   body > header,
   body > footer,
   body > header nav,
+  .site-backdrop,
   .no-print {
     display: none !important;
+  }
+
+  /*
+   * Κρίσιμο: το `/cv` τυπώνεται σε PDF από headless Chrome (`npm run cv:pdf`).
+   * Ό,τι περιμένει `IntersectionObserver` για να εμφανιστεί δεν θα το πάρει ποτέ
+   * σε εκτύπωση — χωρίς αυτόν τον κανόνα το βιογραφικό βγαίνει λευκή σελίδα.
+   */
+  [data-reveal],
+  [data-reveal-children] > *,
+  [data-reveal-part] {
+    opacity: 1 !important;
+    transform: none !important;
   }
 
   main {

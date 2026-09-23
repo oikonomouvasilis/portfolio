@@ -6,6 +6,7 @@ import { alternatesFor, openGraphFor } from "@/lib/site";
 import { Container } from "@/components/container";
 import { formatPeriod } from "@/lib/format";
 import { cv } from "@/content/cv";
+import { TechList } from "@/components/tech-icon";
 
 export async function generateMetadata({
   params,
@@ -42,7 +43,10 @@ export default async function AboutPage({
 
   return (
     <Container className="space-y-20 py-16 sm:py-24">
-      <header className="grid gap-8 sm:grid-cols-[auto_1fr] sm:items-start">
+      <header
+        data-reveal
+        className="grid gap-8 sm:grid-cols-[auto_1fr] sm:items-start"
+      >
         {/*
           Η πηγή είναι 200×200, οπότε δεν εμφανίζεται ποτέ μεγαλύτερη από 128px —
           πάνω από αυτό αρχίζει να φαίνεται η έλλειψη ανάλυσης.
@@ -68,7 +72,7 @@ export default async function AboutPage({
       </header>
 
       <Section title={t.about.experience}>
-        <ol className="space-y-8">
+        <ol data-reveal-children className="space-y-8">
           {cv.experience.map((entry) => (
             <li
               key={`${entry.from}-${entry.role.en}`}
@@ -92,7 +96,7 @@ export default async function AboutPage({
       </Section>
 
       <Section title={t.about.education}>
-        <ol className="space-y-8">
+        <ol data-reveal-children className="space-y-8">
           {cv.education.map((entry) => (
             <li
               key={`${entry.from}-${entry.degree.en}`}
@@ -118,7 +122,7 @@ export default async function AboutPage({
       </Section>
 
       <Section title={t.about.skills}>
-        <dl className="space-y-6">
+        <dl data-reveal-children className="space-y-6">
           {cv.skills.map((group) => (
             <div
               key={group.label.en}
@@ -127,10 +131,8 @@ export default async function AboutPage({
               <dt className="font-mono text-xs tracking-widest text-[var(--faint)] uppercase sm:pt-1">
                 {group.label[locale]}
               </dt>
-              <dd className="flex flex-wrap gap-x-4 gap-y-1.5">
-                {group.items.map((item) => (
-                  <span key={item}>{item}</span>
-                ))}
+              <dd>
+                <TechList items={group.items} />
               </dd>
             </div>
           ))}
@@ -138,7 +140,7 @@ export default async function AboutPage({
       </Section>
 
       <Section title={t.about.interests}>
-        <p className="text-[var(--muted)]">
+        <p data-reveal className="text-[var(--muted)]">
           {cv.interests.map((i) => i[locale]).join(" · ")}
         </p>
       </Section>
@@ -155,9 +157,12 @@ function Section({
 }) {
   return (
     <section className="space-y-8">
-      <h2 className="flex items-baseline gap-4 font-mono text-xs tracking-widest text-[var(--faint)] uppercase">
+      <h2
+        data-reveal
+        className="flex items-baseline gap-4 font-mono text-xs tracking-widest text-[var(--faint)] uppercase"
+      >
         {title}
-        <span aria-hidden="true" className="h-px flex-1 bg-[var(--line)]" />
+        <span aria-hidden="true" data-rule className="h-px flex-1 bg-[var(--line)]" />
       </h2>
       {children}
     </section>

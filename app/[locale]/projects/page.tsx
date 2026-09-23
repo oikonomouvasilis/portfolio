@@ -67,7 +67,7 @@ export default async function ProjectsPage({
 
   return (
     <Container className="space-y-16 py-16 sm:py-24">
-      <header className="max-w-2xl space-y-4">
+      <header data-reveal className="max-w-2xl space-y-4">
         <h1 className="text-5xl sm:text-6xl">{t.projects.title}</h1>
         <p className="text-lg text-[var(--muted)]">{t.projects.intro}</p>
       </header>

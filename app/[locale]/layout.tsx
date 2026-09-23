@@ -10,6 +10,8 @@ import { serif, sans } from "@/lib/fonts";
 import { LocaleSwitch } from "@/components/locale-switch";
 import { ThemeToggle, themeInitScript } from "@/components/theme-toggle";
 import { Reveal } from "@/components/reveal";
+import { Backdrop } from "@/components/backdrop";
+import { SocialLinks } from "@/components/social-links";
 import "../globals.css";
 
 export function generateStaticParams() {
@@ -105,6 +107,9 @@ export default async function LocaleLayout({
         />
       </head>
       <body className="flex min-h-dvh flex-col">
+        {/* Το κοινό φόντο όλων των σελίδων — μία επιφάνεια, όχι ζώνες (D18). */}
+        <Backdrop />
+
         <a
           href="#main"
           className="sr-only focus:not-sr-only focus:absolute focus:top-3 focus:left-3 focus:z-50 focus:rounded focus:bg-[var(--fg)] focus:px-3 focus:py-2 focus:text-[var(--bg)]"
@@ -133,7 +138,11 @@ export default async function LocaleLayout({
               ))}
             </nav>
 
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3">
+              {/* GitHub και LinkedIn πάνω πάνω: είναι τα δύο πράγματα που ψάχνει
+                  ένας recruiter, και ως τώρα ζούσαν μόνο στο υποσέλιδο. */}
+              <SocialLinks />
+              <span aria-hidden="true" className="h-5 w-px bg-[var(--line)]" />
               <LocaleSwitch current={locale as Locale} />
               <ThemeToggle label={t.common.toggleTheme} />
             </div>

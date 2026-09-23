@@ -15,7 +15,7 @@ export function Gallery({ items }: { items: GalleryItem[] }) {
     <div className="space-y-10">
       {items.map((item) => (
         <figure key={item.src} className="space-y-3">
-          <div className="overflow-hidden rounded-lg border border-[var(--line)] bg-[var(--surface)]">
+          <div className="overflow-hidden rounded-lg border border-[var(--line)] bg-[var(--panel)]">
             <Image
               src={item.src}
               alt={item.caption}

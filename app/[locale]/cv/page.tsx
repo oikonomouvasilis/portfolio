@@ -54,13 +54,13 @@ export default async function CvPage({
         <a
           href={`/cv-${locale}.pdf`}
           download
-          className="rounded-md border border-[var(--border-strong,var(--line))] px-4 py-2 text-sm transition-colors hover:bg-[var(--surface)]"
+          className="rounded-md border border-[var(--border-strong,var(--line))] px-4 py-2 text-sm transition-colors hover:bg-[var(--panel)]"
         >
           {t.cv.download} ↓
         </a>
       </div>
 
-      <header className="space-y-2">
+      <header data-reveal className="space-y-2">
         <h2 className="cv-name text-3xl">{cv.name}</h2>
         <p className="text-[var(--muted)]">{cv.headline[locale]}</p>
         <p className="font-mono text-xs text-[var(--faint)]">
@@ -69,7 +69,7 @@ export default async function CvPage({
         </p>
       </header>
 
-      <p className="max-w-2xl leading-relaxed text-[var(--muted)]">
+      <p data-reveal className="max-w-2xl leading-relaxed text-[var(--muted)]">
         {cv.summary[locale]}
       </p>
 
@@ -169,11 +169,16 @@ function CvSection({
 }) {
   return (
     <section className="cv-section space-y-4">
-      <h3 className="flex items-baseline gap-4 font-mono text-xs tracking-widest text-[var(--faint)] uppercase">
+      <h3
+        data-reveal
+        className="flex items-baseline gap-4 font-mono text-xs tracking-widest text-[var(--faint)] uppercase"
+      >
         {title}
-        <span aria-hidden="true" className="h-px flex-1 bg-[var(--line)]" />
+        <span aria-hidden="true" data-rule className="h-px flex-1 bg-[var(--line)]" />
       </h3>
-      <div className="space-y-5">{children}</div>
+      <div data-reveal-children className="space-y-5">
+        {children}
+      </div>
     </section>
   );
 }
