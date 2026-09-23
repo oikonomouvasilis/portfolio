@@ -6,15 +6,34 @@ import { getProjects } from "@/lib/content/projects";
 import { cv } from "@/content/cv";
 import { Container } from "@/components/container";
 
-/**
- * Τα πλάτη των σειρών, εναλλάξ και **άνισα**.
+/*
+ * Η εικόνα αλλάζει πλευρά σε κάθε σειρά, το κείμενο κάθεται **δίπλα** της.
  *
- * Ίσα πλάτη δίνουν grid, και το grid δεν έχει ρυθμό: το μάτι μαθαίνει τη θέση
- * της επόμενης κάρτας και σταματά να κοιτάζει. Επειδή όλες οι εικόνες έχουν την
- * ίδια αναλογία, το διαφορετικό πλάτος παράγει και διαφορετικό **ύψος** — χωρίς
- * να χρειαστεί να περικοπεί καμία.
+ * Οι εικόνες κρατιούνται μικρές επίτηδες: στόχος είναι να χωρούν δύο με τρία
+ * project στην οθόνη ταυτόχρονα, όπως στους καταλόγους βιτρίνας. Μια εικόνα σε
+ * πλήρες πλάτος δείχνει εντυπωσιακή και αφήνει τον επισκέπτη να δει ένα έργο τη
+ * φορά — που είναι ακριβώς ό,τι δεν θέλει ένα portfolio.
+ *
+ * Η εναλλαγή γίνεται με τοποθέτηση σε πλέγμα και όχι με αντιστροφή σειράς: η
+ * σειρά στο DOM μένει σταθερή, οπότε δεν ξαναγεννιέται το πρόβλημα όπου το
+ * κείμενο διαβαζόταν ανάποδα.
  */
-const ROW_WIDTHS = ["sm:w-full", "sm:w-[72%]", "sm:w-[86%]", "sm:w-[64%]"];
+/*
+ * Το `row-start-1` είναι υποχρεωτικό και στα δύο.
+ *
+ * Με δηλωμένη μόνο τη στήλη, η αυτόματη τοποθέτηση του grid έστελνε το κείμενο
+ * —που έρχεται δεύτερο στο DOM αλλά ζητά **προηγούμενη** στήλη— σε νέα γραμμή.
+ * Οι εναλλασσόμενες σειρές έβγαιναν στοιβαγμένες, με ύψος 456px αντί για 230.
+ */
+const IMAGE_SIDE = {
+  left: "sm:col-start-1 sm:col-end-6 sm:row-start-1",
+  right: "sm:col-start-8 sm:col-end-13 sm:row-start-1",
+} as const;
+
+const TEXT_SIDE = {
+  left: "sm:col-start-7 sm:col-end-13 sm:row-start-1",
+  right: "sm:col-start-1 sm:col-end-7 sm:row-start-1",
+} as const;
 
 export default async function HomePage({
   params,
@@ -89,56 +108,54 @@ export default async function HomePage({
               />
             </div>
 
-            <ul className="mt-16 space-y-20 sm:mt-20 sm:space-y-28">
+            <ul className="mt-14 space-y-14 sm:mt-16 sm:space-y-16">
               {featured.map((project, i) => {
-                const flip = i % 2 === 1;
+                const side = i % 2 === 1 ? "right" : "left";
 
                 return (
-                  <li
-                    key={project.slug}
-                    data-reveal
-                    className={`${ROW_WIDTHS[i % ROW_WIDTHS.length]} ${
-                      flip ? "sm:ml-auto" : ""
-                    }`}
-                  >
+                  <li key={project.slug} data-reveal>
                     <Link
                       href={`/${locale}/projects/${project.slug}`}
-                      className="group block rounded-[var(--r-xl)]"
+                      className="group grid items-center gap-5 rounded-[var(--r-lg)] sm:grid-cols-12 sm:gap-10"
                     >
-                      <div className="overflow-hidden rounded-[var(--r-lg)] border border-[var(--line)] bg-[var(--bg)]">
+                      <div
+                        className={`overflow-hidden rounded-[var(--r-md)] border border-[var(--line)] bg-[var(--bg)] ${IMAGE_SIDE[side]}`}
+                      >
                         <Image
                           src={project.cover}
                           alt=""
                           width={1200}
                           height={675}
-                          /*
-                           * Η πρώτη σειρά είναι το LCP. Φορτωμένη τεμπέλικα,
-                           * περίμενε το JavaScript.
-                           */
+                          /* Η πρώτη σειρά είναι το LCP· τεμπέλικη, περίμενε το JavaScript. */
                           priority={i === 0}
-                          className="h-auto w-full transition-transform duration-700 ease-out group-hover:scale-[1.015]"
-                          sizes="(max-width: 40rem) 100vw, 60rem"
+                          className="h-auto w-full transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+                          sizes="(max-width: 40rem) 100vw, 26rem"
                         />
                       </div>
 
-                      {/*
-                       * Η σειρά **δεν** αντιστρέφεται στις μετατοπισμένες
-                       * σειρές. Το `flex-row-reverse` έβγαζε το έτος πρώτο και
-                       * τον τίτλο τελευταίο: διάβαζες «2026 → περίληψη →
-                       * τίτλος». Η ασυμμετρία υπάρχει ήδη στη θέση και στο
-                       * πλάτος της σειράς· δεν χρειάζεται να πληρωθεί με τη
-                       * σειρά ανάγνωσης.
-                       */}
-                      <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-baseline sm:gap-8">
-                        <h3 className="shrink-0 transition-colors group-hover:text-[var(--accent)]">
-                          {project.title}
-                        </h3>
-                        <p className="max-w-[52ch] text-[length:var(--t-small)] leading-relaxed text-[var(--muted)]">
+                      <div className={TEXT_SIDE[side]}>
+                        <div className="flex items-baseline gap-4">
+                          <h3 className="transition-colors group-hover:text-[var(--accent)]">
+                            {project.title}
+                          </h3>
+                          <span className="ml-auto shrink-0 text-[length:var(--t-micro)] text-[var(--faint)] tabular-nums">
+                            {project.year}
+                          </span>
+                        </div>
+
+                        <p className="mt-3 text-[length:var(--t-small)] leading-[1.65] text-[var(--muted)]">
                           {project.summary}
                         </p>
-                        <span className="text-[length:var(--t-micro)] text-[var(--faint)] tabular-nums sm:ml-auto">
-                          {project.year}
-                        </span>
+
+                        {/*
+                         * Δεύτερη παράγραφος από το `outcome`. Η περίληψη είναι
+                         * 80–140 χαρακτήρες — από σχεδιασμό, γιατί φτιάχτηκε για
+                         * κάρτα. Δίπλα σε εικόνα αφήνει τη στήλη μισοάδεια και
+                         * δεν λέει τι βγήκε τελικά, που είναι το ενδιαφέρον.
+                         */}
+                        <p className="mt-3 text-[length:var(--t-small)] leading-[1.65] text-[var(--faint)]">
+                          {project.outcome}
+                        </p>
                       </div>
                     </Link>
                   </li>
