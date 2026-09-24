@@ -73,6 +73,14 @@
   --scene-cool: color-mix(in oklab, var(--fg) 13%, var(--bg));
   --scene-strength: 0.75;
 
+  /*
+   * Πόσο μελάνι / accent παίρνουν οι προσομοιώσεις του φόντου (D23) — τα
+   * διαβάζει το canvas. Πιο έντονα από το D22: τα προστατεύει το τζάμι, όχι η
+   * χλωμάδα τους (βλ. μετρήσεις στο DECISIONS.md).
+   */
+  --sim-ink-mix: 66%;
+  --sim-accent-mix: 85%;
+
   color-scheme: light;
 }
 
@@ -88,16 +96,19 @@
     --accent: #ff7183;
 
     /*
-     * Πιο πυκνό πέπλο στο σκοτεινό θέμα: οι εικόνες είναι φωτεινές, και όση
-     * φωτεινότητα περνά στο φόντο τρώγεται από την αντίθεση του γκρι κειμένου.
+     * Σκοτεινό = μαύρο **από άκρη σε άκρη** (D23, αναιρεί το 88% / ×1,55 του
+     * D18). Οι φωτισμένες φωτογραφίες και η «ψυχρή» κηλίδα (μελάνι, δηλαδή
+     * σχεδόν λευκό, αναμειγμένο στο χαρτί) γκρίζαραν τα περιθώρια, και η σελίδα
+     * έμοιαζε με σκούρα κάρτα πάνω σε γκρι. Ο χαρακτήρας έρχεται πλέον από τις
+     * προσομοιώσεις, όχι από τις φωτογραφίες.
      */
-    --backdrop-veil: 88%;
-    /*
-     * Στο σκοτεινό θέμα η εικόνα φωτίζεται πριν μπει: αλλιώς ένα 12% μιας μέτριας
-     * φωτογραφίας πάνω σε σχεδόν μαύρο δεν φαίνεται καθόλου — το φόντο θα ήταν
-     * κώδικας που δεν βλέπει κανείς.
-     */
-    --backdrop-brightness: 1.55;
+    --backdrop-veil: 97%;
+    --backdrop-brightness: 1;
+    --scene-cool: var(--bg);
+    --scene-strength: 0.45;
+    /* Στο σκοτεινό το ίδιο ποσοστό μελανιού σβήνει μέσα στο μαύρο. */
+    --sim-ink-mix: 78%;
+    --sim-accent-mix: 90%;
 
     color-scheme: dark;
   }
@@ -113,8 +124,12 @@
   --accent: #ff7183;
 
   /* Βλ. σχόλια στο θέμα συστήματος παραπάνω. */
-  --backdrop-veil: 88%;
-  --backdrop-brightness: 1.55;
+  --backdrop-veil: 97%;
+  --backdrop-brightness: 1;
+  --scene-cool: var(--bg);
+  --scene-strength: 0.45;
+  --sim-ink-mix: 78%;
+  --sim-accent-mix: 90%;
 
   color-scheme: dark;
 }
@@ -322,6 +337,67 @@ p {
   height: 44vmax;
   background: radial-gradient(circle, var(--scene-warm) 0%, transparent 70%);
   animation: scene-c 54s ease-in-out infinite alternate;
+}
+
+/*
+ * ── Προσομοιώσεις & γυάλινη στήλη (D22) ─────────────────────────────────────
+ *
+ * Ο καμβάς απλώνεται σε όλη την οθόνη. Δεν χρειάζεται μάσκα: την αντίθεση του
+ * κειμένου την κρατά το τζάμι από πάνω του, όχι η εξαφάνιση των γραφικών.
+ */
+.site-backdrop__sim {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/*
+ * Το τζάμι, σε **ολόκληρο** το παράθυρο (D24).
+ *
+ * Ήταν στήλη 64rem, όσο το `max-w-5xl` του `Container`. Με ορατές ακμές όμως
+ * διαβαζόταν ως πλακέτα μπροστά από γκρι φόντο, όχι ως επιφάνεια: το μάτι
+ * έβλεπε δύο φόντα, ένα φωτεινό στη μέση και ένα σκούρο γύρω. Τώρα το τζάμι
+ * είναι το φόντο — τα γραφικά περνούν θολά από **παντού**, και δεν υπάρχει
+ * ακμή για να προδώσει πού τελειώνει.
+ *
+ * Δύο στρώματα κάνουν το «γυαλί»: θόλωμα (`backdrop-filter`) και ημιδιάφανη
+ * απόχρωση χαρτιού. Η διαγώνια ανταύγεια είναι το τρίτο, και το μόνο που
+ * θυμίζει ότι πρόκειται για τζάμι τώρα που δεν έχει άκρες.
+ */
+.site-backdrop__glass {
+  --glass-tint: 40%;
+  --glass-sheen: rgb(255 255 255 / 0.18);
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(112deg, var(--glass-sheen), transparent 46%),
+    color-mix(in oklab, var(--bg) var(--glass-tint), transparent);
+  -webkit-backdrop-filter: blur(7px) saturate(1.3);
+  backdrop-filter: blur(7px) saturate(1.3);
+}
+
+/* Στο σκοτεινό θέμα η λευκή ανταύγεια του φωτεινού θα έμοιαζε με ομίχλη. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .site-backdrop__glass {
+    --glass-tint: 40%;
+    --glass-sheen: rgb(255 255 255 / 0.035);
+  }
+}
+:root[data-theme="dark"] .site-backdrop__glass {
+  --glass-tint: 40%;
+  --glass-sheen: rgb(255 255 255 / 0.035);
+}
+
+/*
+ * Χωρίς `backdrop-filter` δεν υπάρχει θόλωμα, και η αντίθεση βασιζόταν σε αυτό:
+ * μια αθόλωτη καμπύλη accent κάτω από 56% απόχρωση πέφτει στο 4,2:1. Εκεί το
+ * τζάμι γίνεται σχεδόν αδιαφανές — χάνεται το εφέ, όχι η αναγνωσιμότητα.
+ */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .site-backdrop__glass {
+    --glass-tint: 90% !important;
+  }
 }
 
 @keyframes scene-a {

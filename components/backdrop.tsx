@@ -3,6 +3,8 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
+import { BackdropSim } from "./backdrop-sim";
+
 /**
  * Το κοινό φόντο όλου του site (D18).
  *
@@ -66,6 +68,12 @@ export function Backdrop() {
       <div className="site-backdrop__veil" />
 
       {/*
+        Προσομοιώσεις (D22), πάνω από το πέπλο για τον ίδιο λόγο με τις κηλίδες.
+        Στα περιθώρια φαίνονται καθαρές· πίσω από τη γυάλινη στήλη, θολές.
+      */}
+      <BackdropSim />
+
+      {/*
         Η «παράσταση»: τρεις τεράστιες, αργές κηλίδες φωτός που ταξιδεύουν πάνω
         από το πέπλο. Είναι το μόνο κομμάτι του φόντου που κινείται συνεχώς —
         η εναλλαγή των εικόνων γίνεται κάθε εννιά δευτερόλεπτα, αυτό ποτέ δεν
@@ -77,6 +85,13 @@ export function Backdrop() {
         <span className="site-backdrop__blob site-backdrop__blob--b" />
         <span className="site-backdrop__blob site-backdrop__blob--c" />
       </div>
+
+      {/*
+        Η γυάλινη στήλη: θαμπό τζάμι ακριβώς κάτω από τη στήλη του περιεχομένου.
+        Αυτό κρατά την αντίθεση του κειμένου — όχι μια μάσκα που «σβήνει» τα
+        γραφικά, αλλά θόλωμα που τα αφήνει να φαίνονται μαλακά από πίσω.
+      */}
+      <div className="site-backdrop__glass" />
     </div>
   );
 }
