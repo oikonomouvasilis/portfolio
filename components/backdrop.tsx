@@ -18,10 +18,10 @@ import { BackdropSim } from "./backdrop-sim";
  * έκανε το γκρι κείμενο αδιάβαστο σε κάποια σημεία και μόνο εκεί.
  */
 const FRAMES = [
-  "/images/projects/oil-site/hero.jpg",
+  "/images/projects/oil-site/home-hero.jpg",
   "/images/projects/ai-trader/dashboard-overview.png",
   "/images/projects/nutrition-tracker/dashboard.png",
-  "/images/projects/oil-site/products.jpg",
+  "/images/projects/oil-site/company-hero.jpg",
   "/images/projects/etl-stock-valuation/architecture.png",
   "/images/projects/expenses-predictor/forecast.png",
   "/images/projects/duty-scheduler/month.png",

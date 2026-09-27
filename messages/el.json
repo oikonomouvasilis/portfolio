@@ -3,7 +3,6 @@
     "home": "Αρχική",
     "projects": "Projects",
     "about": "Προφίλ",
-    "cv": "Βιογραφικό",
     "contact": "Επικοινωνία"
   },
   "home": {
@@ -35,6 +34,8 @@
     "empty": "Δεν υπάρχουν ακόμη project.",
     "categoriesLabel": "Κατηγορίες",
     "stackLabel": "Τεχνολογίες",
+    "showFilters": "Εμφάνιση",
+    "hideFilters": "Απόκρυψη",
     "problem": "Πρόβλημα",
     "goal": "Στόχος",
     "solution": "Λύση",
@@ -67,6 +68,10 @@
     "experience": "Εμπειρία",
     "education": "Σπουδές",
     "skills": "Δεξιότητες",
+    "certifications": "Πιστοποιήσεις",
+    "languages": "Γλώσσες",
+    "events": "Συμμετοχές",
+    "publications": "Δημοσιεύσεις",
     "interests": "Ενδιαφέροντα",
     "present": "σήμερα"
   },
@@ -78,8 +83,7 @@
     "openToWork": "Ανοιχτός σε προτάσεις — Αθήνα, hybrid ή remote"
   },
   "cv": {
-    "download": "Λήψη PDF",
-    "projects": "Επιλεγμένα project"
+    "download": "Λήψη PDF"
   },
   "notFound": {
     "code": "404",

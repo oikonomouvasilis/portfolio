@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { Carousel } from "@/components/carousel";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -25,6 +25,9 @@ export type ExplorerLabels = {
   clear: string;
   results: string;
   empty: string;
+  /** Το κουμπί του συρταριού των τεχνολογιών. */
+  show: string;
+  hide: string;
   status: Record<string, string>;
 };
 
@@ -169,6 +172,7 @@ export function ProjectExplorer({
           onToggle={(value) =>
             update((c) => ({ ...c, stack: toggle(c.stack, value) }))
           }
+          collapsible={{ show: labels.show, hide: labels.hide }}
         />
 
         <div
@@ -209,7 +213,7 @@ export function ProjectExplorer({
               */}
               <Link
                 href={`/${locale}/projects/${project.slug}`}
-                className="group grid gap-6 sm:grid-cols-[1fr_1.2fr] sm:items-center"
+                className="project-card group grid gap-6 rounded-[var(--r-lg)] sm:grid-cols-[1fr_1.2fr] sm:items-center"
               >
                 <Carousel
                   images={project.images}
@@ -220,14 +224,15 @@ export function ProjectExplorer({
 
                 <div className="space-y-3">
                   <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
-                    <h2 className="text-3xl group-hover:underline group-hover:underline-offset-4">
-                      {project.title}
-                    </h2>
+                    {/* Το hover το σηκώνει το τζάμι της κάρτας (`.project-card`). */}
+                    <h2 className="text-3xl">{project.title}</h2>
                     <span className="font-mono text-xs text-[var(--faint)]">
                       {project.year} · {labels.status[project.status]}
                     </span>
                   </div>
-                  <p className="text-[var(--muted)]">{project.summary}</p>
+                  <p className="text-block text-[var(--muted)]">
+                    {project.summary}
+                  </p>
                   <p className="font-mono text-xs text-[var(--faint)]">
                     {project.stack.join("  ·  ")}
                   </p>
@@ -246,13 +251,33 @@ function FilterGroup({
   options,
   selected,
   onToggle,
+  collapsible,
 }: {
   label: string;
   options: Option[];
   selected: string[];
   onToggle: (value: string) => void;
+  /** Αν δοθεί, τα chips ζουν σε συρτάρι που ανοίγει προς τα πλάγια. */
+  collapsible?: { show: string; hide: string };
 }) {
+  const drawerId = useId();
+  /*
+   * Κλειστό από προεπιλογή — εκτός αν ο σύνδεσμος φέρνει ήδη επιλογές, οπότε
+   * κρυμμένα ενεργά φίλτρα θα έκαναν τα αποτελέσματα να μοιάζουν αυθαίρετα.
+   */
+  const [open, setOpen] = useState(selected.length > 0);
+
   if (options.length === 0) return null;
+
+  const chips = options.map((option, i) => (
+    <Chip
+      key={option.value}
+      option={option}
+      isOn={selected.includes(option.value)}
+      onToggle={onToggle}
+      index={collapsible ? i : undefined}
+    />
+  ));
 
   return (
     <fieldset className="grid gap-3 sm:grid-cols-[10rem_1fr] sm:items-baseline">
@@ -263,33 +288,95 @@ function FilterGroup({
       >
         {label}
       </span>
-      <div className="flex flex-wrap gap-2">
-        {options.map((option) => {
-          const isOn = selected.includes(option.value);
-          return (
-            <button
-              key={option.value}
-              type="button"
-              aria-pressed={isOn}
-              onClick={() => onToggle(option.value)}
-              className={`rounded-full border px-3 py-1 text-sm transition-colors ${
-                isOn
-                  ? "border-[var(--fg)] bg-[var(--fg)] text-[var(--bg)]"
-                  : "border-[var(--line)] hover:border-[var(--muted)]"
-              }`}
-            >
-              {option.label}{" "}
-              <span
-                className={
-                  isOn ? "opacity-70" : "font-mono text-xs text-[var(--faint)]"
-                }
-              >
-                {option.count}
+
+      {collapsible ? (
+        <div className="space-y-3">
+          <button
+            type="button"
+            aria-expanded={open}
+            aria-controls={drawerId}
+            onClick={() => setOpen((o) => !o)}
+            className="inline-flex items-center gap-2 rounded-full border border-[var(--line)] px-3 py-1 text-sm transition-colors hover:border-[var(--muted)]"
+          >
+            {open ? collapsible.hide : collapsible.show}
+            {selected.length > 0 && (
+              <span className="font-mono text-xs text-[var(--accent)]">
+                {selected.length}
               </span>
-            </button>
-          );
-        })}
-      </div>
+            )}
+            {/* Το βέλος γυρίζει προς την κατεύθυνση που θα κινηθούν τα chips. */}
+            <svg
+              aria-hidden="true"
+              viewBox="0 0 16 16"
+              className={`size-3.5 transition-transform duration-300 ${open ? "rotate-180" : ""}`}
+            >
+              <path
+                d="M6 3l5 5-5 5"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.6"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </button>
+
+          <div
+            id={drawerId}
+            className="filter-drawer"
+            data-open={open ? "" : undefined}
+            // Κλειστό = ούτε Tab ούτε αναγνώστης οθόνης μπαίνουν στα κρυμμένα chips.
+            inert={!open}
+          >
+            <div>
+              {/* Λίγο padding ώστε ο δακτύλιος εστίασης να μην κόβεται από το overflow. */}
+              <div className="flex flex-wrap gap-2 p-1">{chips}</div>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className="flex flex-wrap gap-2">{chips}</div>
+      )}
     </fieldset>
+  );
+}
+
+function Chip({
+  option,
+  isOn,
+  onToggle,
+  index,
+}: {
+  option: Option;
+  isOn: boolean;
+  onToggle: (value: string) => void;
+  /** Θέση μέσα στο συρτάρι — δίνει το βήμα της κλιμακωτής εισόδου. */
+  index?: number;
+}) {
+  return (
+    <button
+      type="button"
+      aria-pressed={isOn}
+      onClick={() => onToggle(option.value)}
+      style={
+        index === undefined
+          ? undefined
+          : ({ "--i": index } as React.CSSProperties)
+      }
+      className={`rounded-full border px-3 py-1 text-sm transition-colors ${
+        index === undefined ? "" : "filter-chip"
+      } ${
+        isOn
+          ? "border-[var(--fg)] bg-[var(--fg)] text-[var(--bg)]"
+          : "border-[var(--line)] hover:border-[var(--muted)]"
+      }`}
+    >
+      {option.label}{" "}
+      <span
+        className={isOn ? "opacity-70" : "font-mono text-xs text-[var(--faint)]"}
+      >
+        {option.count}
+      </span>
+    </button>
   );
 }

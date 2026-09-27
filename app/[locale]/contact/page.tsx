@@ -41,7 +41,7 @@ export default async function ContactPage({
       <div className="max-w-2xl space-y-12">
       <header data-reveal className="space-y-4">
         <h1 className="text-5xl sm:text-6xl">{t.contact.title}</h1>
-        <p className="text-lg text-[var(--muted)]">{t.contact.intro}</p>
+        <p className="text-block text-lg text-[var(--muted)]">{t.contact.intro}</p>
       </header>
 
       {/* Χωρίς φόρμα: κρατά τη σελίδα 100% στατική και δεν χρειάζεται anti-spam (D13). */}

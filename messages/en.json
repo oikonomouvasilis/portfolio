@@ -3,7 +3,6 @@
     "home": "Home",
     "projects": "Projects",
     "about": "About",
-    "cv": "CV",
     "contact": "Contact"
   },
   "home": {
@@ -35,6 +34,8 @@
     "empty": "No projects yet.",
     "categoriesLabel": "Categories",
     "stackLabel": "Technologies",
+    "showFilters": "Show",
+    "hideFilters": "Hide",
     "problem": "Problem",
     "goal": "Goal",
     "solution": "Solution",
@@ -67,6 +68,10 @@
     "experience": "Experience",
     "education": "Education",
     "skills": "Skills",
+    "certifications": "Certifications",
+    "languages": "Languages",
+    "events": "Participation",
+    "publications": "Publications",
     "interests": "Interests",
     "present": "Present"
   },
@@ -78,8 +83,7 @@
     "openToWork": "Open to opportunities — Athens, hybrid or remote"
   },
   "cv": {
-    "download": "Download PDF",
-    "projects": "Selected projects"
+    "download": "Download PDF"
   },
   "notFound": {
     "code": "404",

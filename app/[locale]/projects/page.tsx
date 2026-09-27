@@ -69,7 +69,7 @@ export default async function ProjectsPage({
     <Container className="space-y-16 py-16 sm:py-24">
       <header data-reveal className="max-w-2xl space-y-4">
         <h1 className="text-5xl sm:text-6xl">{t.projects.title}</h1>
-        <p className="text-lg text-[var(--muted)]">{t.projects.intro}</p>
+        <p className="text-block text-lg text-[var(--muted)]">{t.projects.intro}</p>
       </header>
 
       {/*
@@ -100,6 +100,8 @@ export default async function ProjectsPage({
             clear: t.projects.clear,
             results: t.projects.results,
             empty: t.projects.noMatches,
+            show: t.projects.showFilters,
+            hide: t.projects.hideFilters,
             status: t.status,
           }}
         />

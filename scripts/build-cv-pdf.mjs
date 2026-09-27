@@ -1,12 +1,12 @@
 /**
- * Παράγει τα `public/cv-en.pdf` και `public/cv-el.pdf` από τη σελίδα `/cv` (D7).
+ * Παράγει τα `public/cv-en.pdf` και `public/cv-el.pdf` από τη σελίδα `/about` (D7, D27).
  *
  * Γιατί έτσι και όχι με βιβλιοθήκη PDF:
  *
  * 1. **Ελληνικά.** Οι προεπιλεγμένες γραμματοσειρές των βιβλιοθηκών PDF
  *    (Helvetica κ.λπ.) δεν έχουν ελληνικούς χαρακτήρες. Θα έπρεπε να
  *    ενσωματώσουμε δικό μας .ttf και να συντηρούμε δεύτερο πρότυπο.
- * 2. **Μία πηγή.** Το PDF είναι κυριολεκτικά η σελίδα `/cv` τυπωμένη, με το
+ * 2. **Μία πηγή.** Το PDF είναι κυριολεκτικά η σελίδα `/about` τυπωμένη, με το
  *    `@media print` του `globals.css`. Το online βιογραφικό και το PDF δεν
  *    μπορούν να αποκλίνουν, γιατί είναι το ίδιο πράγμα.
  * 3. **Καμία νέα εξάρτηση.** Χρησιμοποιεί το Chrome που ήδη υπάρχει στο
@@ -94,11 +94,11 @@ async function main() {
 
   let failed = null;
   try {
-    await waitForServer(`http://localhost:${PORT}/en/cv`);
+    await waitForServer(`http://localhost:${PORT}/en/about`);
     console.log("✓  Ο server απαντά.\n");
 
     for (const locale of LOCALES) {
-      const url = `http://localhost:${PORT}/${locale}/cv`;
+      const url = `http://localhost:${PORT}/${locale}/about`;
       const out = path.join(OUT_DIR, `cv-${locale}.pdf`);
       console.log(`   ${locale} → ${path.basename(out)}`);
 

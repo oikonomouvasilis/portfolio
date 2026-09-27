@@ -64,7 +64,7 @@ export default async function HomePage({
         <section className="grid gap-10 sm:grid-cols-[1fr_auto] sm:items-center sm:gap-16">
           <div className="max-w-3xl">
             <h1>{t.home.tagline}</h1>
-            <p className="mt-8 max-w-[58ch] text-[length:var(--t-lead)] leading-[1.7] text-[var(--muted)]">
+            <p className="text-block mt-8 max-w-[58ch] text-[length:var(--t-lead)] leading-[1.7] text-[var(--muted)]">
               {cv.summary[locale]}
             </p>
 
@@ -137,7 +137,7 @@ export default async function HomePage({
                   <li key={project.slug} data-reveal>
                     <Link
                       href={`/${locale}/projects/${project.slug}`}
-                      className="group grid items-center gap-5 rounded-[var(--r-lg)] sm:grid-cols-12 sm:gap-10"
+                      className="project-card group grid items-center gap-5 rounded-[var(--r-lg)] sm:grid-cols-12 sm:gap-10"
                     >
                       <div
                         data-reveal-part
@@ -162,9 +162,13 @@ export default async function HomePage({
                           style={part(120)}
                           className="flex items-baseline gap-4"
                         >
-                          <h3 className="transition-colors group-hover:text-[var(--accent)]">
-                            {project.title}
-                          </h3>
+                          {/*
+                           * Χωρίς `group-hover:text-[var(--accent)]`: το κόκκινο
+                           * σημαίνει «ενεργό ή επαληθευμένο» σε αυτό το site, όχι
+                           * «από εδώ πέρασε το ποντίκι». Τη δουλειά την κάνει
+                           * πλέον το τζάμι κάτω από ολόκληρη την κάρτα.
+                           */}
+                          <h3>{project.title}</h3>
                           <span className="ml-auto shrink-0 text-[length:var(--t-micro)] text-[var(--faint)] tabular-nums">
                             {project.year}
                           </span>
@@ -173,7 +177,7 @@ export default async function HomePage({
                         <p
                           data-reveal-part
                           style={part(220)}
-                          className="mt-3 text-[length:var(--t-small)] leading-[1.65] text-[var(--muted)]"
+                          className="text-block mt-3 text-[length:var(--t-small)] leading-[1.65] text-[var(--muted)]"
                         >
                           {project.summary}
                         </p>
@@ -187,7 +191,7 @@ export default async function HomePage({
                         <p
                           data-reveal-part
                           style={part(300)}
-                          className="mt-3 text-[length:var(--t-small)] leading-[1.65] text-[var(--faint)]"
+                          className="text-block mt-3 text-[length:var(--t-small)] leading-[1.65] text-[var(--faint)]"
                         >
                           {project.outcome}
                         </p>

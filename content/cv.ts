@@ -40,6 +40,35 @@ export type SkillGroup = {
   items: string[];
 };
 
+export type Certification = Period & {
+  /** Ο τίτλος του προγράμματος όπως τον δίνει ο διοργανωτής. */
+  title: Localized;
+  issuer: Localized;
+};
+
+export type LanguageEntry = {
+  name: Localized;
+  level: Localized;
+};
+
+/**
+ * Συμμετοχή σε πρόγραμμα, σεμινάριο ή διαγωνισμό. Οι ημερομηνίες είναι εύρος
+ * ημερών, όχι μηνών, οπότε γράφονται ως κείμενο — το `Period` θα έχανε τη μέρα.
+ */
+export type EventEntry = {
+  title: Localized;
+  organizer?: Localized;
+  when: Localized;
+  location: Localized;
+};
+
+export type Publication = {
+  title: Localized;
+  venue: Localized;
+  year?: string;
+  note?: Localized;
+};
+
 export type CvLink = {
   label: string;
   href: string;
@@ -63,6 +92,10 @@ export type Cv = {
   experience: ExperienceEntry[];
   education: EducationEntry[];
   skills: SkillGroup[];
+  certifications: Certification[];
+  languages: LanguageEntry[];
+  events: EventEntry[];
+  publications: Publication[];
   interests: Localized[];
 };
 
@@ -280,6 +313,132 @@ export const cv: Cv = {
     {
       label: { en: "Automation", el: "Αυτοματισμοί" },
       items: ["n8n", "GitHub Actions", "Web scraping", "REST APIs"],
+    },
+  ],
+
+  // Πηγή για τα τέσσερα παρακάτω: οι ενότητες Certifications, Languages,
+  // Participation και Research του `CV_REVISED.docx`.
+  certifications: [
+    {
+      from: "2024-07",
+      to: "2024-08",
+      title: {
+        en: "The Complete Python Bootcamp: From Zero to Hero in Python",
+        el: "The Complete Python Bootcamp: From Zero to Hero in Python",
+      },
+      issuer: { en: "Udemy", el: "Udemy" },
+    },
+    {
+      from: "2024-03",
+      to: "2024-07",
+      title: { en: "Data Analysis Bootcamp", el: "Data Analysis Bootcamp" },
+      issuer: {
+        en: "Workearly Greece, powered by Public",
+        el: "Workearly Greece, με την υποστήριξη του Public",
+      },
+    },
+    {
+      from: "2024-02",
+      to: "2024-03",
+      title: {
+        en: "The ReGeneration Initiative: AI 360° School",
+        el: "The ReGeneration Initiative: AI 360° School",
+      },
+      issuer: {
+        en: "Microsoft & Code Hub",
+        el: "Microsoft & Code Hub",
+      },
+    },
+  ],
+
+  languages: [
+    {
+      name: { en: "Greek", el: "Ελληνικά" },
+      level: { en: "Native", el: "Μητρική" },
+    },
+    {
+      name: { en: "English", el: "Αγγλικά" },
+      level: {
+        en: "C2 — Pearson Edexcel Level 3 Certificate in ESOL International",
+        el: "C2 — Pearson Edexcel Level 3 Certificate in ESOL International",
+      },
+    },
+  ],
+
+  events: [
+    {
+      title: {
+        en: "ReGeneration — 19th cycle",
+        el: "ReGeneration — 19ος κύκλος",
+      },
+      when: { en: "22–24 Oct 2024", el: "22–24 Οκτ 2024" },
+      location: { en: "Athens", el: "Αθήνα" },
+    },
+    {
+      title: {
+        en: "Common Module on Budget and Finance",
+        el: "Κοινή Ενότητα Προϋπολογισμού και Οικονομικών",
+      },
+      organizer: {
+        en: "European Security and Defence College",
+        el: "Ευρωπαϊκό Κολλέγιο Ασφάλειας και Άμυνας",
+      },
+      when: { en: "20–24 Feb 2023", el: "20–24 Φεβ 2023" },
+      location: { en: "Thessaloniki", el: "Θεσσαλονίκη" },
+    },
+    {
+      title: {
+        en: "Common Module on the Common Security and Defence Policy (CSDP)",
+        el: "Κοινή Ενότητα για την Κοινή Πολιτική Ασφάλειας και Άμυνας (ΚΠΑΑ)",
+      },
+      organizer: {
+        en: "European Security and Defence College",
+        el: "Ευρωπαϊκό Κολλέγιο Ασφάλειας και Άμυνας",
+      },
+      when: { en: "24–28 Oct 2022", el: "24–28 Οκτ 2022" },
+      location: { en: "Wiener Neustadt", el: "Βίνερ Νόισταντ" },
+    },
+    {
+      title: {
+        en: "Building a Development Center",
+        el: "Building a Development Center",
+      },
+      organizer: {
+        en: "Aristotle University of Thessaloniki & INTERSPORT ATHLETICS",
+        el: "Αριστοτέλειο Πανεπιστήμιο Θεσσαλονίκης & INTERSPORT ATHLETICS",
+      },
+      when: { en: "3–4 Jun 2022", el: "3–4 Ιούν 2022" },
+      location: { en: "Thessaloniki", el: "Θεσσαλονίκη" },
+    },
+  ],
+
+  publications: [
+    {
+      title: {
+        en:
+          "Evolution of total health expenditure in Greece, 1988–2017: effects " +
+          "of the crisis and comparison with Southern European countries",
+        el:
+          "Εξέλιξη των συνολικών δαπανών υγείας στην Ελλάδα, 1988–2017: " +
+          "επιδράσεις της κρίσης και σύγκριση με τις χώρες της Νότιας Ευρώπης",
+      },
+      venue: {
+        en: "Hellenic Association of Certified Stockmarket Analysts (H.A.S.C.A.)",
+        el: "Hellenic Association of Certified Stockmarket Analysts (H.A.S.C.A.)",
+      },
+      note: { en: "Group publication", el: "Ομαδική δημοσίευση" },
+    },
+    {
+      title: {
+        en: "Analysis of Marfin Investment Group",
+        el: "Ανάλυση της Marfin Investment Group",
+      },
+      venue: {
+        en: "Hellenic Investors Association (SED) — annual magazine",
+        el: "Σύλλογος Επενδυτών & Διαδικτύου (ΣΕΔ) — ετήσιο περιοδικό",
+      },
+      year: "2021",
+      note: { en: "Group publication", el: "Ομαδική δημοσίευση" },
     },
   ],
 

@@ -221,6 +221,134 @@ p {
 }
 
 /*
+ * Πλήρης στοίχιση για τις παραγράφους σώματος.
+ *
+ * Τα ελληνικά βγαίνουν ~15% μακρύτερα από τα αγγλικά, οπότε με αριστερή
+ * στοίχιση η ίδια παράγραφος είχε άλλο «σχήμα» σε κάθε γλώσσα — οδοντωτή δεξιά
+ * άκρη σε διαφορετικά σημεία. Με πλήρη στοίχιση και οι δύο γλώσσες σχηματίζουν
+ * το ίδιο ορθογώνιο μπλοκ. Ο συλλαβισμός κρατά μικρά τα κενά ανάμεσα στις
+ * λέξεις (χρειάζεται το `lang` του <html>, που υπάρχει ήδη).
+ */
+.text-block {
+  text-align: justify;
+  text-justify: inter-word;
+  hyphens: auto;
+}
+
+/*
+ * ── Κάρτα project σε hover ────────────────────────────────────────────────────
+ *
+ * Λευκό, γυάλινο ορθογώνιο πίσω από **ολόκληρη** την κάρτα, αντί για κόκκινο
+ * τίτλο: το accent σημαίνει «ενεργό/επαληθευμένο» και όχι «εδώ είναι το
+ * ποντίκι». Το ορθογώνιο ξεχειλίζει λίγο γύρω από το περιεχόμενο, αλλά μένει
+ * μέσα στη στήλη του `Container` — δεν απλώνεται σε όλο το πλάτος.
+ *
+ * Χωρίς δικό του `backdrop-filter`: πάνω από το τζάμι ολόκληρου του παραθύρου,
+ * δεύτερο φίλτρο θόλωσης έριχνε τον renderer. Το «γυαλί» το κάνουν η
+ * ημιδιάφανη διαβάθμιση, η φωτεινή ακμή και η απαλή σκιά.
+ */
+.project-card {
+  position: relative;
+  isolation: isolate;
+  --card-glass-a: rgb(255 255 255 / 0.62);
+  --card-glass-b: rgb(255 255 255 / 0.22);
+  --card-edge: rgb(255 255 255 / 0.85);
+  --card-shadow: rgb(18 22 31 / 0.14);
+}
+
+.project-card::before {
+  content: "";
+  position: absolute;
+  inset: -0.75rem;
+  z-index: -1;
+  border-radius: var(--r-xl);
+  border: 1px solid var(--card-edge);
+  background: linear-gradient(135deg, var(--card-glass-a), var(--card-glass-b));
+  box-shadow:
+    0 18px 50px -20px var(--card-shadow),
+    inset 0 1px 0 var(--card-edge);
+  opacity: 0;
+  transform: scale(0.985);
+  pointer-events: none;
+  transition:
+    opacity 0.35s ease-out,
+    transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/*
+ * Οριζόντια ξεχειλίζει λιγότερο από το `px-6` του `Container`, ώστε ακόμη και
+ * σε στενό παράθυρο να μένει αέρας ανάμεσα στο ορθογώνιο και την άκρη.
+ */
+@media (min-width: 40rem) {
+  .project-card::before {
+    inset: -1.25rem -1rem;
+  }
+}
+
+.project-card:hover::before,
+.project-card:focus-visible::before {
+  opacity: 1;
+  transform: none;
+}
+
+/* Στο σκοτεινό το ίδιο λευκό θα ήταν προβολέας· εδώ αρκεί μια ανταύγεια. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .project-card {
+    --card-glass-a: rgb(255 255 255 / 0.09);
+    --card-glass-b: rgb(255 255 255 / 0.025);
+    --card-edge: rgb(255 255 255 / 0.14);
+    --card-shadow: rgb(0 0 0 / 0.5);
+  }
+}
+:root[data-theme="dark"] .project-card {
+  --card-glass-a: rgb(255 255 255 / 0.09);
+  --card-glass-b: rgb(255 255 255 / 0.025);
+  --card-edge: rgb(255 255 255 / 0.14);
+  --card-shadow: rgb(0 0 0 / 0.5);
+}
+
+/*
+ * ── Συρτάρι φίλτρων ───────────────────────────────────────────────────────────
+ *
+ * Οι τεχνολογίες είναι πολλές για να φαίνονται όλες από την αρχή. Κλειστό, το
+ * συρτάρι δεν πιάνει ύψος (`0fr`)· ανοιχτό, τα chips γλιστρούν από τα αριστερά
+ * ένα-ένα, με βήμα από το `--i` του καθενός.
+ */
+.filter-drawer {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.filter-drawer[data-open] {
+  grid-template-rows: 1fr;
+}
+
+.filter-drawer > div {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.filter-drawer .filter-chip {
+  opacity: 0;
+  transform: translateX(-1.5rem);
+  transition:
+    opacity 0.2s ease-out,
+    transform 0.2s ease-out;
+}
+
+.filter-drawer[data-open] .filter-chip {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 0.4s ease-out,
+    transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 0.15s,
+    border-color 0.15s;
+  transition-delay: calc(var(--i, 0) * 22ms);
+}
+
+/*
  * ── Το κοινό φόντο (D18) ──────────────────────────────────────────────────────
  *
  * Μία επιφάνεια κάτω από όλες τις σελίδες, με εικόνες των project να εναλλάσσονται
@@ -582,7 +710,8 @@ html[data-js] [data-rule][data-shown] {
    * κρύβεται ποτέ.
    */
   html[data-js] :is([data-reveal], [data-reveal-children] > *),
-  html[data-js] [data-reveal-part] {
+  html[data-js] [data-reveal-part],
+  .filter-drawer[data-open] .filter-chip {
     opacity: 1 !important;
     transform: none !important;
   }
@@ -601,8 +730,8 @@ html[data-js] [data-rule][data-shown] {
 /*
  * Εκτύπωση — και ταυτόχρονα η πηγή των PDF (D7).
  *
- * Το PDF δεν παράγεται από ξεχωριστό πρότυπο: είναι η ίδια σελίδα /cv
- * τυπωμένη. Έτσι δεν υπάρχει περίπτωση το online βιογραφικό και το PDF να
+ * Το PDF δεν παράγεται από ξεχωριστό πρότυπο: είναι η ίδια σελίδα /about
+ * τυπωμένη (D27 — εκεί συγχωνεύτηκε το παλιό /cv). Έτσι δεν υπάρχει περίπτωση το online βιογραφικό και το PDF να
  * αποκλίνουν — που είναι ο συνηθέστερος τρόπος να ντροπιαστεί κανείς σε
  * συνέντευξη.
  */
@@ -622,7 +751,7 @@ html[data-js] [data-rule][data-shown] {
 
   /*
    * ΜΟΝΟ το chrome του site κρύβεται — `body > header`, όχι κάθε `header`.
-   * Η σελίδα /cv έχει δικό της <header> με το όνομα και τα στοιχεία
+   * Η σελίδα /about έχει δικό της <header> με το όνομα και τα στοιχεία
    * επικοινωνίας· χωρίς αυτόν τον περιορισμό το PDF έβγαινε χωρίς όνομα.
    */
   body > header,
@@ -634,13 +763,14 @@ html[data-js] [data-rule][data-shown] {
   }
 
   /*
-   * Κρίσιμο: το `/cv` τυπώνεται σε PDF από headless Chrome (`npm run cv:pdf`).
+   * Κρίσιμο: το `/about` τυπώνεται σε PDF από headless Chrome (`npm run cv:pdf`).
    * Ό,τι περιμένει `IntersectionObserver` για να εμφανιστεί δεν θα το πάρει ποτέ
    * σε εκτύπωση — χωρίς αυτόν τον κανόνα το βιογραφικό βγαίνει λευκή σελίδα.
    */
   [data-reveal],
   [data-reveal-children] > *,
-  [data-reveal-part] {
+  [data-reveal-part],
+  [data-rule] {
     opacity: 1 !important;
     transform: none !important;
   }
@@ -661,18 +791,42 @@ html[data-js] [data-rule][data-shown] {
 
   /* Μια εγγραφή δεν κόβεται στη μέση από αλλαγή σελίδας. */
   .cv-entry,
-  .cv-section h3 {
+  .cv-section > h2 {
     break-inside: avoid;
     page-break-inside: avoid;
   }
 
-  .cv-section h3 {
+  .cv-section > h2 {
     break-after: avoid;
     page-break-after: avoid;
   }
 
   .cv-name {
     font-size: 20pt;
+  }
+
+  /*
+   * Τα κενά της οθόνης (80px ανάμεσα σε ενότητες) είναι αέρας για το μάτι που
+   * κάνει scroll· στο χαρτί είναι σελίδες. Εδώ σφίγγουν, ώστε το PDF να μη
+   * φουσκώνει σε τέσσερις σελίδες από κενό.
+   */
+  .cv-page {
+    padding-block: 0 !important;
+  }
+
+  .cv-page > :not(:last-child) {
+    margin-block-end: 1.4rem !important;
+  }
+
+  .cv-page img {
+    width: 5.5rem !important;
+    height: 5.5rem !important;
+  }
+
+  .cv-section > :not(:last-child),
+  .cv-section ol > :not(:last-child),
+  .cv-section dl > :not(:last-child) {
+    margin-block-end: 0.8rem !important;
   }
 
   a {

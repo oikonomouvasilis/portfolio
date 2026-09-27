@@ -83,7 +83,7 @@ export default async function ProjectPage({ params }: { params: Params }) {
 
         <div className="max-w-3xl space-y-5">
           <h1 className="text-5xl sm:text-6xl">{project.title}</h1>
-          <p className="text-xl text-[var(--muted)]">{project.summary}</p>
+          <p className="text-block text-xl text-[var(--muted)]">{project.summary}</p>
         </div>
 
         <div className="flex flex-wrap items-center gap-x-8 gap-y-3 border-y border-[var(--line)] py-4 font-mono text-xs tracking-wide text-[var(--faint)] uppercase">
@@ -162,7 +162,7 @@ export default async function ProjectPage({ params }: { params: Params }) {
         Το σώμα MDX είναι δικό μας περιεχόμενο από το repo, όχι είσοδος χρήστη.
         Το μέγιστο πλάτος κρατά τη γραμμή σε αναγνώσιμο μήκος (~70 χαρακτήρες).
       */}
-      <div className="max-w-2xl space-y-5 leading-[1.75] [&_h2]:mt-12 [&_h2]:mb-3 [&_h2]:text-2xl [&_p]:text-[var(--muted)] [&_strong]:font-medium [&_strong]:text-[var(--fg)]">
+      <div className="max-w-2xl space-y-5 leading-[1.75] [&_h2]:mt-12 [&_h2]:mb-3 [&_h2]:text-2xl [&_p]:text-justify [&_p]:hyphens-auto [&_p]:text-[var(--muted)] [&_strong]:font-medium [&_strong]:text-[var(--fg)]">
         <MDXRemote source={project.body} />
       </div>
 
