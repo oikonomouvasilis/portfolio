@@ -1,0 +1,135 @@
+---
+title: Tax Certificate Dispatch
+slug: tax-certificate-sender
+year: 2026
+status: archived
+categories:
+  - automation
+  - data
+stackLayers:
+  backend:
+    - Python
+    - pandas
+    - smtplib
+  data:
+    - Excel
+    - PDF
+    - mbox
+role: Design and implementation, end to end
+summary: 4,292 tax withholding certificates had to go out, each to its own recipient — after proving the recipient was the right one.
+problem: >-
+  A public-sector body held 4,292 withholding certificates as separate PDFs,
+  each with the supplier's tax number inside the filename, and a 22,256-row
+  register of email addresses. Matching them by hand is weeks of work — and
+  every mismatch sends one supplier's tax details to another.
+goal: >-
+  Not one wrong file sent. Speed was the second requirement; the first was that
+  every match be checked before an SMTP connection was opened at all.
+solution: >-
+  Two separate scripts. The first sends nothing: it reads tax numbers from the
+  filenames, looks them up in the register, validates the addresses, and writes
+  an audit report with four statuses. The second sends, in batches, keeping a
+  log of what has already gone out so an interruption never resends.
+outcome: >-
+  The first audit found 1,860 files with no recipient. They were not missing
+  from the register: Excel had eaten the leading zero of their tax numbers.
+  After the fix, ready files went from 2,427 to 4,284 and the remainder to 8 —
+  from a 43% miss rate to 0.19%.
+repo: null
+demo: null
+cover: /images/projects/tax-certificate-sender/audit-before.png
+gallery:
+  - src: /images/projects/tax-certificate-sender/audit-after.png
+    caption: The same report after padding the tax number back to nine digits. Same files, same register, one line of difference.
+  - src: /images/projects/tax-certificate-sender/bounces.png
+    caption: Delivery failures by reason, counted from the bounce messages themselves. The register passed the format check and still pointed at hundreds of dead mailboxes.
+featured: false
+caseStudyOnly: true
+---
+
+{/* TODO: δεν υπάρχει repo — ο κώδικας έμεινε δύο τοπικά script (ROADMAP Φάση 0). */}
+
+Work for a public-sector body, on **suppliers' tax records**. The body is not
+named here, and no company name, tax number or address appears. The screenshots
+reproduce the shape of the reports with **fictional data**; the aggregate figures
+are the real ones.
+
+## The script that does not send
+
+The main tool here is not the sender. It is `check_missing.py`, which does
+exactly what the sender would do — read the tax number out of each PDF filename,
+look it up in the register, validate the address — and then, instead of opening
+an SMTP connection, writes a spreadsheet with one row per file and one of four
+statuses: ready, bad filename, missing from the register, bad address.
+
+The separation is not fastidiousness. A send cannot be recalled: the moment one
+supplier's certificate reaches another, the mistake is permanent and it is a
+disclosure of tax records. Running the whole matching logic first, with no
+authority to send, turns "will this go to the right people?" into a file a
+human can read before anything is opened.
+
+## The 1,860 that were "missing"
+
+The first report looked bad: **2,427 ready, 1,860 with no match in the
+register** — nearly half the files. The obvious explanation was that the
+22,256-row register was incomplete, and the obvious move was to ask for a new
+one.
+
+That was not it. The register had all of them.
+
+The tax number in Excel is stored as a **number**, and a number has no leading
+zeros. Of the 22,256 rows, **10,407 arrived eight digits long**, 31 at seven and
+2 at six. The PDF filenames, by contrast, carried the tax number padded to nine.
+`"099963235" == "99963235"` is `False`, so every supplier whose tax number starts
+with a zero fell through the gap.
+
+Of the 1,860 unmatched files, **1,859 had a tax number starting with zero**, and
+**1,858 were found** the moment the register was padded back to nine digits. The
+second run produced **4,284 ready and 8 left over** — three badly named files,
+three invalid addresses, two genuinely absent.
+
+That is the whole argument for the first script. The bug raised no exception,
+logged no warning and was invisible in the code: 57% of the certificates would
+simply have been sent, and the other 1,860 would have been chased down one phone
+call at a time, for months.
+
+## The send prefers to be interruptible
+
+The sender does not try to finish in one run. After each successful send it
+appends the filename to a log, and at the start of every run it skips whatever is
+already in there. A batch limit and a three-second pause per message keep the
+rate under the provider's ceiling.
+
+The result is that an interruption — a dropped network, a closed laptop, a
+provider limit — costs only the time up to that point. No run resends what has
+already gone, and "where we left off" is a text file rather than a recollection.
+
+## Two mistakes left in the code
+
+I would not write these again.
+
+The first is an `except: pass` around the send. It swallows every error
+silently, so the log records what went out but never what failed or why. That
+silence was paid for immediately afterwards: finding out what had not been
+delivered meant downloading the mailbox itself and counting bounce messages —
+work a proper log would have done for free.
+
+The second is the account's app password, written into the file. It never made
+it into a commit, but that was luck rather than design; it belonged in an
+environment variable from the first line.
+
+## What the bounces showed
+
+Analysing two mailbox exports found **276 delivery failures** and 33 delays. By
+SMTP reason: **248 non-existent mailboxes**, 11 blocked as spam, 5 full
+mailboxes, 3 dead domains, 9 unclear.
+
+The number is a lower bound rather than an exact total — it was measured on an
+export of **unread** mail, so anything already opened was not counted. Even so,
+roughly **one address in fifteen** in the register no longer leads anywhere.
+
+The validation the first script performs is a check of **format**: that the text
+looks like an address. No format tells you whether the mailbox still exists.
+Those 276 were not a failure of the check; they were the register being older
+than its suppliers — and they are the one list that, in hindsight, is worth
+handing back to the body for correction.
