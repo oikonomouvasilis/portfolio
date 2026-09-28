@@ -33,8 +33,8 @@ outcome: >-
   A month is generated in one action and then adjusted by hand where judgement
   is needed. Every statistic on the page is derived from the same assignment
   rows the calendar shows, so the roster and its fairness report cannot disagree.
-repo: null
-demo: null
+repo: https://github.com/oikonomouvasilis/duty-scheduler
+demo: https://github.com/oikonomouvasilis/duty-scheduler/releases/latest
 cover: /images/projects/duty-scheduler/month.png
 gallery:
   - src: /images/projects/duty-scheduler/stats.png
@@ -44,14 +44,16 @@ gallery:
   - src: /images/projects/duty-scheduler/duties.png
     caption: Duty types, how many slots each needs per day, and which levels are eligible.
 featured: true
-caseStudyOnly: true
+caseStudyOnly: false
 ---
 
 {/* TODO Φ0: λείπουν τα νούμερα — πόσα άτομα, πόσες ώρες γλίτωνε ο μήνας. */}
 
-Built for an organisation that runs on shifts. The repository is private and the
-application is shown as a case study only: no unit, location, rank list or real
-name appears here, and any screenshot comes from seeded fictional data.
+Built for an organisation that runs on shifts. The code is open and the Windows
+installer is on the Releases page; the data stays out of the repository — the
+local SQLite database is gitignored, because it holds real names. No unit,
+location, rank list or real name appears here, and any screenshot comes from
+seeded fictional data (`npm run db:demo`).
 
 ## One table of facts
 

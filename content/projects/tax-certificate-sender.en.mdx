@@ -35,7 +35,7 @@ outcome: >-
   from the register: Excel had eaten the leading zero of their tax numbers.
   After the fix, ready files went from 2,427 to 4,284 and the remainder to 8 —
   from a 43% miss rate to 0.19%.
-repo: null
+repo: https://github.com/oikonomouvasilis/tax-certificate-dispatch
 demo: null
 cover: /images/projects/tax-certificate-sender/audit-before.png
 gallery:
@@ -44,10 +44,10 @@ gallery:
   - src: /images/projects/tax-certificate-sender/bounces.png
     caption: Delivery failures by reason, counted from the bounce messages themselves. The register passed the format check and still pointed at hundreds of dead mailboxes.
 featured: false
-caseStudyOnly: true
+caseStudyOnly: false
 ---
 
-{/* TODO: δεν υπάρχει repo — ο κώδικας έμεινε δύο τοπικά script (ROADMAP Φάση 0). */}
+{/* Τα δεδομένα δεν ανεβαίνουν πουθενά (D9). Στο repo μπαίνει μόνο ο κώδικας. */}
 
 Work for a public-sector body, on **suppliers' tax records**. The body is not
 named here, and no company name, tax number or address appears. The screenshots
@@ -104,9 +104,9 @@ The result is that an interruption — a dropped network, a closed laptop, a
 provider limit — costs only the time up to that point. No run resends what has
 already gone, and "where we left off" is a text file rather than a recollection.
 
-## Two mistakes left in the code
+## Two mistakes, and what became of them
 
-I would not write these again.
+I would not write these again — and in the repository they are no longer there.
 
 The first is an `except: pass` around the send. It swallows every error
 silently, so the log records what went out but never what failed or why. That
@@ -117,6 +117,12 @@ work a proper log would have done for free.
 The second is the account's app password, written into the file. It never made
 it into a commit, but that was luck rather than design; it belonged in an
 environment variable from the first line.
+
+The published version fixes both: credentials are read from the environment, and
+every failed send is written to `failed.log` with its reason. They are recorded
+here because the first one has a visible consequence inside this very case study
+— without it, the 276 bounces in the next section would not have had to be
+counted out of a mailbox.
 
 ## What the bounces showed
 

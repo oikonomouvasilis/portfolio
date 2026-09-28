@@ -35,8 +35,8 @@ outcome: >-
   χρειάζεται κρίση. Κάθε στατιστικό της σελίδας προκύπτει από τις ίδιες γραμμές
   εκχώρησης που δείχνει το ημερολόγιο, οπότε το πρόγραμμα και η αναφορά
   δικαιοσύνης δεν μπορούν να διαφωνήσουν.
-repo: null
-demo: null
+repo: https://github.com/oikonomouvasilis/duty-scheduler
+demo: https://github.com/oikonomouvasilis/duty-scheduler/releases/latest
 cover: /images/projects/duty-scheduler/month.png
 gallery:
   - src: /images/projects/duty-scheduler/stats.png
@@ -46,15 +46,16 @@ gallery:
   - src: /images/projects/duty-scheduler/duties.png
     caption: Τα είδη υπηρεσίας, πόσες θέσεις θέλει το καθένα ανά μέρα, και ποια επίπεδα τα καλύπτουν.
 featured: true
-caseStudyOnly: true
+caseStudyOnly: false
 ---
 
 {/* TODO Φ0: λείπουν τα νούμερα — πόσα άτομα, πόσες ώρες γλίτωνε ο μήνας. */}
 
-Φτιάχτηκε για οργανισμό που λειτουργεί με βάρδιες. Το repo είναι ιδιωτικό και η
-εφαρμογή παρουσιάζεται μόνο ως case study: καμία μονάδα, τοποθεσία, βαθμολογική
-κλίμακα ή πραγματικό όνομα δεν εμφανίζεται εδώ, και κάθε screenshot προέρχεται
-από φανταστικά δεδομένα.
+Φτιάχτηκε για οργανισμό που λειτουργεί με βάρδιες. Ο κώδικας είναι ανοιχτός και
+ο installer για Windows κατεβαίνει από τα Releases· τα δεδομένα μένουν έξω από το
+repo — η τοπική βάση SQLite είναι στο `.gitignore`, γιατί έχει πραγματικά ονόματα.
+Καμία μονάδα, τοποθεσία, βαθμολογική κλίμακα ή πραγματικό όνομα δεν εμφανίζεται
+εδώ, και κάθε screenshot προέρχεται από φανταστικά δεδομένα (`npm run db:demo`).
 
 ## Ένας πίνακας γεγονότων
 
