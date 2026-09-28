@@ -658,8 +658,9 @@ editorial τυπογραφία — το πληκτρολόγιο **δεν σκρ
       και πέντε βίντεο πραγματικών συνεδριών (D29)
 - [x] `caseStudyOnly: false` και ξαναγράψιμο των παραγράφων που έλεγαν
       «το repo είναι ιδιωτικό» σε έξι αρχεία MDX
-- [ ] Το demo του `expenses-predictor` — το Render δεν απαντά· το πεδίο μένει
-      `null` μέχρι να σηκωθεί
+- [x] Demo του `expenses-predictor` → `expenses-predictor-app.vercel.app` (200,
+      σερβίρει την εφαρμογή). Το URL του Render στο αρχείο `urls` ήταν το
+      **backend**, όχι η εφαρμογή — και κρέμεται (>180s)· θέλει έλεγχο στα logs
 
 ---
 
