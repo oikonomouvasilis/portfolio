@@ -649,7 +649,8 @@ editorial τυπογραφία — το πληκτρολόγιο **δεν σκρ
       αρχείο) και δηλώνει τα 276 bounce ως **κάτω όριο** (D28)
 
 ### 8.13 — Ο κώδικας τριών project γίνεται δημόσιος ✅ *(28 Σεπ 2026)*
-- [x] `duty-scheduler` → public ως έχει· `repo` + `demo` στη σελίδα Releases
+- [x] `duty-scheduler` → public ως έχει· μόνο `repo` — είναι desktop εφαρμογή,
+      ένας installer δεν είναι live demo
 - [x] `tax-certificate-dispatch` → νέο repo με τα δύο script, καθαρισμένα
       (διαπιστευτήρια σε env, `failed.log` αντί για `except: pass`)
 - [x] `expenses-predictor-app` → νέο repo, ένα commit, χωρίς το παλιό ιστορικό:
